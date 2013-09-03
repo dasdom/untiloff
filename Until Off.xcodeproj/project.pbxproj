@@ -21,15 +21,18 @@
 		F2A0DE0317CE9CA300EA93AF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2A0DDE617CE9CA200EA93AF /* UIKit.framework */; };
 		F2A0DE0417CE9CA300EA93AF /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2A0DDE817CE9CA200EA93AF /* CoreData.framework */; };
 		F2A0DE0C17CE9CA300EA93AF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F2A0DE0A17CE9CA300EA93AF /* InfoPlist.strings */; };
-		F2A0DE0E17CE9CA300EA93AF /* Until_OffTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A0DE0D17CE9CA300EA93AF /* Until_OffTests.m */; };
 		F2A0DE1A17CFDC1200EA93AF /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A0DE1917CFDC1200EA93AF /* MainViewController.m */; };
 		F2A0DE1B17CFDC1200EA93AF /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A0DE1917CFDC1200EA93AF /* MainViewController.m */; };
-		F2A0DE1F17CFDDAF00EA93AF /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A0DE1E17CFDDAF00EA93AF /* MainView.m */; };
-		F2A0DE2017CFDDAF00EA93AF /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A0DE1E17CFDDAF00EA93AF /* MainView.m */; };
 		F2A0DE2317CFE63900EA93AF /* Measurement.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A0DE2217CFE63900EA93AF /* Measurement.m */; };
 		F2A0DE2417CFE63900EA93AF /* Measurement.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A0DE2217CFE63900EA93AF /* Measurement.m */; };
 		F2A0DE2717CFE63A00EA93AF /* Predition.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A0DE2617CFE63A00EA93AF /* Predition.m */; };
 		F2A0DE2817CFE63A00EA93AF /* Predition.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A0DE2617CFE63A00EA93AF /* Predition.m */; };
+		F2A0DE2A17D3C88B00EA93AF /* BatteryCalculationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A0DE2917D3C88B00EA93AF /* BatteryCalculationTests.m */; };
+		F2A0DE2D17D3CCEC00EA93AF /* BatteryCalculation.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A0DE2C17D3CCEC00EA93AF /* BatteryCalculation.m */; };
+		F2A0DE2E17D3CCEC00EA93AF /* BatteryCalculation.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A0DE2C17D3CCEC00EA93AF /* BatteryCalculation.m */; };
+		F2A0DE3117D3CD3A00EA93AF /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A0DE3017D3CD3A00EA93AF /* MainView.m */; };
+		F2A0DE3217D3CD3A00EA93AF /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A0DE3017D3CD3A00EA93AF /* MainView.m */; };
+		F2A0DE3517D5248F00EA93AF /* MockMeasurement.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A0DE3417D5248F00EA93AF /* MockMeasurement.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,15 +63,19 @@
 		F2A0DE0017CE9CA300EA93AF /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		F2A0DE0917CE9CA300EA93AF /* Until OffTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Until OffTests-Info.plist"; sourceTree = "<group>"; };
 		F2A0DE0B17CE9CA300EA93AF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		F2A0DE0D17CE9CA300EA93AF /* Until_OffTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Until_OffTests.m; sourceTree = "<group>"; };
 		F2A0DE1817CFDC1100EA93AF /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainViewController.h; path = MainView/MainViewController.h; sourceTree = "<group>"; };
 		F2A0DE1917CFDC1200EA93AF /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainViewController.m; path = MainView/MainViewController.m; sourceTree = "<group>"; };
-		F2A0DE1D17CFDDAF00EA93AF /* MainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainView.h; sourceTree = "<group>"; };
-		F2A0DE1E17CFDDAF00EA93AF /* MainView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainView.m; sourceTree = "<group>"; };
 		F2A0DE2117CFE63900EA93AF /* Measurement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Measurement.h; path = Data/Measurement.h; sourceTree = "<group>"; };
 		F2A0DE2217CFE63900EA93AF /* Measurement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Measurement.m; path = Data/Measurement.m; sourceTree = "<group>"; };
 		F2A0DE2517CFE63A00EA93AF /* Predition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Predition.h; path = Data/Predition.h; sourceTree = "<group>"; };
 		F2A0DE2617CFE63A00EA93AF /* Predition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Predition.m; path = Data/Predition.m; sourceTree = "<group>"; };
+		F2A0DE2917D3C88B00EA93AF /* BatteryCalculationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BatteryCalculationTests.m; sourceTree = "<group>"; };
+		F2A0DE2B17D3CCEC00EA93AF /* BatteryCalculation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BatteryCalculation.h; path = MainView/BatteryCalculation.h; sourceTree = "<group>"; };
+		F2A0DE2C17D3CCEC00EA93AF /* BatteryCalculation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BatteryCalculation.m; path = MainView/BatteryCalculation.m; sourceTree = "<group>"; };
+		F2A0DE2F17D3CD3A00EA93AF /* MainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainView.h; path = MainView/MainView.h; sourceTree = "<group>"; };
+		F2A0DE3017D3CD3A00EA93AF /* MainView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainView.m; path = MainView/MainView.m; sourceTree = "<group>"; };
+		F2A0DE3317D5248F00EA93AF /* MockMeasurement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MockMeasurement.h; sourceTree = "<group>"; };
+		F2A0DE3417D5248F00EA93AF /* MockMeasurement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MockMeasurement.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,7 +162,9 @@
 		F2A0DE0717CE9CA300EA93AF /* Until OffTests */ = {
 			isa = PBXGroup;
 			children = (
-				F2A0DE0D17CE9CA300EA93AF /* Until_OffTests.m */,
+				F2A0DE2917D3C88B00EA93AF /* BatteryCalculationTests.m */,
+				F2A0DE3317D5248F00EA93AF /* MockMeasurement.h */,
+				F2A0DE3417D5248F00EA93AF /* MockMeasurement.m */,
 				F2A0DE0817CE9CA300EA93AF /* Supporting Files */,
 			);
 			path = "Until OffTests";
@@ -187,8 +196,10 @@
 			children = (
 				F2A0DE1817CFDC1100EA93AF /* MainViewController.h */,
 				F2A0DE1917CFDC1200EA93AF /* MainViewController.m */,
-				F2A0DE1D17CFDDAF00EA93AF /* MainView.h */,
-				F2A0DE1E17CFDDAF00EA93AF /* MainView.m */,
+				F2A0DE2F17D3CD3A00EA93AF /* MainView.h */,
+				F2A0DE3017D3CD3A00EA93AF /* MainView.m */,
+				F2A0DE2B17D3CCEC00EA93AF /* BatteryCalculation.h */,
+				F2A0DE2C17D3CCEC00EA93AF /* BatteryCalculation.m */,
 			);
 			name = MainView;
 			sourceTree = "<group>";
@@ -289,10 +300,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				F2A0DE2717CFE63A00EA93AF /* Predition.m in Sources */,
-				F2A0DE1F17CFDDAF00EA93AF /* MainView.m in Sources */,
+				F2A0DE2D17D3CCEC00EA93AF /* BatteryCalculation.m in Sources */,
 				F2A0DDF517CE9CA300EA93AF /* AppDelegate.m in Sources */,
 				F2A0DE2317CFE63900EA93AF /* Measurement.m in Sources */,
 				F2A0DDF817CE9CA300EA93AF /* Until_Off.xcdatamodeld in Sources */,
+				F2A0DE3117D3CD3A00EA93AF /* MainView.m in Sources */,
 				F2A0DDF117CE9CA300EA93AF /* main.m in Sources */,
 				F2A0DE1A17CFDC1200EA93AF /* MainViewController.m in Sources */,
 			);
@@ -302,11 +314,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F2A0DE0E17CE9CA300EA93AF /* Until_OffTests.m in Sources */,
 				F2A0DE2817CFE63A00EA93AF /* Predition.m in Sources */,
+				F2A0DE3517D5248F00EA93AF /* MockMeasurement.m in Sources */,
+				F2A0DE2E17D3CCEC00EA93AF /* BatteryCalculation.m in Sources */,
 				F2A0DE1B17CFDC1200EA93AF /* MainViewController.m in Sources */,
 				F2A0DE2417CFE63900EA93AF /* Measurement.m in Sources */,
-				F2A0DE2017CFDDAF00EA93AF /* MainView.m in Sources */,
+				F2A0DE2A17D3C88B00EA93AF /* BatteryCalculationTests.m in Sources */,
+				F2A0DE3217D3CD3A00EA93AF /* MainView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -12,7 +12,7 @@
 
 @property (nonatomic, strong) NSArray *measurementArray;
 @property (nonatomic) NSUInteger numberOfHours;
-@property (nonatomic) NSUInteger startCalcAtPointFromNow;
+//@property (nonatomic) NSUInteger startCalcAtPointFromNow;
 @property (nonatomic) NSUInteger stopCalcAtPointFromNow;
 
 @end
