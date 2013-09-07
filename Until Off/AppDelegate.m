@@ -17,12 +17,16 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [UIDevice currentDevice].batteryMonitoringEnabled = YES;
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     
     MainViewController *mainViewController = [[MainViewController alloc] init];
     mainViewController.managedObjectContext = self.managedObjectContext;
     
+    [[NSNotificationCenter defaultCenter] addObserver:mainViewController selector:@selector(becameActive:) name:@"UIApplicationDidBecomeActiveNotification" object:nil];
+
     self.window.rootViewController = mainViewController;
     
     self.window.backgroundColor = [UIColor whiteColor];

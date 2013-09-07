@@ -14,5 +14,8 @@
 @property (nonatomic) NSUInteger numberOfHours;
 //@property (nonatomic) NSUInteger startCalcAtPointFromNow;
 @property (nonatomic) NSUInteger stopCalcAtPointFromNow;
+@property (nonatomic, strong) NSString *residualTimeString;
+@property (nonatomic, strong) NSString *totalTimeString;
+@property (nonatomic, strong) UIButton *locationServiceButton;
 
 @end

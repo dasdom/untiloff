@@ -10,6 +10,10 @@
 
 @interface BatteryCalculation : NSObject
 
-- (NSUInteger)stopIndexForMeasurements:(NSArray*)measurementArray;
+- (id)initWithMeasurementArray:(NSArray*)measurementArray;
+- (NSUInteger)stopIndex;
+- (NSInteger)preditionOfResidualTimeWithStopIndex:(NSUInteger)stopIndex;
+- (NSInteger)preditionOfTotalTimeWithStopIndex:(NSUInteger)stopIndex;
+- (CGFloat)timeDiffForStopIndex:(NSUInteger)stopIndex;
 
 @end

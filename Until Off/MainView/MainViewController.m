@@ -10,6 +10,7 @@
 #import "MainView.h"
 #import "Measurement.h"
 #import "AppDelegate.h"
+#import "BatteryCalculation.h"
 
 #define kLevelDiff @"kLevelDiff"
 #define kTimeDiff @"kTimeDiff"
@@ -50,7 +51,7 @@
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Measurement" inManagedObjectContext:self.managedObjectContext];
     [fetchRequest setEntity: entity];
     
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"date" ascending:YES];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"date" ascending:NO];
     NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
     [fetchRequest setSortDescriptors:sortDescriptors];
     
@@ -63,27 +64,62 @@
     
     NSLog(@"measurementArray %@", self.measurementArray);
     
-    self.mainView.measurementArray = self.measurementArray;
-    
+    for (Measurement *measurement in self.measurementArray) {
+        NSLog(@"measurement.level: %@, date: %@", measurement.level, measurement.date);
+    }
 //    [self calculateAveragePrediction];
     
-    NSDictionary *calculationDictionary = [self computeLifeTimeWithMeasurements:self.measurementArray andStopAtIndex:0];
-	CGFloat timeDiff = [calculationDictionary[kTimeDiff] floatValue];
+    [self updateMainView];
     
-    self.mainView.stopCalcAtPointFromNow = [self.measurementArray count] - [calculationDictionary[kMaxPointsInTimeForCalculation] integerValue];
-	
-	self.mainView.numberOfHours = (timeDiff/3600.0f > 6.0f) ? timeDiff/3600.0f : 6.0f;
+//    self.mainView.stopCalcAtPointFromNow = [self.measurementArray count] - [calculationDictionary[kMaxPointsInTimeForCalculation] integerValue];
+//	
+//	self.mainView.numberOfHours = (timeDiff/3600.0f > 6.0f) ? timeDiff/3600.0f : 6.0f;
     
 //    [[self predictionView] setNeedsDisplay];
 //    
 //    [[self diagramView] setNeedsDisplay];
 }
 
+- (void)updateMainView
+{
+    self.mainView.measurementArray = self.measurementArray;
+
+    BatteryCalculation *batteryCalculation = [[BatteryCalculation alloc] initWithMeasurementArray:self.measurementArray];
+    
+    NSUInteger stopIndex = [batteryCalculation stopIndex];
+    NSInteger predictionOfResitualSeconds = [batteryCalculation preditionOfResidualTimeWithStopIndex:stopIndex];
+    NSInteger predictionOfTotalSeconds = [batteryCalculation preditionOfTotalTimeWithStopIndex:stopIndex];
+    
+    CGFloat timeDiff = [batteryCalculation timeDiffForStopIndex:stopIndex];
+    self.mainView.numberOfHours = (NSUInteger)((timeDiff/3600.0f > 6.0f) ? timeDiff/3600.0f : 6.0f);
+
+    self.mainView.stopCalcAtPointFromNow = stopIndex;
+    self.mainView.residualTimeString = [self timeStringFromSeconds:predictionOfResitualSeconds];
+    self.mainView.totalTimeString = [self timeStringFromSeconds:predictionOfTotalSeconds];
+
+    [self.mainView setNeedsDisplay];
+}
+
+- (NSString*)timeStringFromSeconds:(NSInteger)seconds
+{
+    if (seconds < 1)
+    {
+        return @"-:-";
+    }
+    NSInteger hours = seconds/3600;
+    NSNumber *minutes = @(seconds/60-hours*60);
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    [formatter setPositiveFormat: @"00"];
+    return [NSString stringWithFormat:@"%d:%@", hours, [formatter stringFromNumber:minutes]];
+}
+
 #pragma mark -
 
-- (void)addMeasurement {
+- (void)addMeasurement
+{
     NSDate *date = [NSDate date];
     NSNumber *currentLevelNumber = [NSNumber numberWithFloat: [[UIDevice currentDevice] batteryLevel]];
+    NSLog(@"batteryLevel: %f", [[UIDevice currentDevice] batteryLevel]);
     
     Measurement *measurement = [NSEntityDescription insertNewObjectForEntityForName: @"Measurement" inManagedObjectContext: [self managedObjectContext]];
     [measurement setLevel: currentLevelNumber];
@@ -92,38 +128,38 @@
     [(AppDelegate*)[[UIApplication sharedApplication] delegate] saveContext];
 }
 
-#pragma mark -
-
-- (NSDictionary*)computeLifeTimeWithMeasurements:(NSArray*)measurementArray andStopAtIndex:(NSInteger)stop {
-    Measurement *lastMeasurement = [measurementArray lastObject];
-    
-   	CGFloat previousLevel = 0.0;
-	CGFloat timeDiff;
-	CGFloat levelDiff;
-    NSInteger maxPointsInTimeForCalculation = 0;
-	NSDate *previousDate = [lastMeasurement date];
-	for (int i = [measurementArray count]-1; i >= stop; i--) {
-        Measurement *measurement = measurementArray[i];
-		timeDiff = [[lastMeasurement date] timeIntervalSinceDate:measurement.date];
-		levelDiff = [measurement.level floatValue] - [lastMeasurement.level floatValue];
-		float stepLevelDiff = [measurement.level floatValue] - previousLevel;
-		if (stepLevelDiff < 0) {
-			break;
-		}
-		if (timeDiff > 172800.0f) { //don't use timediffs larger than 48 h
-			break;
-		}
-        maxPointsInTimeForCalculation++;
-		previousLevel = [measurement.level floatValue];
-		previousDate = [measurement date];
-	}
-    
-	levelDiff = previousLevel - [lastMeasurement.level floatValue];
-	timeDiff = [[lastMeasurement date] timeIntervalSinceDate: previousDate];
-	NSLog(@"levelDiff: %f, timeDiff: %f", levelDiff, timeDiff);
-    
-    return @{kLevelDiff: @(levelDiff), kTimeDiff: @(timeDiff), kMaxPointsInTimeForCalculation: @(maxPointsInTimeForCalculation)};
-}
+//#pragma mark -
+//
+//- (NSDictionary*)computeLifeTimeWithMeasurements:(NSArray*)measurementArray andStopAtIndex:(NSInteger)stop {
+//    Measurement *lastMeasurement = [measurementArray lastObject];
+//    
+//   	CGFloat previousLevel = 0.0;
+//	CGFloat timeDiff;
+//	CGFloat levelDiff;
+//    NSInteger maxPointsInTimeForCalculation = 0;
+//	NSDate *previousDate = [lastMeasurement date];
+//	for (int i = [measurementArray count]-1; i >= stop; i--) {
+//        Measurement *measurement = measurementArray[i];
+//		timeDiff = [[lastMeasurement date] timeIntervalSinceDate:measurement.date];
+//		levelDiff = [measurement.level floatValue] - [lastMeasurement.level floatValue];
+//		float stepLevelDiff = [measurement.level floatValue] - previousLevel;
+//		if (stepLevelDiff < 0) {
+//			break;
+//		}
+//		if (timeDiff > 172800.0f) { //don't use timediffs larger than 48 h
+//			break;
+//		}
+//        maxPointsInTimeForCalculation++;
+//		previousLevel = [measurement.level floatValue];
+//		previousDate = [measurement date];
+//	}
+//    
+//	levelDiff = previousLevel - [lastMeasurement.level floatValue];
+//	timeDiff = [[lastMeasurement date] timeIntervalSinceDate: previousDate];
+//	NSLog(@"levelDiff: %f, timeDiff: %f", levelDiff, timeDiff);
+//    
+//    return @{kLevelDiff: @(levelDiff), kTimeDiff: @(timeDiff), kMaxPointsInTimeForCalculation: @(maxPointsInTimeForCalculation)};
+//}
 
 //#pragma mark -
 //
