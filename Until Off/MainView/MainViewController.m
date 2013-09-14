@@ -9,23 +9,42 @@
 #import "MainViewController.h"
 #import "MainView.h"
 #import "Measurement.h"
+#import "Prediction.h"
+#import "Geofence.h"
 #import "AppDelegate.h"
 #import "BatteryCalculation.h"
+#import "LocationServiceViewController.h"
+#import "PredictionsOverviewViewController.h"
+#import <CoreLocation/CoreLocation.h>
 
 #define kLevelDiff @"kLevelDiff"
 #define kTimeDiff @"kTimeDiff"
 #define kMaxPointsInTimeForCalculation @"kMaxPointsInTimeForCalculation"
 
-@interface MainViewController ()
+@interface MainViewController () <CLLocationManagerDelegate>
 @property (nonatomic, strong) MainView *mainView;
 @property (nonatomic, strong) NSArray *measurementArray;
+@property (nonatomic, strong) CLLocationManager *locationManager;
 @end
 
 @implementation MainViewController
 
+- (id)init
+{
+    if ((self = [super init]))
+    {
+        _locationManager = [[CLLocationManager alloc] init];
+        _locationManager.delegate = self;
+    }
+    return self;
+}
+
 - (void)loadView
 {
     _mainView = [[MainView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    [_mainView.locationServiceButton addTarget:self action:@selector(showLocationServiceSettings:) forControlEvents:UIControlEventTouchUpInside];
+    [_mainView.predictionOverviewButton addTarget:self action:@selector(showPredictionOverview:) forControlEvents:UIControlEventTouchUpInside];
     
     self.view = _mainView;
 }
@@ -36,10 +55,42 @@
 	// Do any additional setup after loading the view.
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    NSArray *regionArray = [[self.locationManager monitoredRegions] allObjects];
+    for (CLRegion *region in regionArray)
+    {
+        [self.locationManager stopMonitoringForRegion:region];
+    }
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Geofence" inManagedObjectContext:self.managedObjectContext];
+    [fetchRequest setEntity: entity];
+
+    NSError *fetchError;
+    NSArray *geofenceArray = [self.managedObjectContext executeFetchRequest:fetchRequest error:&fetchError];
+    
+    for (Geofence *geofence in geofenceArray)
+    {
+        NSLog(@"geofence.name: %@", geofence.name);
+        CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([geofence.latitude doubleValue], [geofence.longitude doubleValue]);
+        CLCircularRegion *circularRegion = [[CLCircularRegion alloc] initWithCenter:coordinate radius:[geofence.radius floatValue] identifier:geofence.name];;
+        [self.locationManager startMonitoringForRegion:circularRegion];
+    }
+    
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
+{
+    [self addMeasurement];
 }
 
 #pragma mark -
@@ -62,22 +113,13 @@
         [self.managedObjectContext deleteObject:self.measurementArray[0]];
     }
     
-    NSLog(@"measurementArray %@", self.measurementArray);
-    
-    for (Measurement *measurement in self.measurementArray) {
-        NSLog(@"measurement.level: %@, date: %@", measurement.level, measurement.date);
-    }
-//    [self calculateAveragePrediction];
+//    NSLog(@"measurementArray %@", self.measurementArray);
+//    
+//    for (Measurement *measurement in self.measurementArray) {
+//        NSLog(@"measurement.level: %@, date: %@", measurement.level, measurement.date);
+//    }
     
     [self updateMainView];
-    
-//    self.mainView.stopCalcAtPointFromNow = [self.measurementArray count] - [calculationDictionary[kMaxPointsInTimeForCalculation] integerValue];
-//	
-//	self.mainView.numberOfHours = (timeDiff/3600.0f > 6.0f) ? timeDiff/3600.0f : 6.0f;
-    
-//    [[self predictionView] setNeedsDisplay];
-//    
-//    [[self diagramView] setNeedsDisplay];
 }
 
 - (void)updateMainView
@@ -93,15 +135,29 @@
     CGFloat timeDiff = [batteryCalculation timeDiffForStopIndex:stopIndex];
     self.mainView.numberOfHours = (NSUInteger)((timeDiff/3600.0f > 6.0f) ? timeDiff/3600.0f : 6.0f);
 
+    CGFloat levelDiff = [batteryCalculation levelDiffForStopIndex:stopIndex];
+    if (levelDiff > 0.1f)
+    {
+       Prediction *prediction = [NSEntityDescription insertNewObjectForEntityForName:@"Prediction" inManagedObjectContext:self.managedObjectContext];
+        prediction.timeBasis = @(timeDiff);
+        prediction.levelBasis = @(levelDiff);
+        prediction.date = [NSDate date];
+        prediction.totalRuntime = @(predictionOfTotalSeconds);
+        
+        [(AppDelegate*)[[UIApplication sharedApplication] delegate] saveContext];
+    }
+    
     self.mainView.stopCalcAtPointFromNow = stopIndex;
     self.mainView.residualTimeString = [self timeStringFromSeconds:predictionOfResitualSeconds];
     self.mainView.totalTimeString = [self timeStringFromSeconds:predictionOfTotalSeconds];
-
+    self.mainView.residualTime = (CGFloat)predictionOfResitualSeconds;
+    
     [self.mainView setNeedsDisplay];
 }
 
 - (NSString*)timeStringFromSeconds:(NSInteger)seconds
 {
+    NSLog(@"seconds: %d", seconds);
     if (seconds < 1)
     {
         return @"-:-";
@@ -118,87 +174,46 @@
 - (void)addMeasurement
 {
     NSDate *date = [NSDate date];
-    NSNumber *currentLevelNumber = [NSNumber numberWithFloat: [[UIDevice currentDevice] batteryLevel]];
+    CGFloat currentLevel = [[UIDevice currentDevice] batteryLevel];
+    NSNumber *currentLevelNumber = [NSNumber numberWithFloat:currentLevel];
+    NSNumber *batteryState = [NSNumber numberWithInteger:[[UIDevice currentDevice] batteryState]];
     NSLog(@"batteryLevel: %f", [[UIDevice currentDevice] batteryLevel]);
     
-    Measurement *measurement = [NSEntityDescription insertNewObjectForEntityForName: @"Measurement" inManagedObjectContext: [self managedObjectContext]];
-    [measurement setLevel: currentLevelNumber];
-    [measurement setDate: date];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    CGFloat previousLevel = [userDefaults floatForKey:@"previousLevel"];
+    
+    if (currentLevel > previousLevel && currentLevel - previousLevel < 0.1f && [[UIDevice currentDevice] batteryState] != UIDeviceBatteryStateCharging)
+    {
+        return;
+    }
+    
+    [userDefaults setFloat:currentLevel forKey:@"previousLevel"];
+    [userDefaults synchronize];
+    
+    Measurement *measurement = [NSEntityDescription insertNewObjectForEntityForName:@"Measurement" inManagedObjectContext:[self managedObjectContext]];
+    measurement.level = currentLevelNumber;
+    measurement.date = date;
+    measurement.batteryState = batteryState;
     
     [(AppDelegate*)[[UIApplication sharedApplication] delegate] saveContext];
 }
 
-//#pragma mark -
-//
-//- (NSDictionary*)computeLifeTimeWithMeasurements:(NSArray*)measurementArray andStopAtIndex:(NSInteger)stop {
-//    Measurement *lastMeasurement = [measurementArray lastObject];
-//    
-//   	CGFloat previousLevel = 0.0;
-//	CGFloat timeDiff;
-//	CGFloat levelDiff;
-//    NSInteger maxPointsInTimeForCalculation = 0;
-//	NSDate *previousDate = [lastMeasurement date];
-//	for (int i = [measurementArray count]-1; i >= stop; i--) {
-//        Measurement *measurement = measurementArray[i];
-//		timeDiff = [[lastMeasurement date] timeIntervalSinceDate:measurement.date];
-//		levelDiff = [measurement.level floatValue] - [lastMeasurement.level floatValue];
-//		float stepLevelDiff = [measurement.level floatValue] - previousLevel;
-//		if (stepLevelDiff < 0) {
-//			break;
-//		}
-//		if (timeDiff > 172800.0f) { //don't use timediffs larger than 48 h
-//			break;
-//		}
-//        maxPointsInTimeForCalculation++;
-//		previousLevel = [measurement.level floatValue];
-//		previousDate = [measurement date];
-//	}
-//    
-//	levelDiff = previousLevel - [lastMeasurement.level floatValue];
-//	timeDiff = [[lastMeasurement date] timeIntervalSinceDate: previousDate];
-//	NSLog(@"levelDiff: %f, timeDiff: %f", levelDiff, timeDiff);
-//    
-//    return @{kLevelDiff: @(levelDiff), kTimeDiff: @(timeDiff), kMaxPointsInTimeForCalculation: @(maxPointsInTimeForCalculation)};
-//}
+#pragma mark - actions
+- (void)showLocationServiceSettings:(UIButton*)sender
+{
+    LocationServiceViewController *locationServiceViewController = [[LocationServiceViewController alloc] init];
+    locationServiceViewController.managedObjectContext = self.managedObjectContext;
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:locationServiceViewController];
+    [self presentViewController:navigationController animated:YES completion:^{}];
+}
 
-//#pragma mark -
-//
-//- (CGFloat)updateLabelsWithStart: (NSInteger)startInteger andStop: (NSInteger)stopInteger {
-//    CGSize levelsAndTimes = [self computeLifeTimeWithMeasurements: [self measurementArray] fromInt: startInteger toInt: stopInteger];
-//    float levelDiff = levelsAndTimes.width;
-//    float timeDiff = levelsAndTimes.height;
-//    
-//	if (levelDiff > 0) {
-//        CGFloat lastLevel = [[(Measurement*)[[self measurementArray] lastObject] level] floatValue];
-//        int hours = timeDiff*lastLevel/(levelDiff*3600);
-//        NSNumber *minutes = [NSNumber numberWithInt: ((timeDiff*lastLevel/(levelDiff*3600))-hours)*60];
-//        int totalHours = timeDiff/(levelDiff*3600);
-//        NSNumber *totalMinutes = [NSNumber numberWithInt: ((timeDiff/(levelDiff*3600))-totalHours)*60];
-//        int usedHours = timeDiff/3600.0f;
-//        NSNumber *usedMinutes = [NSNumber numberWithInt: (timeDiff/3600.0f-usedHours)*60];
-//        NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-//        [formatter setPositiveFormat: @"00"];
-//        [[self predictionLabel] setText: [NSString stringWithFormat: @"%d:%@ h", hours, [formatter stringFromNumber: minutes]]];
-//        [[self totalLivetimeLabel] setText: [NSString stringWithFormat: @"%d:%@ h", totalHours, [formatter stringFromNumber: totalMinutes]]];
-//        [self setTimeDiffNumber: [[NSNumber alloc] initWithDouble: timeDiff/(levelDiff*3600)]];
-//        
-//        [self setTotalLivetimeInMinutes: [NSNumber numberWithInteger: totalHours*60+[totalMinutes integerValue]]];
-//        [self setTimeBasis: [NSNumber numberWithInteger: usedHours*60+[usedMinutes integerValue]]];
-//        [self setLevelBasis: [NSNumber numberWithInteger: (int)levelDiff]];
-//        [[self savePredictionButton] setEnabled: YES];
-//        [[self savePredictionButton] setAlpha: 1.0f];
-//    } else {
-//        [[self predictionLabel] setText:@"-:- h"];
-//        [[self totalLivetimeLabel] setText:@"-:- h"];
-//        
-//        [self setTotalLivetimeInMinutes: [NSNumber numberWithInteger: 0]];
-//        [self setTimeBasis: [NSNumber numberWithInteger: 1]];
-//        [self setLevelBasis: [NSNumber numberWithInteger: 1]];
-//        [[self savePredictionButton] setEnabled: NO];
-//        [[self savePredictionButton] setAlpha: 0.5f];
-//	}
-//    return timeDiff;
-//}
+- (void)showPredictionOverview:(UIButton*)sender
+{
+    PredictionsOverviewViewController *predictionOverviewViewController = [[PredictionsOverviewViewController alloc] init];
+    predictionOverviewViewController.managedObjectContext = self.managedObjectContext;
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:predictionOverviewViewController];
+    [self presentViewController:navigationController animated:YES completion:^{}];
 
+}
 
 @end

@@ -17,5 +17,7 @@
 @property (nonatomic, strong) NSString *residualTimeString;
 @property (nonatomic, strong) NSString *totalTimeString;
 @property (nonatomic, strong) UIButton *locationServiceButton;
+@property (nonatomic, strong) UIButton *predictionOverviewButton;
+@property (nonatomic) CGFloat residualTime;
 
 @end

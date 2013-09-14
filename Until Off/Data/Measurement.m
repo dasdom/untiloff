@@ -2,7 +2,7 @@
 //  Measurement.m
 //  Until Off
 //
-//  Created by dasdom on 29.08.13.
+//  Created by dasdom on 10.09.13.
 //  Copyright (c) 2013 dasdom. All rights reserved.
 //
 
@@ -13,5 +13,6 @@
 
 @dynamic date;
 @dynamic level;
+@dynamic batteryState;
 
 @end

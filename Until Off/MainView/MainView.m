@@ -14,6 +14,7 @@
 
 @interface MainView ()
 @property (nonatomic, strong) NSMutableArray *pointsArray;
+@property (nonatomic) BOOL showTimes;
 @end
 
 @implementation MainView
@@ -39,7 +40,13 @@
         UIImage *locationServiceImage = [UIImage imageNamed:@"locationServiceIcon"];
         [_locationServiceButton setImage:locationServiceImage forState:UIControlStateNormal];
         _locationServiceButton.translatesAutoresizingMaskIntoConstraints = NO;
+        _locationServiceButton.contentMode = UIViewContentModeCenter;
         [self addSubview:_locationServiceButton];
+        
+        _predictionOverviewButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _predictionOverviewButton.translatesAutoresizingMaskIntoConstraints = NO;
+        _predictionOverviewButton.backgroundColor = [UIColor yellowColor];
+        [self addSubview:_predictionOverviewButton];
         
         NSArray *titleVerticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[titleLabel(40)]" options:0 metrics:nil views:NSDictionaryOfVariableBindings(titleLabel)];
         [self addConstraints:titleVerticalConstraints];
@@ -47,11 +54,14 @@
         NSArray *titleHorizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[titleLabel]-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(titleLabel)];
         [self addConstraints:titleHorizontalConstraints];
         
-        NSArray *locationServiceVerticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[_locationServiceButton]-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_locationServiceButton)];
+        NSArray *locationServiceVerticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[_locationServiceButton(==40,==_predictionOverviewButton)]-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_locationServiceButton, _predictionOverviewButton)];
         [self addConstraints:locationServiceVerticalConstraints];
         
-        NSArray *locationServiceHorizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[_locationServiceButton]-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_locationServiceButton)];
+        NSArray *locationServiceHorizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[_predictionOverviewButton(==64,_locationServiceButton)]-[_locationServiceButton]-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_locationServiceButton, _predictionOverviewButton)];
         [self addConstraints:locationServiceHorizontalConstraints];
+        
+        [self addConstraint: [NSLayoutConstraint constraintWithItem:_predictionOverviewButton attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:_locationServiceButton attribute:NSLayoutAttributeTop multiplier:1.0f constant:0.0f]];
+        
     }
     return self;
 }
@@ -129,6 +139,9 @@
     CGFloat firstYPoint;
     CGFloat firstLevel;
     UIBezierPath *bezierPath = [UIBezierPath bezierPath];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateStyle = NSDateFormatterNoStyle;
+    dateFormatter.timeStyle = NSDateFormatterShortStyle;
     for (int i = 0; i < [self.measurementArray count]; i++)
     {
         Measurement *measurement = self.measurementArray[i];
@@ -136,6 +149,8 @@
         CGFloat timeDiff = [measurement.date timeIntervalSinceDate:lastDate];
         CGFloat pointX = diagramFrame.size.width+20.0f+timeDiff*(diagramFrame.size.width+20.0f)/timeNorm;
         CGFloat pointY = diagramFrame.origin.y+(1-[measurement.level floatValue])*(diagramFrame.size.height);
+        
+//        [[dateFormatter stringFromDate:measurement.date] drawAtPoint:CGPointMake(pointX-5.0f, pointY-15.0f) withAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Light" size:9.0f], NSBackgroundColorAttributeName : [UIColor whiteColor]}];
         
         CGPoint point = CGPointMake(pointX, pointY);
         [self.pointsArray addObject:[NSValue valueWithCGPoint:point]];
@@ -157,22 +172,35 @@
     residualFrame.origin.y = firstYPoint;
     residualFrame.size.height = CGRectGetMaxY(diagramFrame)-firstYPoint;
     
-    CGFloat stopPosistion = width-30.0f;
+    CGFloat stopPosistion = kXPositionOfZero;
     diagramFrame.size.width = stopPosistion-diagramFrame.origin.x;
     
 //	CGContextSetRGBStrokeColor(context, 0.0, 0.0, 0.0, 1.0);
 //    CGContextSetLineWidth(context, 2.0f);
 //	CGContextStrokePath(context);
 
+    CGContextSetRGBFillColor(context, 0.0, 0.5, 1.0, 0.1);
+    CGContextFillRect(context, diagramFrame);
+    
     CGContextSetRGBFillColor(context, 102.0f/255.0f, 157.0f/255.0f, 107.0f/255.0f, 1.0f);
     CGContextFillRect(context, residualFrame);
-    CGContextStrokePath(context);
     
     CGContextSaveGState(context);
     
     [[UIColor blackColor] setStroke];
     bezierPath.lineWidth = 2.0f;
     [bezierPath stroke];
+    
+    if (self.residualTime > 0)
+    {
+        UIBezierPath *dashedLine = [[UIBezierPath alloc] init];
+        [dashedLine moveToPoint:CGPointMake(CGRectGetMaxX(residualFrame), CGRectGetMinY(residualFrame))];
+        [dashedLine addLineToPoint:CGPointMake(kXPositionOfZero+self.residualTime*(kXPositionOfZero)/timeNorm, CGRectGetMaxY(diagramFrame))];
+        dashedLine.lineWidth = 2;
+        CGFloat dashedLinePattern[] = {3, 3, 3, 3};
+        [dashedLine setLineDash: dashedLinePattern count: 4 phase: 0];
+        [dashedLine stroke];
+    }
     
     CGContextRestoreGState(context);
     
@@ -182,8 +210,17 @@
     CGContextSetLineWidth(context, 2.0f);
 	CGContextStrokePath(context);
     
-    for (NSValue *value in self.pointsArray) {
+    for (int i = 0; i < [self.pointsArray count]; i++) {
+        NSValue *value = self.pointsArray[i];
+        
+        Measurement *measurement = self.measurementArray[i];
         CGPoint point = [value CGPointValue];
+        
+        if (self.showTimes)
+        {
+            NSString *timeString = [NSString stringWithFormat:@" %@ ", [dateFormatter stringFromDate:measurement.date]];
+            [timeString drawAtPoint:CGPointMake(point.x-10.0f, point.y-18.0f) withAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Light" size:9.0f], NSBackgroundColorAttributeName : [[UIColor whiteColor] colorWithAlphaComponent:0.8f], NSForegroundColorAttributeName : [UIColor blackColor]}];
+        }
 		CGContextAddArc(context, point.x, point.y, 3, 0, 2*M_PI, NO);
         CGContextSetRGBFillColor(context, 0.0f, 0.0f, 0.0f, 1.0f);
         CGContextFillPath(context);
@@ -205,5 +242,22 @@
 
 }
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    self.showTimes = YES;
+    [self setNeedsDisplay];
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    self.showTimes = NO;
+    [self setNeedsDisplay];
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    self.showTimes = NO;
+    [self setNeedsDisplay];
+}
 
 @end

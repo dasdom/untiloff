@@ -2,7 +2,7 @@
 //  Measurement.h
 //  Until Off
 //
-//  Created by dasdom on 29.08.13.
+//  Created by dasdom on 10.09.13.
 //  Copyright (c) 2013 dasdom. All rights reserved.
 //
 
@@ -14,5 +14,6 @@
 
 @property (nonatomic, retain) NSDate * date;
 @property (nonatomic, retain) NSNumber * level;
+@property (nonatomic, retain) NSNumber * batteryState;
 
 @end

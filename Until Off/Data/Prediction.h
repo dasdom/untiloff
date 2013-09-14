@@ -1,8 +1,8 @@
 //
-//  Predition.h
+//  Prediction.h
 //  Until Off
 //
-//  Created by dasdom on 29.08.13.
+//  Created by dasdom on 12.09.13.
 //  Copyright (c) 2013 dasdom. All rights reserved.
 //
 
@@ -10,7 +10,7 @@
 #import <CoreData/CoreData.h>
 
 
-@interface Predition : NSManagedObject
+@interface Prediction : NSManagedObject
 
 @property (nonatomic, retain) NSDate * date;
 @property (nonatomic, retain) NSNumber * levelBasis;

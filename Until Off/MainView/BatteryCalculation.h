@@ -15,5 +15,6 @@
 - (NSInteger)preditionOfResidualTimeWithStopIndex:(NSUInteger)stopIndex;
 - (NSInteger)preditionOfTotalTimeWithStopIndex:(NSUInteger)stopIndex;
 - (CGFloat)timeDiffForStopIndex:(NSUInteger)stopIndex;
+- (CGFloat)levelDiffForStopIndex:(NSUInteger)stopIndex;
 
 @end
