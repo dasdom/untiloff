@@ -8,6 +8,7 @@
 
 #import "MainView.h"
 #import "Measurement.h"
+#import <QuartzCore/QuartzCore.h>
 
 #define kSecondsPerHour 3600.0f
 #define kXPositionOfZero 233.0f
@@ -15,6 +16,8 @@
 @interface MainView ()
 @property (nonatomic, strong) NSMutableArray *pointsArray;
 @property (nonatomic) BOOL showTimes;
+@property (nonatomic, strong) UILabel *residualLabel;
+@property (nonatomic, strong) UILabel *totalLabel;
 @end
 
 @implementation MainView
@@ -37,16 +40,42 @@
         [self addSubview: titleLabel];
         
         _locationServiceButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        UIImage *locationServiceImage = [UIImage imageNamed:@"locationServiceIcon"];
-        [_locationServiceButton setImage:locationServiceImage forState:UIControlStateNormal];
+        [_locationServiceButton setImage:[[UIImage imageNamed:@"locationServiceIcon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
         _locationServiceButton.translatesAutoresizingMaskIntoConstraints = NO;
         _locationServiceButton.contentMode = UIViewContentModeCenter;
+        _locationServiceButton.layer.borderWidth = 0.5f;
+        _locationServiceButton.layer.borderColor = [[UIColor colorWithHue:357.0f/360.0f saturation:1.0f brightness:0.80f alpha:1.0f] CGColor];
+        _locationServiceButton.layer.cornerRadius = 3.0f;
+        _locationServiceButton.accessibilityLabel = @"Location service";
+        _locationServiceButton.accessibilityHint = @"Not accessible yet.";
         [self addSubview:_locationServiceButton];
         
         _predictionOverviewButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_predictionOverviewButton setImage:[[UIImage imageNamed:@"distributionIcon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
         _predictionOverviewButton.translatesAutoresizingMaskIntoConstraints = NO;
-        _predictionOverviewButton.backgroundColor = [UIColor yellowColor];
+//        _predictionOverviewButton.backgroundColor = [UIColor yellowColor];
+        _predictionOverviewButton.layer.borderWidth = 0.5f;
+        _predictionOverviewButton.layer.borderColor = [[UIColor colorWithHue:357.0f/360.0f saturation:1.0f brightness:0.80f alpha:1.0f] CGColor];
+        _predictionOverviewButton.layer.cornerRadius = 3.0f;
+        _predictionOverviewButton.accessibilityLabel = @"Distribution";
+        _predictionOverviewButton.accessibilityHint = @"Not accessible yet.";
         [self addSubview:_predictionOverviewButton];
+        
+        _residualLabel = [[UILabel alloc] init];
+        _residualLabel.textColor = [UIColor whiteColor];
+        _residualLabel.backgroundColor = [UIColor clearColor];
+        _residualLabel.textAlignment = NSTextAlignmentCenter;
+        _residualLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:25.0f];
+        [self addSubview:_residualLabel];
+        
+        _totalLabel = [[UILabel alloc] init];
+        _totalLabel.textColor = [UIColor blackColor];
+        _totalLabel.backgroundColor = [UIColor clearColor];
+        _totalLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:22.0f];
+        _totalLabel.adjustsFontSizeToFitWidth = YES;
+        _totalLabel.minimumScaleFactor = 0.7f;
+        _totalLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        [self addSubview:_totalLabel];
         
         NSArray *titleVerticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[titleLabel(40)]" options:0 metrics:nil views:NSDictionaryOfVariableBindings(titleLabel)];
         [self addConstraints:titleVerticalConstraints];
@@ -54,11 +83,13 @@
         NSArray *titleHorizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[titleLabel]-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(titleLabel)];
         [self addConstraints:titleHorizontalConstraints];
         
-        NSArray *locationServiceVerticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[_locationServiceButton(==40,==_predictionOverviewButton)]-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_locationServiceButton, _predictionOverviewButton)];
+        NSArray *locationServiceVerticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[_totalLabel]-15-[_locationServiceButton(==40,==_predictionOverviewButton)]-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_totalLabel,_locationServiceButton, _predictionOverviewButton)];
         [self addConstraints:locationServiceVerticalConstraints];
         
-        NSArray *locationServiceHorizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[_predictionOverviewButton(==64,_locationServiceButton)]-[_locationServiceButton]-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_locationServiceButton, _predictionOverviewButton)];
+        NSArray *locationServiceHorizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[_predictionOverviewButton(==_locationServiceButton)]-[_locationServiceButton]-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_locationServiceButton, _predictionOverviewButton)];
         [self addConstraints:locationServiceHorizontalConstraints];
+        
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20-[_totalLabel]-20-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_totalLabel)]];
         
         [self addConstraint: [NSLayoutConstraint constraintWithItem:_predictionOverviewButton attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:_locationServiceButton attribute:NSLayoutAttributeTop multiplier:1.0f constant:0.0f]];
         
@@ -76,12 +107,11 @@
     [[UIColor whiteColor] setFill];
     CGContextFillRect(context, rect);
     
-	NSDate *lastDate = ((Measurement*)[self.measurementArray firstObject]).date;
 	CGFloat timeNorm = self.numberOfHours*kSecondsPerHour+7000;
 	CGFloat width = self.frame.size.width;
-	CGFloat height = self.frame.size.height;
-    CGRect diagramFrame = CGRectMake(20.0f, 72.0f, kXPositionOfZero-20.0f, 270.0f);
-    CGRect residualFrame = CGRectMake(20.0f, 72.0f, kXPositionOfZero-20.0f, 270.0f);
+//	CGFloat height = self.frame.size.height;
+    CGRect diagramFrame = CGRectMake(20.0f, 72.0f, kXPositionOfZero-20.0f, self.frame.size.height-210.0f);
+    CGRect residualFrame = CGRectMake(20.0f, 72.0f, kXPositionOfZero-20.0f, self.frame.size.height-210.0f);
     
 	for (int i = 0; i <= self.numberOfHours/2; i++)
     {
@@ -92,7 +122,7 @@
         CGContextSetRGBStrokeColor(context, 0.66, 0.66, 0.66, 1.0);
         CGContextSetLineWidth(context, 0.5f);
 		CGContextStrokePath(context);
-        if (self.numberOfHours < 20 || i%2 == 0)
+        if (self.numberOfHours < 14 || (self.numberOfHours < 20  && i%2 == 0) || i%4 == 0)
         {
             NSString *labelText;
             if (i == 0)
@@ -142,13 +172,15 @@
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     dateFormatter.dateStyle = NSDateFormatterNoStyle;
     dateFormatter.timeStyle = NSDateFormatterShortStyle;
+    NSDate *lastDate = [[NSDate alloc] initWithTimeInterval:0 sinceDate:((Measurement*)[self.measurementArray firstObject]).date];
     for (int i = 0; i < [self.measurementArray count]; i++)
     {
         Measurement *measurement = self.measurementArray[i];
+        NSLog(@"i: %d, measurement.date: %@, lastDate: %@", i, measurement.date, lastDate);
         
-        CGFloat timeDiff = [measurement.date timeIntervalSinceDate:lastDate];
-        CGFloat pointX = diagramFrame.size.width+20.0f+timeDiff*(diagramFrame.size.width+20.0f)/timeNorm;
-        CGFloat pointY = diagramFrame.origin.y+(1-[measurement.level floatValue])*(diagramFrame.size.height);
+        double timeDiff = [measurement.date timeIntervalSinceDate:lastDate];
+        double pointX = diagramFrame.size.width+20.0f+timeDiff*(diagramFrame.size.width+20.0f)/timeNorm;
+        double pointY = diagramFrame.origin.y+(1-[measurement.level floatValue])*(diagramFrame.size.height);
         
 //        [[dateFormatter stringFromDate:measurement.date] drawAtPoint:CGPointMake(pointX-5.0f, pointY-15.0f) withAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Light" size:9.0f], NSBackgroundColorAttributeName : [UIColor whiteColor]}];
         
@@ -171,6 +203,8 @@
     
     residualFrame.origin.y = firstYPoint;
     residualFrame.size.height = CGRectGetMaxY(diagramFrame)-firstYPoint;
+    
+//    self.residualFrame = residualFrame;
     
     CGFloat stopPosistion = kXPositionOfZero;
     diagramFrame.size.width = stopPosistion-diagramFrame.origin.x;
@@ -233,12 +267,34 @@
     CGContextStrokePath(context);
     
     NSString *residualString = [NSString stringWithFormat:@"%.0f%% ➞ %@h", firstLevel*100, self.residualTimeString];
-    CGSize residualStringSize = [residualString sizeWithAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Bold" size:25.0f]}];
-    [residualString drawAtPoint:CGPointMake(residualFrame.origin.x+(residualFrame.size.width-residualStringSize.width)/2.0f, residualFrame.origin.y+(residualFrame.size.height-residualStringSize.height)/2.0f) withAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Bold" size:25.0f], NSForegroundColorAttributeName : [UIColor whiteColor]}];
+    self.residualLabel.frame = residualFrame;
+    self.residualLabel.text = residualString;
+    if ([self.residualTimeString isEqualToString:@"-:-"])
+    {
+        self.residualLabel.accessibilityLabel = @"Not enough data to calculate residual battery duration.";
+        self.residualLabel.accessibilityHint = @"To collect data, open the app from time to time.";
+    }
+    else
+    {
+        NSArray *componentsArray = [self.totalTimeString componentsSeparatedByString:@":"];
+        self.residualLabel.accessibilityLabel = [NSString stringWithFormat:@"Residual battery %@ hours and %@ minutes", componentsArray[0], componentsArray[1]];
+    }
+//    CGSize residualStringSize = [residualString sizeWithAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Bold" size:25.0f]}];
+//    [residualString drawAtPoint:CGPointMake(residualFrame.origin.x+(residualFrame.size.width-residualStringSize.width)/2.0f, residualFrame.origin.y+(residualFrame.size.height-residualStringSize.height)/2.0f) withAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Bold" size:25.0f], NSForegroundColorAttributeName : [UIColor whiteColor]}];
     
     NSString *totalTimeString = [NSString stringWithFormat:@"Total Battery Duration %@h", self.totalTimeString];
-    CGSize totalTimeStringSize = [totalTimeString sizeWithAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Light" size:22.0f]}];
-    [totalTimeString drawAtPoint:CGPointMake(width-totalTimeStringSize.width-20.0f, height-105.0f) withAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Light" size:22.0f]}];
+    self.totalLabel.text = totalTimeString;
+    if ([self.totalTimeString isEqualToString:@"-:-"])
+    {
+        self.totalLabel.accessibilityLabel = @"Not enough data to calculate total battery duration.";
+    }
+    else
+    {
+        NSArray *componentsArray = [self.totalTimeString componentsSeparatedByString:@":"];
+        self.totalLabel.accessibilityLabel = [NSString stringWithFormat:@"Total battery duration %@ hours and %@ minutes.", componentsArray[0], componentsArray[1]];
+    }
+//    CGSize totalTimeStringSize = [totalTimeString sizeWithAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Light" size:22.0f]}];
+//    [totalTimeString drawAtPoint:CGPointMake(width-totalTimeStringSize.width-20.0f, height-105.0f) withAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Light" size:22.0f]}];
 
 }
 
@@ -259,5 +315,6 @@
     self.showTimes = NO;
     [self setNeedsDisplay];
 }
+
 
 @end

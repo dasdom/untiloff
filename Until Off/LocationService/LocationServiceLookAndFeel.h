@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
+#define kLocationHeaderViewIndentifier @"kLocationHeaderViewIndentifier"
+
 @interface LocationServiceLookAndFeel : NSObject <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic) CGFloat viewWidth;

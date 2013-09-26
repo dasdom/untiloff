@@ -12,6 +12,7 @@
 #import "AddCurrentLocationCell.h"
 #import "Geofence.h"
 #import "AppDelegate.h"
+#import "LocationHeaderView.h"
 
 @interface LocationServiceViewController ()
 @property (nonatomic, strong) LocationServiceLookAndFeel *locationServiceLookAndFeel;
@@ -35,10 +36,12 @@
     
     collectionView.delegate = _locationServiceLookAndFeel;
     collectionView.dataSource = _locationServiceLookAndFeel;
+    collectionView.backgroundColor = [UIColor colorWithWhite:0.95f alpha:1.0f];
     
     [collectionView registerClass:([LocationCell class]) forCellWithReuseIdentifier:kLocationCell];
     [collectionView registerClass:([AddCurrentLocationCell class]) forCellWithReuseIdentifier:kAddCurrentLocationCell];
-
+    [collectionView registerClass:[LocationHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kLocationHeaderViewIndentifier];
+    
     collectionView.allowsMultipleSelection = YES;
     
 //    self.navigationItem.rightBarButtonItem = self.editButtonItem;
@@ -69,6 +72,9 @@
     self.locationServiceLookAndFeel.placeMarkArray = [mutableGeofenceArray copy];
     
     self.collectionView = collectionView;
+//    self.collectionView.tintColor = self.navigationController.view.tintColor;
+    
+    self.title = NSLocalizedString(@"Geo Fences", nil);
 }
 
 - (void)viewDidLoad
@@ -81,6 +87,10 @@
 {
     [super viewDidAppear:animated];
     [self.locationServiceLookAndFeel.locationManager startUpdatingLocation];
+    
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Add Geo Fences", nil) message:NSLocalizedString(@"Add here a geo fence to you current location to take a measurement everytime you leave this location. (This could drain your battery a bit faster.)", nil) delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
+//    alertView.tintColor = [UIColor colorWithHue:357.0f/360.0f saturation:1.0f brightness:0.80f alpha:1.0f];
+    [alertView show];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -100,7 +110,8 @@
     NSArray *indexPathOfSelectedItems = [self.collectionView indexPathsForSelectedItems];
     if ([indexPathOfSelectedItems count] < 1)
     {
-        
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Nothing to delete", nil) message:NSLocalizedString(@"To delete a location, select it and touch the trash can again.", nil) delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
+        [alertView show];
     }
     else
     {

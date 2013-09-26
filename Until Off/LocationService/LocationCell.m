@@ -20,6 +20,7 @@
         labelFrame.origin.x = 10.0f;
         labelFrame.size.width = labelFrame.size.width - 20.0f;
         _locationNameLabel = [[UILabel alloc] initWithFrame:labelFrame];
+        _locationNameLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0f];
         [self.contentView addSubview:_locationNameLabel];
         
         UIView *selectedBackgroundView = [[UIView alloc] initWithFrame:self.bounds];

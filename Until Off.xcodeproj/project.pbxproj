@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		F207546717DFB2E100981BE4 /* Measurement.m in Sources */ = {isa = PBXBuildFile; fileRef = F207546617DFB2E100981BE4 /* Measurement.m */; };
 		F207546817DFB2E100981BE4 /* Measurement.m in Sources */ = {isa = PBXBuildFile; fileRef = F207546617DFB2E100981BE4 /* Measurement.m */; };
+		F22F2B1F17EDCCAC00EEFABD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F22F2B1E17EDCCAC00EEFABD /* Images.xcassets */; };
 		F23EE43D17E25396005D5572 /* Prediction.m in Sources */ = {isa = PBXBuildFile; fileRef = F23EE43C17E25396005D5572 /* Prediction.m */; };
 		F23EE43E17E25396005D5572 /* Prediction.m in Sources */ = {isa = PBXBuildFile; fileRef = F23EE43C17E25396005D5572 /* Prediction.m */; };
 		F23EE44117E25757005D5572 /* PredictionsOverviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F23EE44017E25757005D5572 /* PredictionsOverviewViewController.m */; };
@@ -25,6 +26,8 @@
 		F24BCAC717DBC8B500A09272 /* AddCurrentLocationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F24BCAC517DBC8B500A09272 /* AddCurrentLocationCell.m */; };
 		F272CFDA17DCC4F4004C09A2 /* Geofence.m in Sources */ = {isa = PBXBuildFile; fileRef = F272CFD917DCC4F4004C09A2 /* Geofence.m */; };
 		F272CFDB17DCC4F4004C09A2 /* Geofence.m in Sources */ = {isa = PBXBuildFile; fileRef = F272CFD917DCC4F4004C09A2 /* Geofence.m */; };
+		F28D937517F0E47A0044943E /* DescriptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = F28D937417F0E47A0044943E /* DescriptionView.m */; };
+		F28D937617F0E47A0044943E /* DescriptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = F28D937417F0E47A0044943E /* DescriptionView.m */; };
 		F2A0DDE317CE9CA200EA93AF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2A0DDE217CE9CA200EA93AF /* Foundation.framework */; };
 		F2A0DDE517CE9CA200EA93AF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2A0DDE417CE9CA200EA93AF /* CoreGraphics.framework */; };
 		F2A0DDE717CE9CA200EA93AF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2A0DDE617CE9CA200EA93AF /* UIKit.framework */; };
@@ -33,7 +36,6 @@
 		F2A0DDF117CE9CA300EA93AF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A0DDF017CE9CA300EA93AF /* main.m */; };
 		F2A0DDF517CE9CA300EA93AF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A0DDF417CE9CA300EA93AF /* AppDelegate.m */; };
 		F2A0DDF817CE9CA300EA93AF /* Until_Off.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F2A0DDF617CE9CA300EA93AF /* Until_Off.xcdatamodeld */; };
-		F2A0DDFA17CE9CA300EA93AF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F2A0DDF917CE9CA300EA93AF /* Images.xcassets */; };
 		F2A0DE0117CE9CA300EA93AF /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2A0DE0017CE9CA300EA93AF /* XCTest.framework */; };
 		F2A0DE0217CE9CA300EA93AF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2A0DDE217CE9CA200EA93AF /* Foundation.framework */; };
 		F2A0DE0317CE9CA300EA93AF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2A0DDE617CE9CA200EA93AF /* UIKit.framework */; };
@@ -48,6 +50,12 @@
 		F2A0DE3217D3CD3A00EA93AF /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A0DE3017D3CD3A00EA93AF /* MainView.m */; };
 		F2A0DE3517D5248F00EA93AF /* MockMeasurement.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A0DE3417D5248F00EA93AF /* MockMeasurement.m */; };
 		F2A0DE3717DB44F100EA93AF /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2A0DE3617DB44F100EA93AF /* CoreLocation.framework */; };
+		F2AE7F0117E7990D00A1778F /* MainViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F2AE7F0017E7990D00A1778F /* MainViewControllerTests.m */; };
+		F2AE7F0317EA33AF00A1778F /* MeasurementsManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F2AE7F0217EA33AF00A1778F /* MeasurementsManagerTests.m */; };
+		F2AE7F0617EA3C6700A1778F /* MeasurementsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F2AE7F0517EA3C6700A1778F /* MeasurementsManager.m */; };
+		F2AE7F0717EA3C6700A1778F /* MeasurementsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F2AE7F0517EA3C6700A1778F /* MeasurementsManager.m */; };
+		F2AE7F0A17EB8F0D00A1778F /* LocationHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F2AE7F0917EB8F0D00A1778F /* LocationHeaderView.m */; };
+		F2AE7F0B17EB8F0D00A1778F /* LocationHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F2AE7F0917EB8F0D00A1778F /* LocationHeaderView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +71,7 @@
 /* Begin PBXFileReference section */
 		F207546517DFB2E100981BE4 /* Measurement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Measurement.h; path = Data/Measurement.h; sourceTree = "<group>"; };
 		F207546617DFB2E100981BE4 /* Measurement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Measurement.m; path = Data/Measurement.m; sourceTree = "<group>"; };
+		F22F2B1E17EDCCAC00EEFABD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ../../../../.Trash/Images.xcassets; sourceTree = "<group>"; };
 		F23EE43B17E25396005D5572 /* Prediction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Prediction.h; path = Data/Prediction.h; sourceTree = "<group>"; };
 		F23EE43C17E25396005D5572 /* Prediction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Prediction.m; path = Data/Prediction.m; sourceTree = "<group>"; };
 		F23EE43F17E25757005D5572 /* PredictionsOverviewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PredictionsOverviewViewController.h; path = PredictionsOverview/PredictionsOverviewViewController.h; sourceTree = "<group>"; };
@@ -79,6 +88,8 @@
 		F24BCAC517DBC8B500A09272 /* AddCurrentLocationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AddCurrentLocationCell.m; path = LocationService/AddCurrentLocationCell.m; sourceTree = "<group>"; };
 		F272CFD817DCC4F4004C09A2 /* Geofence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Geofence.h; path = Data/Geofence.h; sourceTree = "<group>"; };
 		F272CFD917DCC4F4004C09A2 /* Geofence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Geofence.m; path = Data/Geofence.m; sourceTree = "<group>"; };
+		F28D937317F0E47A0044943E /* DescriptionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DescriptionView.h; path = MainView/DescriptionView.h; sourceTree = "<group>"; };
+		F28D937417F0E47A0044943E /* DescriptionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DescriptionView.m; path = MainView/DescriptionView.m; sourceTree = "<group>"; };
 		F2A0DDDF17CE9CA200EA93AF /* Until Off.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Until Off.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2A0DDE217CE9CA200EA93AF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F2A0DDE417CE9CA200EA93AF /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -91,7 +102,6 @@
 		F2A0DDF317CE9CA300EA93AF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F2A0DDF417CE9CA300EA93AF /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		F2A0DDF717CE9CA300EA93AF /* Until_Off.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Until_Off.xcdatamodel; sourceTree = "<group>"; };
-		F2A0DDF917CE9CA300EA93AF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		F2A0DDFF17CE9CA300EA93AF /* Until OffTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Until OffTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2A0DE0017CE9CA300EA93AF /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		F2A0DE0917CE9CA300EA93AF /* Until OffTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Until OffTests-Info.plist"; sourceTree = "<group>"; };
@@ -106,6 +116,12 @@
 		F2A0DE3317D5248F00EA93AF /* MockMeasurement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MockMeasurement.h; sourceTree = "<group>"; };
 		F2A0DE3417D5248F00EA93AF /* MockMeasurement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MockMeasurement.m; sourceTree = "<group>"; };
 		F2A0DE3617DB44F100EA93AF /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		F2AE7F0017E7990D00A1778F /* MainViewControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewControllerTests.m; sourceTree = "<group>"; };
+		F2AE7F0217EA33AF00A1778F /* MeasurementsManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeasurementsManagerTests.m; sourceTree = "<group>"; };
+		F2AE7F0417EA3C6700A1778F /* MeasurementsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MeasurementsManager.h; path = MainView/MeasurementsManager.h; sourceTree = "<group>"; };
+		F2AE7F0517EA3C6700A1778F /* MeasurementsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MeasurementsManager.m; path = MainView/MeasurementsManager.m; sourceTree = "<group>"; };
+		F2AE7F0817EB8F0D00A1778F /* LocationHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LocationHeaderView.h; path = LocationService/LocationHeaderView.h; sourceTree = "<group>"; };
+		F2AE7F0917EB8F0D00A1778F /* LocationHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LocationHeaderView.m; path = LocationService/LocationHeaderView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,6 +173,8 @@
 				F24BCAC117DB8B0000A09272 /* LocationCell.m */,
 				F24BCAC417DBC8B500A09272 /* AddCurrentLocationCell.h */,
 				F24BCAC517DBC8B500A09272 /* AddCurrentLocationCell.m */,
+				F2AE7F0817EB8F0D00A1778F /* LocationHeaderView.h */,
+				F2AE7F0917EB8F0D00A1778F /* LocationHeaderView.m */,
 			);
 			name = LocationService;
 			sourceTree = "<group>";
@@ -202,7 +220,7 @@
 				F2A0DE1C17CFDC1800EA93AF /* MainView */,
 				F24BCABB17DB794500A09272 /* LocationService */,
 				F2A0DE1717CE9DF900EA93AF /* Data */,
-				F2A0DDF917CE9CA300EA93AF /* Images.xcassets */,
+				F22F2B1E17EDCCAC00EEFABD /* Images.xcassets */,
 				F2A0DDEB17CE9CA300EA93AF /* Supporting Files */,
 			);
 			path = "Until Off";
@@ -223,6 +241,8 @@
 			isa = PBXGroup;
 			children = (
 				F2A0DE2917D3C88B00EA93AF /* BatteryCalculationTests.m */,
+				F2AE7F0017E7990D00A1778F /* MainViewControllerTests.m */,
+				F2AE7F0217EA33AF00A1778F /* MeasurementsManagerTests.m */,
 				F2A0DE3317D5248F00EA93AF /* MockMeasurement.h */,
 				F2A0DE3417D5248F00EA93AF /* MockMeasurement.m */,
 				F2A0DE0817CE9CA300EA93AF /* Supporting Files */,
@@ -258,8 +278,12 @@
 			children = (
 				F2A0DE1817CFDC1100EA93AF /* MainViewController.h */,
 				F2A0DE1917CFDC1200EA93AF /* MainViewController.m */,
+				F2AE7F0417EA3C6700A1778F /* MeasurementsManager.h */,
+				F2AE7F0517EA3C6700A1778F /* MeasurementsManager.m */,
 				F2A0DE2F17D3CD3A00EA93AF /* MainView.h */,
 				F2A0DE3017D3CD3A00EA93AF /* MainView.m */,
+				F28D937317F0E47A0044943E /* DescriptionView.h */,
+				F28D937417F0E47A0044943E /* DescriptionView.m */,
 				F2A0DE2B17D3CCEC00EA93AF /* BatteryCalculation.h */,
 				F2A0DE2C17D3CCEC00EA93AF /* BatteryCalculation.m */,
 			);
@@ -342,7 +366,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F2A0DDEF17CE9CA300EA93AF /* InfoPlist.strings in Resources */,
-				F2A0DDFA17CE9CA300EA93AF /* Images.xcassets in Resources */,
+				F22F2B1F17EDCCAC00EEFABD /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -365,9 +389,12 @@
 				F2A0DE2D17D3CCEC00EA93AF /* BatteryCalculation.m in Sources */,
 				F2A0DDF517CE9CA300EA93AF /* AppDelegate.m in Sources */,
 				F2A0DDF817CE9CA300EA93AF /* Until_Off.xcdatamodeld in Sources */,
+				F2AE7F0A17EB8F0D00A1778F /* LocationHeaderView.m in Sources */,
+				F2AE7F0617EA3C6700A1778F /* MeasurementsManager.m in Sources */,
 				F23EE44117E25757005D5572 /* PredictionsOverviewViewController.m in Sources */,
 				F2A0DE3117D3CD3A00EA93AF /* MainView.m in Sources */,
 				F24BCABE17DB79AB00A09272 /* LocationServiceLookAndFeel.m in Sources */,
+				F28D937517F0E47A0044943E /* DescriptionView.m in Sources */,
 				F207546717DFB2E100981BE4 /* Measurement.m in Sources */,
 				F24BCAC617DBC8B500A09272 /* AddCurrentLocationCell.m in Sources */,
 				F272CFDA17DCC4F4004C09A2 /* Geofence.m in Sources */,
@@ -384,18 +411,23 @@
 			buildActionMask = 2147483647;
 			files = (
 				F2A0DE3517D5248F00EA93AF /* MockMeasurement.m in Sources */,
+				F2AE7F0717EA3C6700A1778F /* MeasurementsManager.m in Sources */,
+				F2AE7F0117E7990D00A1778F /* MainViewControllerTests.m in Sources */,
 				F207546817DFB2E100981BE4 /* Measurement.m in Sources */,
 				F23EE44217E25757005D5572 /* PredictionsOverviewViewController.m in Sources */,
 				F24BCAC317DB8B0000A09272 /* LocationCell.m in Sources */,
 				F23EE44717E259F8005D5572 /* PredictionOverviewView.m in Sources */,
+				F28D937617F0E47A0044943E /* DescriptionView.m in Sources */,
 				F24BCAC717DBC8B500A09272 /* AddCurrentLocationCell.m in Sources */,
 				F23EE43E17E25396005D5572 /* Prediction.m in Sources */,
 				F2A0DE2E17D3CCEC00EA93AF /* BatteryCalculation.m in Sources */,
 				F272CFDB17DCC4F4004C09A2 /* Geofence.m in Sources */,
 				F24BCABA17DB793900A09272 /* LocationServiceViewController.m in Sources */,
 				F24BCABF17DB79AB00A09272 /* LocationServiceLookAndFeel.m in Sources */,
+				F2AE7F0317EA33AF00A1778F /* MeasurementsManagerTests.m in Sources */,
 				F2A0DE1B17CFDC1200EA93AF /* MainViewController.m in Sources */,
 				F2A0DE2A17D3C88B00EA93AF /* BatteryCalculationTests.m in Sources */,
+				F2AE7F0B17EB8F0D00A1778F /* LocationHeaderView.m in Sources */,
 				F2A0DE3217D3CD3A00EA93AF /* MainView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -12,5 +12,6 @@
 
 @property (nonatomic, strong) NSNumber *level;
 @property (nonatomic, strong) NSDate *date;
+@property (nonatomic, strong) NSNumber *batteryState;
 
 @end

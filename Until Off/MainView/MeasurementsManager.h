@@ -1,18 +1,19 @@
 //
-//  MainViewController.h
+//  MeasurementsManager.h
 //  Until Off
 //
-//  Created by dasdom on 29.08.13.
+//  Created by dasdom on 18.09.13.
 //  Copyright (c) 2013 dasdom. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
-@interface MainViewController : UIViewController
+@interface MeasurementsManager : NSObject
 
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 
 - (id)initWithManagedObjectContext:(NSManagedObjectContext*)managedObjectContext;
-- (void)becameActive:(NSNotification*)notification;
+- (void)addMeasurement;
+- (NSArray*)measurements;
 
 @end

@@ -34,6 +34,8 @@
     UIBarButtonItem *closeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonTouched:)];
     self.navigationItem.leftBarButtonItem = closeButton;
     
+    self.title = NSLocalizedString(@"Distribution", nil);
+    
     self.view = predictionOverviewView;
 }
 

@@ -9,6 +9,7 @@
 #import "LocationServiceLookAndFeel.h"
 #import "LocationCell.h"
 #import "AddCurrentLocationCell.h"
+#import "LocationHeaderView.h"
 
 @interface LocationServiceLookAndFeel () <CLLocationManagerDelegate>
 @property (nonatomic, strong) CLPlacemark *currentPlaceMark;
@@ -56,15 +57,23 @@
         case 0:
         {
             AddCurrentLocationCell *addCurrentLocationCell = [collectionView dequeueReusableCellWithReuseIdentifier:kAddCurrentLocationCell forIndexPath:indexPath];
-            addCurrentLocationCell.titleLabel.text = NSLocalizedString(@"Add Current Location", nil);
+            addCurrentLocationCell.titleLabel.text = NSLocalizedString(@"+ Add Current Location", nil);
+            addCurrentLocationCell.tintColor = collectionView.tintColor;
             return addCurrentLocationCell;
             break;
         }
         case 1:
         {
             LocationCell *locationCell = [collectionView dequeueReusableCellWithReuseIdentifier:kLocationCell forIndexPath:indexPath];
-            NSDictionary *geofenceDictionary = [self.placeMarkArray objectAtIndex:indexPath.row];
-            locationCell.locationNameLabel.text = [geofenceDictionary objectForKey:@"name"];
+            if ([self.placeMarkArray count] < 1)
+            {
+                locationCell.locationNameLabel.text = NSLocalizedString(@"No geofence yet.", nil);
+            }
+            else
+            {
+                NSDictionary *geofenceDictionary = [self.placeMarkArray objectAtIndex:indexPath.row];
+                locationCell.locationNameLabel.text = [geofenceDictionary objectForKey:@"name"];
+            }
             return locationCell;
             break;
         }
@@ -78,9 +87,24 @@
     }
 }
 
+- (UICollectionReusableView*)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    LocationHeaderView *locationHeaderView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kLocationHeaderViewIndentifier forIndexPath:indexPath];
+    return locationHeaderView;
+}
+
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     return CGSizeMake(self.viewWidth, 50.0f);
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
+{
+    if (section == 0 || [self.placeMarkArray count] < 1)
+    {
+        return CGSizeZero;
+    }
+    return CGSizeMake(self.viewWidth, 30.0f);
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath

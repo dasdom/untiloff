@@ -22,14 +22,15 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     
-    MainViewController *mainViewController = [[MainViewController alloc] init];
-    mainViewController.managedObjectContext = self.managedObjectContext;
+    MainViewController *mainViewController = [[MainViewController alloc] initWithManagedObjectContext:self.managedObjectContext];
+//    mainViewController.managedObjectContext = self.managedObjectContext;
     
     [[NSNotificationCenter defaultCenter] addObserver:mainViewController selector:@selector(becameActive:) name:@"UIApplicationDidBecomeActiveNotification" object:nil];
 
     self.window.rootViewController = mainViewController;
     
     self.window.backgroundColor = [UIColor whiteColor];
+    self.window.tintColor = [UIColor colorWithHue:357.0f/360.0f saturation:1.0f brightness:0.75f alpha:1.0f];
     [self.window makeKeyAndVisible];
     return YES;
 }

@@ -15,7 +15,10 @@
 #import "BatteryCalculation.h"
 #import "LocationServiceViewController.h"
 #import "PredictionsOverviewViewController.h"
+#import "MeasurementsManager.h"
+#import "DescriptionView.h"
 #import <CoreLocation/CoreLocation.h>
+#import <QuartzCore/QuartzCore.h>
 
 #define kLevelDiff @"kLevelDiff"
 #define kTimeDiff @"kTimeDiff"
@@ -25,28 +28,46 @@
 @property (nonatomic, strong) MainView *mainView;
 @property (nonatomic, strong) NSArray *measurementArray;
 @property (nonatomic, strong) CLLocationManager *locationManager;
+@property (nonatomic, strong) MeasurementsManager *measurementManager;
 @end
 
 @implementation MainViewController
 
-- (id)init
+- (id)initWithManagedObjectContext:(NSManagedObjectContext*)managedObjectContext
 {
     if ((self = [super init]))
     {
         _locationManager = [[CLLocationManager alloc] init];
         _locationManager.delegate = self;
+        
+        _mainView = [[MainView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+//        _mainView.tintColor = [UIColor greenColor];
+        
+        [_mainView.locationServiceButton addTarget:self action:@selector(showLocationServiceSettings:) forControlEvents:UIControlEventTouchUpInside];
+        [_mainView.predictionOverviewButton addTarget:self action:@selector(showPredictionOverview:) forControlEvents:UIControlEventTouchUpInside];
+        
+        _measurementManager = [[MeasurementsManager alloc] initWithManagedObjectContext:managedObjectContext];
+        
+        _managedObjectContext = managedObjectContext;
     }
     return self;
 }
 
 - (void)loadView
 {
-    _mainView = [[MainView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    
-    [_mainView.locationServiceButton addTarget:self action:@selector(showLocationServiceSettings:) forControlEvents:UIControlEventTouchUpInside];
-    [_mainView.predictionOverviewButton addTarget:self action:@selector(showPredictionOverview:) forControlEvents:UIControlEventTouchUpInside];
-    
     self.view = _mainView;
+    
+    CGRect bounds = self.view.bounds;
+
+//    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"appAlreadyStarted"])
+    {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"appAlreadyStarted"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        DescriptionView *descriptionView = [[DescriptionView alloc] initWithFrame:bounds];
+        [descriptionView.dismissButton addTarget:descriptionView action:@selector(removeFromSuperview) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:descriptionView];
+    }
 }
 
 - (void)viewDidLoad
@@ -90,34 +111,16 @@
 
 - (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
 {
-    [self addMeasurement];
+    [self.measurementManager addMeasurement];
 }
 
 #pragma mark -
 
-- (void)becameActive:(NSNotification*)notification {
-    [self addMeasurement];
+- (void)becameActive:(NSNotification*)notification
+{
+    [self.measurementManager addMeasurement];
     
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Measurement" inManagedObjectContext:self.managedObjectContext];
-    [fetchRequest setEntity: entity];
-    
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"date" ascending:NO];
-    NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
-    [fetchRequest setSortDescriptors:sortDescriptors];
-    
-    NSError *fetchError;
-    self.measurementArray = [[self managedObjectContext] executeFetchRequest:fetchRequest error:&fetchError];
-    
-    if ([self.measurementArray count] > 50) {
-        [self.managedObjectContext deleteObject:self.measurementArray[0]];
-    }
-    
-//    NSLog(@"measurementArray %@", self.measurementArray);
-//    
-//    for (Measurement *measurement in self.measurementArray) {
-//        NSLog(@"measurement.level: %@, date: %@", measurement.level, measurement.date);
-//    }
+    self.measurementArray = [self.measurementManager measurements];
     
     [self updateMainView];
 }
@@ -136,7 +139,7 @@
     self.mainView.numberOfHours = (NSUInteger)((timeDiff/3600.0f > 6.0f) ? timeDiff/3600.0f : 6.0f);
 
     CGFloat levelDiff = [batteryCalculation levelDiffForStopIndex:stopIndex];
-    if (levelDiff > 0.1f)
+    if (levelDiff > 0.5f)
     {
        Prediction *prediction = [NSEntityDescription insertNewObjectForEntityForName:@"Prediction" inManagedObjectContext:self.managedObjectContext];
         prediction.timeBasis = @(timeDiff);
@@ -169,41 +172,13 @@
     return [NSString stringWithFormat:@"%d:%@", hours, [formatter stringFromNumber:minutes]];
 }
 
-#pragma mark -
-
-- (void)addMeasurement
-{
-    NSDate *date = [NSDate date];
-    CGFloat currentLevel = [[UIDevice currentDevice] batteryLevel];
-    NSNumber *currentLevelNumber = [NSNumber numberWithFloat:currentLevel];
-    NSNumber *batteryState = [NSNumber numberWithInteger:[[UIDevice currentDevice] batteryState]];
-    NSLog(@"batteryLevel: %f", [[UIDevice currentDevice] batteryLevel]);
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    CGFloat previousLevel = [userDefaults floatForKey:@"previousLevel"];
-    
-    if (currentLevel > previousLevel && currentLevel - previousLevel < 0.1f && [[UIDevice currentDevice] batteryState] != UIDeviceBatteryStateCharging)
-    {
-        return;
-    }
-    
-    [userDefaults setFloat:currentLevel forKey:@"previousLevel"];
-    [userDefaults synchronize];
-    
-    Measurement *measurement = [NSEntityDescription insertNewObjectForEntityForName:@"Measurement" inManagedObjectContext:[self managedObjectContext]];
-    measurement.level = currentLevelNumber;
-    measurement.date = date;
-    measurement.batteryState = batteryState;
-    
-    [(AppDelegate*)[[UIApplication sharedApplication] delegate] saveContext];
-}
-
 #pragma mark - actions
 - (void)showLocationServiceSettings:(UIButton*)sender
 {
     LocationServiceViewController *locationServiceViewController = [[LocationServiceViewController alloc] init];
     locationServiceViewController.managedObjectContext = self.managedObjectContext;
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:locationServiceViewController];
+//    navigationController.view.tintColor = [UIColor colorWithHue:357.0f/360.0f saturation:1.0f brightness:0.80f alpha:1.0f];
     [self presentViewController:navigationController animated:YES completion:^{}];
 }
 
@@ -214,6 +189,12 @@
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:predictionOverviewViewController];
     [self presentViewController:navigationController animated:YES completion:^{}];
 
+}
+
+#pragma mark - resture action
+- (void)dismissOverlay:(UITapGestureRecognizer*)sender
+{
+    [sender.view removeFromSuperview];
 }
 
 @end
