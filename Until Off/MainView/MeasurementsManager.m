@@ -8,6 +8,7 @@
 
 #import "MeasurementsManager.h"
 #import "Measurement.h"
+#import "MockMeasurement.h"
 
 @interface MeasurementsManager ()
 @end
@@ -55,6 +56,56 @@
     [fetchRequest setSortDescriptors:sortDescriptors];
     
     return [self.managedObjectContext executeFetchRequest:fetchRequest error:nil];
+//    return [self testArray];
+}
+
+- (NSArray*)testArray
+{
+    NSMutableArray *mutableArray = [NSMutableArray array];
+    NSDate *nowDate = [NSDate date];
+    
+    MockMeasurement *mockMeasurement = [[MockMeasurement alloc] init];
+    mockMeasurement.level = @(0.25f);
+    mockMeasurement.date = nowDate;
+    [mutableArray addObject:mockMeasurement];
+    
+    mockMeasurement = [[MockMeasurement alloc] init];
+    mockMeasurement.level = @(0.4f);
+    mockMeasurement.date = [NSDate dateWithTimeInterval:(-60.0f*60.0f*2.0f) sinceDate:nowDate];
+    mockMeasurement.batteryState = @(UIDeviceBatteryStateUnplugged);
+    [mutableArray addObject:mockMeasurement];
+    
+    mockMeasurement = [[MockMeasurement alloc] init];
+    mockMeasurement.level = @(0.5f);
+    mockMeasurement.date = [NSDate dateWithTimeInterval:(-60.0f*60.0f*3.2f) sinceDate:nowDate];
+    mockMeasurement.batteryState = @(UIDeviceBatteryStateUnplugged);
+    [mutableArray addObject:mockMeasurement];
+    
+    mockMeasurement = [[MockMeasurement alloc] init];
+    mockMeasurement.level = @(0.6f);
+    mockMeasurement.date = [NSDate dateWithTimeInterval:(-60.0f*60.0f*5.7f) sinceDate:nowDate];
+    mockMeasurement.batteryState = @(UIDeviceBatteryStateUnplugged);
+    [mutableArray addObject:mockMeasurement];
+    
+    mockMeasurement = [[MockMeasurement alloc] init];
+    mockMeasurement.level = @(0.75f);
+    mockMeasurement.date = [NSDate dateWithTimeInterval:(-60.0f*60.0f*7.2f) sinceDate:nowDate];
+    mockMeasurement.batteryState = @(UIDeviceBatteryStateUnplugged);
+    [mutableArray addObject:mockMeasurement];
+    
+    mockMeasurement = [[MockMeasurement alloc] init];
+    mockMeasurement.level = @(0.9f);
+    mockMeasurement.date = [NSDate dateWithTimeInterval:(-60.0f*60.0f*9.5f) sinceDate:nowDate];
+    mockMeasurement.batteryState = @(UIDeviceBatteryStateUnplugged);
+    [mutableArray addObject:mockMeasurement];
+
+    mockMeasurement = [[MockMeasurement alloc] init];
+    mockMeasurement.level = @(0.5f);
+    mockMeasurement.date = [NSDate dateWithTimeInterval:(-60.0f*60.0f*12.5f) sinceDate:nowDate];
+    mockMeasurement.batteryState = @(UIDeviceBatteryStateUnplugged);
+    [mutableArray addObject:mockMeasurement];
+
+    return mutableArray;
 }
 
 - (void)saveContext

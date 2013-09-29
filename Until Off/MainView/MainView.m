@@ -37,7 +37,13 @@
         titleLabel.textColor = [UIColor blackColor];
         titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:22.0f];
         titleLabel.backgroundColor = [UIColor whiteColor];
-        [self addSubview: titleLabel];
+        [self addSubview:titleLabel];
+        
+        _infoButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
+        _infoButton.translatesAutoresizingMaskIntoConstraints = NO;
+        _infoButton.accessibilityLabel = NSLocalizedString(@"Info", nil);
+        _infoButton.accessibilityHint = NSLocalizedString(@"Shows the walkthrough again.", nil);
+        [self addSubview:_infoButton];
         
         _locationServiceButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_locationServiceButton setImage:[[UIImage imageNamed:@"locationServiceIcon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
@@ -46,8 +52,8 @@
         _locationServiceButton.layer.borderWidth = 0.5f;
         _locationServiceButton.layer.borderColor = [[UIColor colorWithHue:357.0f/360.0f saturation:1.0f brightness:0.80f alpha:1.0f] CGColor];
         _locationServiceButton.layer.cornerRadius = 3.0f;
-        _locationServiceButton.accessibilityLabel = @"Location service";
-        _locationServiceButton.accessibilityHint = @"Opens location service screen.";
+        _locationServiceButton.accessibilityLabel = NSLocalizedString(@"Location service", nil);
+        _locationServiceButton.accessibilityHint = NSLocalizedString(@"Opens location service screen.", nil);
         [self addSubview:_locationServiceButton];
         
         _predictionOverviewButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -57,14 +63,14 @@
         _predictionOverviewButton.layer.borderWidth = 0.5f;
         _predictionOverviewButton.layer.borderColor = [[UIColor colorWithHue:357.0f/360.0f saturation:1.0f brightness:0.80f alpha:1.0f] CGColor];
         _predictionOverviewButton.layer.cornerRadius = 3.0f;
-        _predictionOverviewButton.accessibilityLabel = @"Distribution";
-        _predictionOverviewButton.accessibilityHint = @"Opens disctibution screen.";
+        _predictionOverviewButton.accessibilityLabel = NSLocalizedString(@"Distribution", nil);
+        _predictionOverviewButton.accessibilityHint = NSLocalizedString(@"Opens disctibution screen.", nil);
         [self addSubview:_predictionOverviewButton];
         
         _residualLabel = [[UILabel alloc] init];
         _residualLabel.textColor = [UIColor whiteColor];
-        _residualLabel.backgroundColor = [UIColor colorWithRed:102.0f/255.0f green:157.0f/255.0f blue:107.0f/255.0f alpha:1.0f];
-//        _residualLabel.backgroundColor = [UIColor yellowColor];
+//        _residualLabel.backgroundColor = [UIColor colorWithRed:102.0f/255.0f green:157.0f/255.0f blue:107.0f/255.0f alpha:1.0f];
+        _residualLabel.backgroundColor = [UIColor clearColor];
         _residualLabel.textAlignment = NSTextAlignmentCenter;
         _residualLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:24.0f];
         [self addSubview:_residualLabel];
@@ -81,8 +87,10 @@
         NSArray *titleVerticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[titleLabel(40)]" options:0 metrics:nil views:NSDictionaryOfVariableBindings(titleLabel)];
         [self addConstraints:titleVerticalConstraints];
         
-        NSArray *titleHorizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[titleLabel]-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(titleLabel)];
+        NSArray *titleHorizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[titleLabel]-[_infoButton]-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(titleLabel, _infoButton)];
         [self addConstraints:titleHorizontalConstraints];
+        
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:_infoButton attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:titleLabel attribute:NSLayoutAttributeCenterY multiplier:1.0f constant:0.0f]];
         
         NSArray *locationServiceVerticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[_totalLabel]-15-[_locationServiceButton(==40,==_predictionOverviewButton)]-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_totalLabel,_locationServiceButton, _predictionOverviewButton)];
         [self addConstraints:locationServiceVerticalConstraints];
@@ -217,8 +225,8 @@
     CGContextSetRGBFillColor(context, 0.0, 0.5, 1.0, 0.1);
     CGContextFillRect(context, diagramFrame);
     
-//    CGContextSetRGBFillColor(context, 102.0f/255.0f, 157.0f/255.0f, 107.0f/255.0f, 1.0f);
-//    CGContextFillRect(context, residualFrame);
+    CGContextSetRGBFillColor(context, 102.0f/255.0f, 157.0f/255.0f, 107.0f/255.0f, 1.0f);
+    CGContextFillRect(context, residualFrame);
     
     CGContextSaveGState(context);
     
@@ -272,27 +280,27 @@
     self.residualLabel.text = residualString;
     if ([self.residualTimeString isEqualToString:@"-:-"])
     {
-        self.residualLabel.accessibilityLabel = @"Not enough data to calculate residual battery duration.";
-        self.residualLabel.accessibilityHint = @"To collect data, open the app from time to time.";
+        self.residualLabel.accessibilityLabel = NSLocalizedString(@"Not enough data to calculate residual battery duration.", nil);
+        self.residualLabel.accessibilityHint = NSLocalizedString(@"To collect data, open the app from time to time.", nil);
     }
     else
     {
         NSArray *componentsArray = [self.totalTimeString componentsSeparatedByString:@":"];
-        self.residualLabel.accessibilityLabel = [NSString stringWithFormat:@"Residual battery %@ hours and %@ minutes", componentsArray[0], componentsArray[1]];
+        self.residualLabel.accessibilityLabel = [NSString stringWithFormat:NSLocalizedString(@"Residual battery %@ hours and %@ minutes", nil), componentsArray[0], componentsArray[1]];
     }
 //    CGSize residualStringSize = [residualString sizeWithAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Bold" size:25.0f]}];
 //    [residualString drawAtPoint:CGPointMake(residualFrame.origin.x+(residualFrame.size.width-residualStringSize.width)/2.0f, residualFrame.origin.y+(residualFrame.size.height-residualStringSize.height)/2.0f) withAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Bold" size:25.0f], NSForegroundColorAttributeName : [UIColor whiteColor]}];
     
-    NSString *totalTimeString = [NSString stringWithFormat:@"Total Battery Duration %@h", self.totalTimeString];
+    NSString *totalTimeString = [NSString stringWithFormat:NSLocalizedString(@"Total Battery Duration %@h", nil), self.totalTimeString];
     self.totalLabel.text = totalTimeString;
     if ([self.totalTimeString isEqualToString:@"-:-"])
     {
-        self.totalLabel.accessibilityLabel = @"Not enough data to calculate total battery duration.";
+        self.totalLabel.accessibilityLabel = NSLocalizedString(@"Not enough data to calculate total battery duration.", nil);
     }
     else
     {
         NSArray *componentsArray = [self.totalTimeString componentsSeparatedByString:@":"];
-        self.totalLabel.accessibilityLabel = [NSString stringWithFormat:@"Total battery duration %@ hours and %@ minutes.", componentsArray[0], componentsArray[1]];
+        self.totalLabel.accessibilityLabel = [NSString stringWithFormat:NSLocalizedString(@"Total battery duration %@ hours and %@ minutes.", nil), componentsArray[0], componentsArray[1]];
     }
 //    CGSize totalTimeStringSize = [totalTimeString sizeWithAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Light" size:22.0f]}];
 //    [totalTimeString drawAtPoint:CGPointMake(width-totalTimeStringSize.width-20.0f, height-105.0f) withAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Light" size:22.0f]}];

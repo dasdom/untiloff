@@ -31,6 +31,11 @@
     }
     
     NSUInteger stopIndex = 0;
+    if ([[[self.measurementArray firstObject] valueForKey:@"batteryState"] integerValue] != UIDeviceBatteryStateUnplugged)
+    {
+        return stopIndex;
+    }
+    
     CGFloat previousLevel = [[[self.measurementArray firstObject] valueForKey:@"level"] floatValue];
     NSDate *firstDate = [[self.measurementArray firstObject] valueForKey:@"date"];
     for (int i = 1; i < [self.measurementArray count]; i++)

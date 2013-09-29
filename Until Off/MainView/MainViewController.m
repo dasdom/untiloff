@@ -45,6 +45,7 @@
         
         [_mainView.locationServiceButton addTarget:self action:@selector(showLocationServiceSettings:) forControlEvents:UIControlEventTouchUpInside];
         [_mainView.predictionOverviewButton addTarget:self action:@selector(showPredictionOverview:) forControlEvents:UIControlEventTouchUpInside];
+        [_mainView.infoButton addTarget:self action:@selector(showDescription) forControlEvents:UIControlEventTouchUpInside];
         
         _measurementManager = [[MeasurementsManager alloc] initWithManagedObjectContext:managedObjectContext];
         
@@ -56,17 +57,17 @@
 - (void)loadView
 {
     self.view = _mainView;
-    
-    CGRect bounds = self.view.bounds;
 
-//    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"appAlreadyStarted"])
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"appAlreadyStarted"])
     {
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"appAlreadyStarted"];
         [[NSUserDefaults standardUserDefaults] synchronize];
         
-        DescriptionView *descriptionView = [[DescriptionView alloc] initWithFrame:bounds];
-        [descriptionView.dismissButton addTarget:descriptionView action:@selector(removeFromSuperview) forControlEvents:UIControlEventTouchUpInside];
-        [self.view addSubview:descriptionView];
+//        DescriptionView *descriptionView = [[DescriptionView alloc] initWithFrame:bounds];
+//        [descriptionView.dismissButton addTarget:descriptionView action:@selector(removeFromSuperview) forControlEvents:UIControlEventTouchUpInside];
+//        [self.view addSubview:descriptionView];
+        
+        [self showDescription];
     }
 }
 
@@ -115,6 +116,14 @@
 }
 
 #pragma mark -
+- (void)showDescription
+{
+    DescriptionView *descriptionView = [[DescriptionView alloc] initWithFrame:self.view.bounds];
+    [descriptionView.dismissButton addTarget:descriptionView action:@selector(removeFromSuperview) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:descriptionView];
+}
+
+#pragma mark -
 
 - (void)becameActive:(NSNotification*)notification
 {
@@ -139,7 +148,7 @@
     self.mainView.numberOfHours = (NSUInteger)((timeDiff/3600.0f > 6.0f) ? timeDiff/3600.0f : 6.0f);
 
     CGFloat levelDiff = [batteryCalculation levelDiffForStopIndex:stopIndex];
-    if (levelDiff > 0.7f)
+    if (levelDiff >= 0.7f)
     {
        Prediction *prediction = [NSEntityDescription insertNewObjectForEntityForName:@"Prediction" inManagedObjectContext:self.managedObjectContext];
         prediction.timeBasis = @(timeDiff);

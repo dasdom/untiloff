@@ -32,6 +32,7 @@
 		F28D937A17F616350044943E /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = F28D937817F616350044943E /* Utilities.m */; };
 		F291949617F70CD00036D6E3 /* DescriptionScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = F291949517F70CD00036D6E3 /* DescriptionScrollView.m */; };
 		F291949717F70CD00036D6E3 /* DescriptionScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = F291949517F70CD00036D6E3 /* DescriptionScrollView.m */; };
+		F291949817F8C22C0036D6E3 /* MockMeasurement.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A0DE3417D5248F00EA93AF /* MockMeasurement.m */; };
 		F2A0DDE317CE9CA200EA93AF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2A0DDE217CE9CA200EA93AF /* Foundation.framework */; };
 		F2A0DDE517CE9CA200EA93AF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2A0DDE417CE9CA200EA93AF /* CoreGraphics.framework */; };
 		F2A0DDE717CE9CA200EA93AF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2A0DDE617CE9CA200EA93AF /* UIKit.framework */; };
@@ -296,10 +297,10 @@
 			children = (
 				F2A0DE1817CFDC1100EA93AF /* MainViewController.h */,
 				F2A0DE1917CFDC1200EA93AF /* MainViewController.m */,
-				F2AE7F0417EA3C6700A1778F /* MeasurementsManager.h */,
-				F2AE7F0517EA3C6700A1778F /* MeasurementsManager.m */,
 				F2A0DE2F17D3CD3A00EA93AF /* MainView.h */,
 				F2A0DE3017D3CD3A00EA93AF /* MainView.m */,
+				F2AE7F0417EA3C6700A1778F /* MeasurementsManager.h */,
+				F2AE7F0517EA3C6700A1778F /* MeasurementsManager.m */,
 				F28D937317F0E47A0044943E /* DescriptionView.h */,
 				F28D937417F0E47A0044943E /* DescriptionView.m */,
 				F291949417F70CD00036D6E3 /* DescriptionScrollView.h */,
@@ -420,6 +421,7 @@
 				F207546717DFB2E100981BE4 /* Measurement.m in Sources */,
 				F24BCAC617DBC8B500A09272 /* AddCurrentLocationCell.m in Sources */,
 				F272CFDA17DCC4F4004C09A2 /* Geofence.m in Sources */,
+				F291949817F8C22C0036D6E3 /* MockMeasurement.m in Sources */,
 				F2A0DDF117CE9CA300EA93AF /* main.m in Sources */,
 				F24BCAC217DB8B0000A09272 /* LocationCell.m in Sources */,
 				F23EE43D17E25396005D5572 /* Prediction.m in Sources */,
