@@ -11,7 +11,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 #define kSecondsPerHour 3600.0f
-#define kXPositionOfZero 233.0f
+#define kXPositionOfZero self.frame.size.width-87.0f
 
 @interface MainView ()
 @property (nonatomic, strong) NSMutableArray *pointsArray;
@@ -47,7 +47,7 @@
         _locationServiceButton.layer.borderColor = [[UIColor colorWithHue:357.0f/360.0f saturation:1.0f brightness:0.80f alpha:1.0f] CGColor];
         _locationServiceButton.layer.cornerRadius = 3.0f;
         _locationServiceButton.accessibilityLabel = @"Location service";
-        _locationServiceButton.accessibilityHint = @"Not accessible yet.";
+        _locationServiceButton.accessibilityHint = @"Opens location service screen.";
         [self addSubview:_locationServiceButton];
         
         _predictionOverviewButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -58,14 +58,15 @@
         _predictionOverviewButton.layer.borderColor = [[UIColor colorWithHue:357.0f/360.0f saturation:1.0f brightness:0.80f alpha:1.0f] CGColor];
         _predictionOverviewButton.layer.cornerRadius = 3.0f;
         _predictionOverviewButton.accessibilityLabel = @"Distribution";
-        _predictionOverviewButton.accessibilityHint = @"Not accessible yet.";
+        _predictionOverviewButton.accessibilityHint = @"Opens disctibution screen.";
         [self addSubview:_predictionOverviewButton];
         
         _residualLabel = [[UILabel alloc] init];
         _residualLabel.textColor = [UIColor whiteColor];
-        _residualLabel.backgroundColor = [UIColor clearColor];
+        _residualLabel.backgroundColor = [UIColor colorWithRed:102.0f/255.0f green:157.0f/255.0f blue:107.0f/255.0f alpha:1.0f];
+//        _residualLabel.backgroundColor = [UIColor yellowColor];
         _residualLabel.textAlignment = NSTextAlignmentCenter;
-        _residualLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:25.0f];
+        _residualLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:24.0f];
         [self addSubview:_residualLabel];
         
         _totalLabel = [[UILabel alloc] init];
@@ -216,8 +217,8 @@
     CGContextSetRGBFillColor(context, 0.0, 0.5, 1.0, 0.1);
     CGContextFillRect(context, diagramFrame);
     
-    CGContextSetRGBFillColor(context, 102.0f/255.0f, 157.0f/255.0f, 107.0f/255.0f, 1.0f);
-    CGContextFillRect(context, residualFrame);
+//    CGContextSetRGBFillColor(context, 102.0f/255.0f, 157.0f/255.0f, 107.0f/255.0f, 1.0f);
+//    CGContextFillRect(context, residualFrame);
     
     CGContextSaveGState(context);
     

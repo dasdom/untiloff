@@ -28,6 +28,10 @@
 		F272CFDB17DCC4F4004C09A2 /* Geofence.m in Sources */ = {isa = PBXBuildFile; fileRef = F272CFD917DCC4F4004C09A2 /* Geofence.m */; };
 		F28D937517F0E47A0044943E /* DescriptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = F28D937417F0E47A0044943E /* DescriptionView.m */; };
 		F28D937617F0E47A0044943E /* DescriptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = F28D937417F0E47A0044943E /* DescriptionView.m */; };
+		F28D937917F616350044943E /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = F28D937817F616350044943E /* Utilities.m */; };
+		F28D937A17F616350044943E /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = F28D937817F616350044943E /* Utilities.m */; };
+		F291949617F70CD00036D6E3 /* DescriptionScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = F291949517F70CD00036D6E3 /* DescriptionScrollView.m */; };
+		F291949717F70CD00036D6E3 /* DescriptionScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = F291949517F70CD00036D6E3 /* DescriptionScrollView.m */; };
 		F2A0DDE317CE9CA200EA93AF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2A0DDE217CE9CA200EA93AF /* Foundation.framework */; };
 		F2A0DDE517CE9CA200EA93AF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2A0DDE417CE9CA200EA93AF /* CoreGraphics.framework */; };
 		F2A0DDE717CE9CA200EA93AF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2A0DDE617CE9CA200EA93AF /* UIKit.framework */; };
@@ -90,6 +94,10 @@
 		F272CFD917DCC4F4004C09A2 /* Geofence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Geofence.m; path = Data/Geofence.m; sourceTree = "<group>"; };
 		F28D937317F0E47A0044943E /* DescriptionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DescriptionView.h; path = MainView/DescriptionView.h; sourceTree = "<group>"; };
 		F28D937417F0E47A0044943E /* DescriptionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DescriptionView.m; path = MainView/DescriptionView.m; sourceTree = "<group>"; };
+		F28D937717F616350044943E /* Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Utilities.h; path = Utilities/Utilities.h; sourceTree = "<group>"; };
+		F28D937817F616350044943E /* Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Utilities.m; path = Utilities/Utilities.m; sourceTree = "<group>"; };
+		F291949417F70CD00036D6E3 /* DescriptionScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DescriptionScrollView.h; path = MainView/DescriptionScrollView.h; sourceTree = "<group>"; };
+		F291949517F70CD00036D6E3 /* DescriptionScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DescriptionScrollView.m; path = MainView/DescriptionScrollView.m; sourceTree = "<group>"; };
 		F2A0DDDF17CE9CA200EA93AF /* Until Off.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Until Off.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2A0DDE217CE9CA200EA93AF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F2A0DDE417CE9CA200EA93AF /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -179,6 +187,15 @@
 			name = LocationService;
 			sourceTree = "<group>";
 		};
+		F28D937B17F6163C0044943E /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				F28D937717F616350044943E /* Utilities.h */,
+				F28D937817F616350044943E /* Utilities.m */,
+			);
+			name = Utilities;
+			sourceTree = "<group>";
+		};
 		F2A0DDD617CE9CA200EA93AF = {
 			isa = PBXGroup;
 			children = (
@@ -216,6 +233,7 @@
 			children = (
 				F2A0DDF317CE9CA300EA93AF /* AppDelegate.h */,
 				F2A0DDF417CE9CA300EA93AF /* AppDelegate.m */,
+				F28D937B17F6163C0044943E /* Utilities */,
 				F23EE44317E259D6005D5572 /* PredictionOverview */,
 				F2A0DE1C17CFDC1800EA93AF /* MainView */,
 				F24BCABB17DB794500A09272 /* LocationService */,
@@ -284,6 +302,8 @@
 				F2A0DE3017D3CD3A00EA93AF /* MainView.m */,
 				F28D937317F0E47A0044943E /* DescriptionView.h */,
 				F28D937417F0E47A0044943E /* DescriptionView.m */,
+				F291949417F70CD00036D6E3 /* DescriptionScrollView.h */,
+				F291949517F70CD00036D6E3 /* DescriptionScrollView.m */,
 				F2A0DE2B17D3CCEC00EA93AF /* BatteryCalculation.h */,
 				F2A0DE2C17D3CCEC00EA93AF /* BatteryCalculation.m */,
 			);
@@ -385,10 +405,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F291949617F70CD00036D6E3 /* DescriptionScrollView.m in Sources */,
 				F24BCAB917DB793900A09272 /* LocationServiceViewController.m in Sources */,
 				F2A0DE2D17D3CCEC00EA93AF /* BatteryCalculation.m in Sources */,
 				F2A0DDF517CE9CA300EA93AF /* AppDelegate.m in Sources */,
 				F2A0DDF817CE9CA300EA93AF /* Until_Off.xcdatamodeld in Sources */,
+				F28D937917F616350044943E /* Utilities.m in Sources */,
 				F2AE7F0A17EB8F0D00A1778F /* LocationHeaderView.m in Sources */,
 				F2AE7F0617EA3C6700A1778F /* MeasurementsManager.m in Sources */,
 				F23EE44117E25757005D5572 /* PredictionsOverviewViewController.m in Sources */,
@@ -423,7 +445,9 @@
 				F2A0DE2E17D3CCEC00EA93AF /* BatteryCalculation.m in Sources */,
 				F272CFDB17DCC4F4004C09A2 /* Geofence.m in Sources */,
 				F24BCABA17DB793900A09272 /* LocationServiceViewController.m in Sources */,
+				F291949717F70CD00036D6E3 /* DescriptionScrollView.m in Sources */,
 				F24BCABF17DB79AB00A09272 /* LocationServiceLookAndFeel.m in Sources */,
+				F28D937A17F616350044943E /* Utilities.m in Sources */,
 				F2AE7F0317EA33AF00A1778F /* MeasurementsManagerTests.m in Sources */,
 				F2A0DE1B17CFDC1200EA93AF /* MainViewController.m in Sources */,
 				F2A0DE2A17D3C88B00EA93AF /* BatteryCalculationTests.m in Sources */,
@@ -535,10 +559,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Dominik Hauser (MNX8UVNQT5)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Until Off/Until Off-Prefix.pch";
 				INFOPLIST_FILE = "Until Off/Until Off-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -552,7 +579,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Until Off/Until Off-Prefix.pch";
 				INFOPLIST_FILE = "Until Off/Until Off-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

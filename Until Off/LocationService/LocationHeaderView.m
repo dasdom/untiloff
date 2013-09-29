@@ -13,13 +13,14 @@
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
-    if (self) {
+    if (self)
+    {
         UIColor *backgroundColor = [UIColor colorWithWhite:0.95f alpha:1.0f];
         
         self.backgroundColor = backgroundColor;
         
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10.0f, 0.0f, frame.size.width-20.0f, frame.size.height)];
-        label.text = NSLocalizedString(@"Geofence Locations", nil);
+        label.text = NSLocalizedString(@"Geo Fence Locations", nil);
         label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0f];
         [self addSubview:label];
     }

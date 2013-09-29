@@ -17,6 +17,7 @@
 #import "PredictionsOverviewViewController.h"
 #import "MeasurementsManager.h"
 #import "DescriptionView.h"
+#import "Utilities.h"
 #import <CoreLocation/CoreLocation.h>
 #import <QuartzCore/QuartzCore.h>
 
@@ -41,7 +42,6 @@
         _locationManager.delegate = self;
         
         _mainView = [[MainView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-//        _mainView.tintColor = [UIColor greenColor];
         
         [_mainView.locationServiceButton addTarget:self action:@selector(showLocationServiceSettings:) forControlEvents:UIControlEventTouchUpInside];
         [_mainView.predictionOverviewButton addTarget:self action:@selector(showPredictionOverview:) forControlEvents:UIControlEventTouchUpInside];
@@ -139,7 +139,7 @@
     self.mainView.numberOfHours = (NSUInteger)((timeDiff/3600.0f > 6.0f) ? timeDiff/3600.0f : 6.0f);
 
     CGFloat levelDiff = [batteryCalculation levelDiffForStopIndex:stopIndex];
-    if (levelDiff > 0.5f)
+    if (levelDiff > 0.7f)
     {
        Prediction *prediction = [NSEntityDescription insertNewObjectForEntityForName:@"Prediction" inManagedObjectContext:self.managedObjectContext];
         prediction.timeBasis = @(timeDiff);
@@ -151,8 +151,25 @@
     }
     
     self.mainView.stopCalcAtPointFromNow = stopIndex;
-    self.mainView.residualTimeString = [self timeStringFromSeconds:predictionOfResitualSeconds];
-    self.mainView.totalTimeString = [self timeStringFromSeconds:predictionOfTotalSeconds];
+    NSString *residualTimeString = [self timeStringFromSeconds:predictionOfResitualSeconds];
+    NSString *totalTimeString = [self timeStringFromSeconds:predictionOfTotalSeconds];
+    if (!residualTimeString)
+    {
+        NSInteger averageTotalTime = [[NSUserDefaults standardUserDefaults] integerForKey:kAverageTotalRuntimeKey];
+        if (averageTotalTime > 0)
+        {
+            Measurement *firstMeasurement = [self.measurementArray firstObject];
+            if ([firstMeasurement.batteryState integerValue] == UIDeviceBatteryStateUnplugged)
+            {
+                NSInteger residualTime = averageTotalTime*[firstMeasurement.level floatValue];
+                residualTimeString = [NSString stringWithFormat:@"~%@", [self timeStringFromSeconds:residualTime]];
+                totalTimeString = [NSString stringWithFormat:@"~%@", [self timeStringFromSeconds:averageTotalTime]];
+            }
+        }
+    }
+    
+    self.mainView.residualTimeString = residualTimeString ? : @"-:-";
+    self.mainView.totalTimeString = totalTimeString ? : @"-:-";
     self.mainView.residualTime = (CGFloat)predictionOfResitualSeconds;
     
     [self.mainView setNeedsDisplay];
@@ -163,7 +180,7 @@
     NSLog(@"seconds: %d", seconds);
     if (seconds < 1)
     {
-        return @"-:-";
+        return nil;
     }
     NSInteger hours = seconds/3600;
     NSNumber *minutes = @(seconds/60-hours*60);

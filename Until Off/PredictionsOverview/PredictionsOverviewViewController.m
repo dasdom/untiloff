@@ -8,6 +8,7 @@
 
 #import "PredictionsOverviewViewController.h"
 #import "PredictionOverviewView.h"
+#import "Prediction.h"
 
 @interface PredictionsOverviewViewController ()
 @property (nonatomic, strong) NSArray *predictionArray;
@@ -18,7 +19,7 @@
 - (void)loadView
 {
     CGRect frame = [[UIScreen mainScreen] applicationFrame];
-    frame.size.height = frame.size.height-self.navigationController.navigationBar.frame.size.height;
+//    frame.size.height = frame.size.height-self.navigationController.navigationBar.frame.size.height;
     
     PredictionOverviewView *predictionOverviewView = [[PredictionOverviewView alloc] initWithFrame:frame];
     
@@ -34,6 +35,9 @@
     UIBarButtonItem *closeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonTouched:)];
     self.navigationItem.leftBarButtonItem = closeButton;
     
+    UIBarButtonItem *resetBarButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Reset", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(resetPredictions:)];
+    self.navigationItem.rightBarButtonItem = resetBarButton;
+    
     self.title = NSLocalizedString(@"Distribution", nil);
     
     self.view = predictionOverviewView;
@@ -42,7 +46,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -51,9 +55,19 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - bar button actions
 - (void)doneButtonTouched:(UIBarButtonItem*)sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)resetPredictions:(UIBarButtonItem*)sender
+{
+    for (Prediction *prediction in self.predictionArray)
+    {
+        [self.managedObjectContext deleteObject:prediction];
+    }
+    [self.managedObjectContext save:nil];
 }
 
 @end
