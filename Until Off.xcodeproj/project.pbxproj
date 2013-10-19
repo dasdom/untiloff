@@ -24,6 +24,8 @@
 		F24BCAC317DB8B0000A09272 /* LocationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F24BCAC117DB8B0000A09272 /* LocationCell.m */; };
 		F24BCAC617DBC8B500A09272 /* AddCurrentLocationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F24BCAC517DBC8B500A09272 /* AddCurrentLocationCell.m */; };
 		F24BCAC717DBC8B500A09272 /* AddCurrentLocationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F24BCAC517DBC8B500A09272 /* AddCurrentLocationCell.m */; };
+		F26AEEE51810812C007170AA /* ElementFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = F26AEEE41810812C007170AA /* ElementFactory.m */; };
+		F26AEEE61810812C007170AA /* ElementFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = F26AEEE41810812C007170AA /* ElementFactory.m */; };
 		F272CFDA17DCC4F4004C09A2 /* Geofence.m in Sources */ = {isa = PBXBuildFile; fileRef = F272CFD917DCC4F4004C09A2 /* Geofence.m */; };
 		F272CFDB17DCC4F4004C09A2 /* Geofence.m in Sources */ = {isa = PBXBuildFile; fileRef = F272CFD917DCC4F4004C09A2 /* Geofence.m */; };
 		F28D937517F0E47A0044943E /* DescriptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = F28D937417F0E47A0044943E /* DescriptionView.m */; };
@@ -91,6 +93,8 @@
 		F24BCAC117DB8B0000A09272 /* LocationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LocationCell.m; path = LocationService/LocationCell.m; sourceTree = "<group>"; };
 		F24BCAC417DBC8B500A09272 /* AddCurrentLocationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddCurrentLocationCell.h; path = LocationService/AddCurrentLocationCell.h; sourceTree = "<group>"; };
 		F24BCAC517DBC8B500A09272 /* AddCurrentLocationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AddCurrentLocationCell.m; path = LocationService/AddCurrentLocationCell.m; sourceTree = "<group>"; };
+		F26AEEE31810812C007170AA /* ElementFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ElementFactory.h; path = Utilities/ElementFactory.h; sourceTree = "<group>"; };
+		F26AEEE41810812C007170AA /* ElementFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ElementFactory.m; path = Utilities/ElementFactory.m; sourceTree = "<group>"; };
 		F272CFD817DCC4F4004C09A2 /* Geofence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Geofence.h; path = Data/Geofence.h; sourceTree = "<group>"; };
 		F272CFD917DCC4F4004C09A2 /* Geofence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Geofence.m; path = Data/Geofence.m; sourceTree = "<group>"; };
 		F28D937317F0E47A0044943E /* DescriptionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DescriptionView.h; path = MainView/DescriptionView.h; sourceTree = "<group>"; };
@@ -193,6 +197,8 @@
 			children = (
 				F28D937717F616350044943E /* Utilities.h */,
 				F28D937817F616350044943E /* Utilities.m */,
+				F26AEEE31810812C007170AA /* ElementFactory.h */,
+				F26AEEE41810812C007170AA /* ElementFactory.m */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -358,6 +364,9 @@
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = dasdom;
 				TargetAttributes = {
+					F2A0DDDE17CE9CA200EA93AF = {
+						DevelopmentTeam = Q6PD97MRX4;
+					};
 					F2A0DDFE17CE9CA300EA93AF = {
 						TestTargetID = F2A0DDDE17CE9CA200EA93AF;
 					};
@@ -411,6 +420,7 @@
 				F2A0DE2D17D3CCEC00EA93AF /* BatteryCalculation.m in Sources */,
 				F2A0DDF517CE9CA300EA93AF /* AppDelegate.m in Sources */,
 				F2A0DDF817CE9CA300EA93AF /* Until_Off.xcdatamodeld in Sources */,
+				F26AEEE51810812C007170AA /* ElementFactory.m in Sources */,
 				F28D937917F616350044943E /* Utilities.m in Sources */,
 				F2AE7F0A17EB8F0D00A1778F /* LocationHeaderView.m in Sources */,
 				F2AE7F0617EA3C6700A1778F /* MeasurementsManager.m in Sources */,
@@ -439,6 +449,7 @@
 				F2AE7F0117E7990D00A1778F /* MainViewControllerTests.m in Sources */,
 				F207546817DFB2E100981BE4 /* Measurement.m in Sources */,
 				F23EE44217E25757005D5572 /* PredictionsOverviewViewController.m in Sources */,
+				F26AEEE61810812C007170AA /* ElementFactory.m in Sources */,
 				F24BCAC317DB8B0000A09272 /* LocationCell.m in Sources */,
 				F23EE44717E259F8005D5572 /* PredictionOverviewView.m in Sources */,
 				F28D937617F0E47A0044943E /* DescriptionView.m in Sources */,
@@ -561,12 +572,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Dominik Hauser (MNX8UVNQT5)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Until Off/Until Off-Prefix.pch";
 				INFOPLIST_FILE = "Until Off/Until Off-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -577,12 +590,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Dominik Hauser";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Until Off/Until Off-Prefix.pch";
 				INFOPLIST_FILE = "Until Off/Until Off-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};

@@ -7,8 +7,8 @@
 //
 
 #import "MainView.h"
+#import "ElementFactory.h"
 #import "Measurement.h"
-#import <QuartzCore/QuartzCore.h>
 
 #define kSecondsPerHour 3600.0f
 #define kXPositionOfZero self.frame.size.width-87.0f
@@ -45,27 +45,20 @@
         _infoButton.accessibilityHint = NSLocalizedString(@"Shows the walkthrough again.", nil);
         [self addSubview:_infoButton];
         
-        _locationServiceButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_locationServiceButton setImage:[[UIImage imageNamed:@"locationServiceIcon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-        _locationServiceButton.translatesAutoresizingMaskIntoConstraints = NO;
-        _locationServiceButton.contentMode = UIViewContentModeCenter;
-        _locationServiceButton.layer.borderWidth = 0.5f;
-        _locationServiceButton.layer.borderColor = [[UIColor colorWithHue:357.0f/360.0f saturation:1.0f brightness:0.80f alpha:1.0f] CGColor];
-        _locationServiceButton.layer.cornerRadius = 3.0f;
+        _locationServiceButton = [ElementFactory mainScreenButtonWithImage:[UIImage imageNamed:@"locationServiceIcon"]];
         _locationServiceButton.accessibilityLabel = NSLocalizedString(@"Location service", nil);
         _locationServiceButton.accessibilityHint = NSLocalizedString(@"Opens location service screen.", nil);
         [self addSubview:_locationServiceButton];
         
-        _predictionOverviewButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_predictionOverviewButton setImage:[[UIImage imageNamed:@"distributionIcon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-        _predictionOverviewButton.translatesAutoresizingMaskIntoConstraints = NO;
-//        _predictionOverviewButton.backgroundColor = [UIColor yellowColor];
-        _predictionOverviewButton.layer.borderWidth = 0.5f;
-        _predictionOverviewButton.layer.borderColor = [[UIColor colorWithHue:357.0f/360.0f saturation:1.0f brightness:0.80f alpha:1.0f] CGColor];
-        _predictionOverviewButton.layer.cornerRadius = 3.0f;
+        _predictionOverviewButton = [ElementFactory mainScreenButtonWithImage:[UIImage imageNamed:@"distributionIcon"]];
         _predictionOverviewButton.accessibilityLabel = NSLocalizedString(@"Distribution", nil);
         _predictionOverviewButton.accessibilityHint = NSLocalizedString(@"Opens disctibution screen.", nil);
         [self addSubview:_predictionOverviewButton];
+        
+        _addPredictionButton = [ElementFactory mainScreenButtonWithImage:[UIImage imageNamed:@"distributionIcon"]];
+        _addPredictionButton.accessibilityLabel = NSLocalizedString(@"Add measurement", nil);
+        _addPredictionButton.accessibilityHint = NSLocalizedString(@"Adds the measurement to the distribution.", nil);
+        [self addSubview:_addPredictionButton];
         
         _residualLabel = [[UILabel alloc] init];
         _residualLabel.textColor = [UIColor whiteColor];
@@ -82,25 +75,33 @@
         _totalLabel.adjustsFontSizeToFitWidth = YES;
         _totalLabel.minimumScaleFactor = 0.7f;
         _totalLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        _totalLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:_totalLabel];
         
-        NSArray *titleVerticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[titleLabel(40)]" options:0 metrics:nil views:NSDictionaryOfVariableBindings(titleLabel)];
-        [self addConstraints:titleVerticalConstraints];
+        _sliderView = [[UIView alloc] init];
+        _sliderView.translatesAutoresizingMaskIntoConstraints = NO;
+        _sliderView.backgroundColor = [UIColor colorWithHue:357.0f/360.0f saturation:1.0f brightness:0.80f alpha:1.0f];
+        _sliderView.userInteractionEnabled = NO;
+        [self addSubview:_sliderView];
         
-        NSArray *titleHorizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[titleLabel]-[_infoButton]-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(titleLabel, _infoButton)];
-        [self addConstraints:titleHorizontalConstraints];
+        NSDictionary *viewsDictionary = NSDictionaryOfVariableBindings(titleLabel, _infoButton, _sliderView, _totalLabel, _locationServiceButton, _predictionOverviewButton, _addPredictionButton);
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[titleLabel(40)]-10-[_sliderView(sliderHeight)]" options:0 metrics:@{@"sliderHeight" : @(frame.size.height-210.0f)} views:viewsDictionary]];
+        
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[titleLabel]-[_infoButton]-|" options:0 metrics:nil views:viewsDictionary]];
+        
+        [_sliderView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"[_sliderView(1)]" options:0 metrics:nil views:viewsDictionary]];
+        
+        _sliderConstraint = [NSLayoutConstraint constraintWithItem:_sliderView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:1.0f constant:20.0f];
+        [self addConstraint: _sliderConstraint];
         
         [self addConstraint:[NSLayoutConstraint constraintWithItem:_infoButton attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:titleLabel attribute:NSLayoutAttributeCenterY multiplier:1.0f constant:0.0f]];
         
-        NSArray *locationServiceVerticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[_totalLabel]-15-[_locationServiceButton(==40,==_predictionOverviewButton)]-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_totalLabel,_locationServiceButton, _predictionOverviewButton)];
-        [self addConstraints:locationServiceVerticalConstraints];
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_totalLabel]-15-[_addPredictionButton(==40,==_predictionOverviewButton,==_locationServiceButton)]-|" options:0 metrics:nil views:viewsDictionary]];
         
-        NSArray *locationServiceHorizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[_predictionOverviewButton(==_locationServiceButton)]-[_locationServiceButton]-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_locationServiceButton, _predictionOverviewButton)];
-        [self addConstraints:locationServiceHorizontalConstraints];
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[_addPredictionButton(==_locationServiceButton,==_predictionOverviewButton)]-[_predictionOverviewButton]-[_locationServiceButton]-|" options:NSLayoutFormatAlignAllTop metrics:nil views:viewsDictionary]];
         
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20-[_totalLabel]-20-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_totalLabel)]];
         
-        [self addConstraint: [NSLayoutConstraint constraintWithItem:_predictionOverviewButton attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:_locationServiceButton attribute:NSLayoutAttributeTop multiplier:1.0f constant:0.0f]];
         
     }
     return self;
@@ -125,7 +126,7 @@
 	for (int i = 0; i <= self.numberOfHours/2; i++)
     {
         CGFloat xPos = diagramFrame.size.width+20-i*2*60*60*(diagramFrame.size.width+20)/timeNorm;
-        NSLog(@"xPos: %f", xPos);
+//        NSLog(@"xPos: %f", xPos);
 		CGContextMoveToPoint(context, xPos, CGRectGetMinY(diagramFrame));
 		CGContextAddLineToPoint(context, xPos, CGRectGetMaxY(diagramFrame));
         CGContextSetRGBStrokeColor(context, 0.66, 0.66, 0.66, 1.0);
@@ -185,7 +186,7 @@
     for (int i = 0; i < [self.measurementArray count]; i++)
     {
         Measurement *measurement = self.measurementArray[i];
-        NSLog(@"i: %d, measurement.date: %@, lastDate: %@", i, measurement.date, lastDate);
+//        NSLog(@"i: %d, measurement.date: %@, lastDate: %@", i, measurement.date, lastDate);
         
         double timeDiff = [measurement.date timeIntervalSinceDate:lastDate];
         double pointX = diagramFrame.size.width+20.0f+timeDiff*(diagramFrame.size.width+20.0f)/timeNorm;
@@ -213,6 +214,8 @@
     residualFrame.origin.y = firstYPoint;
     residualFrame.size.height = CGRectGetMaxY(diagramFrame)-firstYPoint;
     
+    self.sliderConstraint.constant = diagramFrame.origin.x;
+    [self updateConstraintsIfNeeded];
 //    self.residualFrame = residualFrame;
     
     CGFloat stopPosistion = kXPositionOfZero;
@@ -278,52 +281,77 @@
     NSString *residualString = [NSString stringWithFormat:@"%.0f%% ➞ %@h", firstLevel*100, self.residualTimeString];
     self.residualLabel.frame = residualFrame;
     self.residualLabel.text = residualString;
-    if ([self.residualTimeString isEqualToString:@"-:-"])
-    {
-        self.residualLabel.accessibilityLabel = NSLocalizedString(@"Not enough data to calculate residual battery duration.", nil);
-        self.residualLabel.accessibilityHint = NSLocalizedString(@"To collect data, open the app from time to time.", nil);
-    }
-    else
+    self.residualLabel.accessibilityLabel = NSLocalizedString(@"Not enough data to calculate residual battery duration.", nil);
+    self.residualLabel.accessibilityHint = NSLocalizedString(@"To collect data, open the app from time to time.", nil);
+    if (![self.residualTimeString isEqualToString:@"-:-"])
     {
         NSArray *componentsArray = [self.totalTimeString componentsSeparatedByString:@":"];
-        self.residualLabel.accessibilityLabel = [NSString stringWithFormat:NSLocalizedString(@"Residual battery %@ hours and %@ minutes", nil), componentsArray[0], componentsArray[1]];
+        if ([componentsArray count] > 1)
+        {
+            self.residualLabel.accessibilityLabel = [NSString stringWithFormat:NSLocalizedString(@"Residual battery %@ hours and %@ minutes", nil), componentsArray[0], componentsArray[1]];
+            self.residualLabel.accessibilityHint = nil;
+        }
     }
 //    CGSize residualStringSize = [residualString sizeWithAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Bold" size:25.0f]}];
 //    [residualString drawAtPoint:CGPointMake(residualFrame.origin.x+(residualFrame.size.width-residualStringSize.width)/2.0f, residualFrame.origin.y+(residualFrame.size.height-residualStringSize.height)/2.0f) withAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Bold" size:25.0f], NSForegroundColorAttributeName : [UIColor whiteColor]}];
     
-    NSString *totalTimeString = [NSString stringWithFormat:NSLocalizedString(@"Total Battery Duration %@h", nil), self.totalTimeString];
+    NSString *totalTimeString = [NSString stringWithFormat:NSLocalizedString(@"100%% ➞ %@h", nil), self.totalTimeString];
     self.totalLabel.text = totalTimeString;
-    if ([self.totalTimeString isEqualToString:@"-:-"])
-    {
-        self.totalLabel.accessibilityLabel = NSLocalizedString(@"Not enough data to calculate total battery duration.", nil);
-    }
-    else
+    self.totalLabel.accessibilityLabel = NSLocalizedString(@"Not enough data to calculate total battery duration.", nil);
+    if (![self.totalTimeString isEqualToString:@"-:-"])
     {
         NSArray *componentsArray = [self.totalTimeString componentsSeparatedByString:@":"];
-        self.totalLabel.accessibilityLabel = [NSString stringWithFormat:NSLocalizedString(@"Total battery duration %@ hours and %@ minutes.", nil), componentsArray[0], componentsArray[1]];
+        if ([componentsArray count] > 1)
+        {
+            self.totalLabel.accessibilityLabel = [NSString stringWithFormat:NSLocalizedString(@"Total battery duration %@ hours and %@ minutes.", nil), componentsArray[0], componentsArray[1]];
+            self.residualLabel.accessibilityHint = nil;
+        }
     }
 //    CGSize totalTimeStringSize = [totalTimeString sizeWithAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Light" size:22.0f]}];
 //    [totalTimeString drawAtPoint:CGPointMake(width-totalTimeStringSize.width-20.0f, height-105.0f) withAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Light" size:22.0f]}];
 
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+- (NSUInteger)indexForXPosition:(CGFloat)xPosition
 {
-    self.showTimes = YES;
-    [self setNeedsDisplay];
+    NSUInteger index = self.stopCalcAtPointFromNow;
+    for (int i = 0; i < [self.pointsArray count]; i++)
+    {
+        CGPoint point = [self.pointsArray[i] CGPointValue];
+        if (fabsf(point.x - xPosition) < 5)
+        {
+            index = i;
+            self.stopCalcAtPointFromNow = index;
+            break;
+        }
+    }
+    return index;
 }
 
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+- (CGFloat)xPositionForIndex:(NSUInteger)index
 {
-    self.showTimes = NO;
-    [self setNeedsDisplay];
+    CGPoint point = [self.pointsArray[index] CGPointValue];
+    return point.x;
 }
 
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    self.showTimes = NO;
-    [self setNeedsDisplay];
-}
+
+//- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+//{
+//    self.showTimes = YES;
+//    [self setNeedsDisplay];
+//}
+//
+//- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+//{
+//    self.showTimes = NO;
+//    [self setNeedsDisplay];
+//}
+//
+//- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+//{
+//    self.showTimes = NO;
+//    [self setNeedsDisplay];
+//}
 
 
 @end

@@ -67,6 +67,7 @@
     MockMeasurement *mockMeasurement = [[MockMeasurement alloc] init];
     mockMeasurement.level = @(0.25f);
     mockMeasurement.date = nowDate;
+    mockMeasurement.batteryState = @(UIDeviceBatteryStateUnplugged);
     [mutableArray addObject:mockMeasurement];
     
     mockMeasurement = [[MockMeasurement alloc] init];

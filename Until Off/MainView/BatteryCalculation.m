@@ -64,18 +64,26 @@
 
 - (NSInteger)preditionOfResidualTimeWithStopIndex:(NSUInteger)stopIndex
 {
+    if (stopIndex >= [self.measurementArray count])
+    {
+        return 0;
+    }
     id firstMeasurement = [self.measurementArray firstObject];
     id stopIndexMeasurement = self.measurementArray[stopIndex];
     
     CGFloat firstLevel = [[firstMeasurement valueForKey:@"level"] floatValue];
     CGFloat levelDiff = [[stopIndexMeasurement valueForKey:@"level"] floatValue] - firstLevel;
     CGFloat timeDiff = [[firstMeasurement valueForKey:@"date"] timeIntervalSinceDate:[stopIndexMeasurement valueForKey:@"date"]];
-    NSLog(@"firstLevel: %f, levelDiff: %f, timeDiff: %f", firstLevel, levelDiff, timeDiff);
+//    NSLog(@"firstLevel: %f, levelDiff: %f, timeDiff: %f", firstLevel, levelDiff, timeDiff);
     return (levelDiff > 0.0f) ? (NSInteger)(timeDiff*firstLevel/levelDiff) : 0;
 }
 
 - (NSInteger)preditionOfTotalTimeWithStopIndex:(NSUInteger)stopIndex
 {
+    if (stopIndex >= [self.measurementArray count])
+    {
+        return 0;
+    }
     id firstMeasurement = [self.measurementArray firstObject];
     id stopIndexMeasurement = self.measurementArray[stopIndex];
     
@@ -88,6 +96,10 @@
 
 - (CGFloat)timeDiffForStopIndex:(NSUInteger)stopIndex
 {
+    if (stopIndex >= [self.measurementArray count])
+    {
+        return 0;
+    }
     id firstMeasurement = [self.measurementArray firstObject];
     id stopIndexMeasurement = self.measurementArray[stopIndex];
 
@@ -96,6 +108,10 @@
 
 - (CGFloat)levelDiffForStopIndex:(NSUInteger)stopIndex
 {
+    if (stopIndex >= [self.measurementArray count])
+    {
+        return 0.0f;
+    }
     id firstMeasurement = [self.measurementArray firstObject];
     id stopIndexMeasurement = self.measurementArray[stopIndex];
     

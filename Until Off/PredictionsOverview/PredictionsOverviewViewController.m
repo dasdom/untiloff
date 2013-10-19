@@ -9,6 +9,7 @@
 #import "PredictionsOverviewViewController.h"
 #import "PredictionOverviewView.h"
 #import "Prediction.h"
+#import "Utilities.h"
 
 @interface PredictionsOverviewViewController ()
 @property (nonatomic, strong) NSArray *predictionArray;
@@ -68,6 +69,9 @@
         [self.managedObjectContext deleteObject:prediction];
     }
     [self.managedObjectContext save:nil];
+    
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kAverageTotalRuntimeKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 @end
