@@ -55,7 +55,7 @@
         _predictionOverviewButton.accessibilityHint = NSLocalizedString(@"Opens disctibution screen.", nil);
         [self addSubview:_predictionOverviewButton];
         
-        _addPredictionButton = [ElementFactory mainScreenButtonWithImage:[UIImage imageNamed:@"distributionIcon"]];
+        _addPredictionButton = [ElementFactory mainScreenButtonWithImage:[UIImage imageNamed:@"addPrediction"]];
         _addPredictionButton.accessibilityLabel = NSLocalizedString(@"Add measurement", nil);
         _addPredictionButton.accessibilityHint = NSLocalizedString(@"Adds the measurement to the distribution.", nil);
         [self addSubview:_addPredictionButton];
