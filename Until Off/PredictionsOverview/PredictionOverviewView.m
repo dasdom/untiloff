@@ -34,7 +34,7 @@
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextClearRect(context, rect);
-    [[UIColor whiteColor] setFill];
+    [[UIColor colorWithWhite:0.98f alpha:1.0f] setFill];
     CGContextFillRect(context, rect);
     
     for (Prediction *prediction in self.predictionsArray)

@@ -12,4 +12,6 @@
 
 @interface Utilities : NSObject
 
++ (UIColor*)globalTintColor;
+
 @end

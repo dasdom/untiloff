@@ -15,6 +15,7 @@
 #import "BatteryCalculation.h"
 #import "LocationServiceViewController.h"
 #import "PredictionsOverviewViewController.h"
+#import "NotificationViewController.h"
 #import "MeasurementsManager.h"
 #import "DescriptionView.h"
 #import "Utilities.h"
@@ -51,6 +52,7 @@
         [_mainView.predictionOverviewButton addTarget:self action:@selector(showPredictionOverview:) forControlEvents:UIControlEventTouchUpInside];
         [_mainView.infoButton addTarget:self action:@selector(showDescription) forControlEvents:UIControlEventTouchUpInside];
         [_mainView.addPredictionButton addTarget:self action:@selector(addPrediction:) forControlEvents:UIControlEventTouchUpInside];
+        [_mainView.addNotificationButton addTarget:self action:@selector(addNotification:) forControlEvents:UIControlEventTouchUpInside];
         
         _measurementManager = [[MeasurementsManager alloc] initWithManagedObjectContext:managedObjectContext];
         
@@ -154,10 +156,10 @@
     self.timeDiff = [batteryCalculation timeDiffForStopIndex:stopIndex];
 
     self.levelDiff = [batteryCalculation levelDiffForStopIndex:stopIndex];
-    if (self.levelDiff >= 0.7f)
-    {
-        [self addPrediction:nil];
-    }
+//    if (self.levelDiff >= 0.7f)
+//    {
+//        [self addPrediction:nil];
+//    }
     
     self.mainView.stopCalcAtPointFromNow = stopIndex;
     NSString *residualTimeString = [self timeStringFromSeconds:predictionOfResitualSeconds];
@@ -231,7 +233,6 @@
     LocationServiceViewController *locationServiceViewController = [[LocationServiceViewController alloc] init];
     locationServiceViewController.managedObjectContext = self.managedObjectContext;
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:locationServiceViewController];
-//    navigationController.view.tintColor = [UIColor colorWithHue:357.0f/360.0f saturation:1.0f brightness:0.80f alpha:1.0f];
     [self presentViewController:navigationController animated:YES completion:^{}];
 }
 
@@ -241,7 +242,14 @@
     predictionOverviewViewController.managedObjectContext = self.managedObjectContext;
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:predictionOverviewViewController];
     [self presentViewController:navigationController animated:YES completion:^{}];
+}
 
+- (void)addNotification:(UIButton*)sender
+{
+    NSLog(@"0");
+    NotificationViewController *notificationViewController = [[NotificationViewController alloc] init];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:notificationViewController];
+    [self presentViewController:navigationController animated:YES completion:^{}];
 }
 
 #pragma mark - resture action

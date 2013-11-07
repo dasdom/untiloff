@@ -7,6 +7,7 @@
 //
 
 #import "AddCurrentLocationCell.h"
+#import "Utilities.h"
 
 @implementation AddCurrentLocationCell
 
@@ -21,7 +22,7 @@
         _titleLabel = [[UILabel alloc] initWithFrame:labelFrame];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:20.0f];
-        _titleLabel.textColor = [UIColor colorWithHue:357.0f/360.0f saturation:1.0f brightness:0.80f alpha:1.0f];
+        _titleLabel.textColor = [Utilities globalTintColor];
         [self.contentView addSubview:_titleLabel];
     }
     return self;

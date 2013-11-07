@@ -7,6 +7,7 @@
 //
 
 #import "ElementFactory.h"
+#import "Utilities.h"
 #import <QuartzCore/QuartzCore.h>
 
 @implementation ElementFactory
@@ -18,7 +19,7 @@
     button.translatesAutoresizingMaskIntoConstraints = NO;
     button.contentMode = UIViewContentModeCenter;
     button.layer.borderWidth = 0.5f;
-    button.layer.borderColor = [[UIColor colorWithHue:357.0f/360.0f saturation:1.0f brightness:0.80f alpha:1.0f] CGColor];
+    button.layer.borderColor = [[Utilities globalTintColor] CGColor];
     button.layer.cornerRadius = 3.0f;
     return button;
 }

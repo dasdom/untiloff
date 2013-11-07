@@ -19,6 +19,7 @@
 @property (nonatomic, strong) UIButton *locationServiceButton;
 @property (nonatomic, strong) UIButton *predictionOverviewButton;
 @property (nonatomic, strong) UIButton *addPredictionButton;
+@property (nonatomic, strong) UIButton *addNotificationButton;
 @property (nonatomic, strong) UIButton *infoButton;
 @property (nonatomic) CGFloat residualTime;
 @property (nonatomic, strong) UIView *sliderView;

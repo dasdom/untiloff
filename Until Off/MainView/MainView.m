@@ -9,6 +9,7 @@
 #import "MainView.h"
 #import "ElementFactory.h"
 #import "Measurement.h"
+#import "Utilities.h"
 
 #define kSecondsPerHour 3600.0f
 #define kXPositionOfZero self.frame.size.width-87.0f
@@ -36,7 +37,7 @@
         titleLabel.textAlignment = NSTextAlignmentCenter;
         titleLabel.textColor = [UIColor blackColor];
         titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:22.0f];
-        titleLabel.backgroundColor = [UIColor whiteColor];
+        titleLabel.backgroundColor = [UIColor clearColor];
         [self addSubview:titleLabel];
         
         _infoButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
@@ -56,9 +57,14 @@
         [self addSubview:_predictionOverviewButton];
         
         _addPredictionButton = [ElementFactory mainScreenButtonWithImage:[UIImage imageNamed:@"addPrediction"]];
-        _addPredictionButton.accessibilityLabel = NSLocalizedString(@"Add measurement", nil);
-        _addPredictionButton.accessibilityHint = NSLocalizedString(@"Adds the measurement to the distribution.", nil);
+        _addPredictionButton.accessibilityLabel = NSLocalizedString(@"Add prediction", nil);
+        _addPredictionButton.accessibilityHint = NSLocalizedString(@"Adds the prediction to the distribution.", nil);
         [self addSubview:_addPredictionButton];
+        
+        _addNotificationButton = [ElementFactory mainScreenButtonWithImage:[UIImage imageNamed:@"notificationIcon"]];
+        _addNotificationButton.accessibilityLabel = NSLocalizedString(@"Notification", nil);
+        _addNotificationButton.accessibilityHint = NSLocalizedString(@"Lets you add notifications that you don't forget to open the app.", nil);
+        [self addSubview:_addNotificationButton];
         
         _residualLabel = [[UILabel alloc] init];
         _residualLabel.textColor = [UIColor whiteColor];
@@ -80,11 +86,11 @@
         
         _sliderView = [[UIView alloc] init];
         _sliderView.translatesAutoresizingMaskIntoConstraints = NO;
-        _sliderView.backgroundColor = [UIColor colorWithHue:357.0f/360.0f saturation:1.0f brightness:0.80f alpha:1.0f];
+        _sliderView.backgroundColor = [Utilities globalTintColor];
         _sliderView.userInteractionEnabled = NO;
         [self addSubview:_sliderView];
         
-        NSDictionary *viewsDictionary = NSDictionaryOfVariableBindings(titleLabel, _infoButton, _sliderView, _totalLabel, _locationServiceButton, _predictionOverviewButton, _addPredictionButton);
+        NSDictionary *viewsDictionary = NSDictionaryOfVariableBindings(titleLabel, _infoButton, _sliderView, _totalLabel, _locationServiceButton, _predictionOverviewButton, _addPredictionButton, _addNotificationButton);
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[titleLabel(40)]-10-[_sliderView(sliderHeight)]" options:0 metrics:@{@"sliderHeight" : @(frame.size.height-210.0f)} views:viewsDictionary]];
         
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[titleLabel]-[_infoButton]-|" options:0 metrics:nil views:viewsDictionary]];
@@ -96,9 +102,9 @@
         
         [self addConstraint:[NSLayoutConstraint constraintWithItem:_infoButton attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:titleLabel attribute:NSLayoutAttributeCenterY multiplier:1.0f constant:0.0f]];
         
-        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_totalLabel]-15-[_addPredictionButton(==40,==_predictionOverviewButton,==_locationServiceButton)]-|" options:0 metrics:nil views:viewsDictionary]];
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_totalLabel]-15-[_addPredictionButton(==40,==_predictionOverviewButton,==_locationServiceButton,==_addNotificationButton)]-|" options:0 metrics:nil views:viewsDictionary]];
         
-        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[_addPredictionButton(==_locationServiceButton,==_predictionOverviewButton)]-[_predictionOverviewButton]-[_locationServiceButton]-|" options:NSLayoutFormatAlignAllTop metrics:nil views:viewsDictionary]];
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[_addPredictionButton(==_locationServiceButton,==_predictionOverviewButton,==_addNotificationButton)]-[_predictionOverviewButton]-[_locationServiceButton]-[_addNotificationButton]-|" options:NSLayoutFormatAlignAllTop metrics:nil views:viewsDictionary]];
         
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20-[_totalLabel]-20-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_totalLabel)]];
         
@@ -114,7 +120,7 @@
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextClearRect(context, rect);
-    [[UIColor whiteColor] setFill];
+    [[UIColor colorWithWhite:0.98f alpha:1.0f] setFill];
     CGContextFillRect(context, rect);
     
 	CGFloat timeNorm = self.numberOfHours*kSecondsPerHour+7000;
@@ -228,7 +234,14 @@
     CGContextSetRGBFillColor(context, 0.0, 0.5, 1.0, 0.1);
     CGContextFillRect(context, diagramFrame);
     
-    CGContextSetRGBFillColor(context, 102.0f/255.0f, 157.0f/255.0f, 107.0f/255.0f, 1.0f);
+    if (firstLevel > 0.2f)
+    {
+        CGContextSetRGBFillColor(context, 102.0f/255.0f, 157.0f/255.0f, 107.0f/255.0f, 1.0f);
+    }
+    else
+    {
+        CGContextSetRGBFillColor(context, 210.0f/255.0f, 102.0f/255.0f, 107.0f/255.0f, 1.0f);
+    }
     CGContextFillRect(context, residualFrame);
     
     CGContextSaveGState(context);
@@ -295,7 +308,15 @@
 //    CGSize residualStringSize = [residualString sizeWithAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Bold" size:25.0f]}];
 //    [residualString drawAtPoint:CGPointMake(residualFrame.origin.x+(residualFrame.size.width-residualStringSize.width)/2.0f, residualFrame.origin.y+(residualFrame.size.height-residualStringSize.height)/2.0f) withAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Bold" size:25.0f], NSForegroundColorAttributeName : [UIColor whiteColor]}];
     
-    NSString *totalTimeString = [NSString stringWithFormat:NSLocalizedString(@"100%% ➞ %@h", nil), self.totalTimeString];
+    NSString *totalTimeString;
+    if (firstLevel < 1.0f)
+    {
+        totalTimeString = [NSString stringWithFormat:NSLocalizedString(@"100%% ➞ %@h", nil), self.totalTimeString];
+    }
+    else
+    {
+        totalTimeString = @"";
+    }
     self.totalLabel.text = totalTimeString;
     self.totalLabel.accessibilityLabel = NSLocalizedString(@"Not enough data to calculate total battery duration.", nil);
     if (![self.totalTimeString isEqualToString:@"-:-"])
