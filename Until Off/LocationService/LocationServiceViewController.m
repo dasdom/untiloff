@@ -86,15 +86,27 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+//    [self.locationServiceLookAndFeel.locationManager requestAlwaysAuthorization];
     [self.locationServiceLookAndFeel.locationManager startUpdatingLocation];
     
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Add Geo Fences", nil) message:NSLocalizedString(@"Add here a geo fence to you current location to take a measurement everytime you leave this location. (This could drain your battery a bit faster.)", nil) delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
-    [alertView show];
+//    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Add Geo Fences", nil) message:NSLocalizedString(@"Add here a geo fence to you current location to take a measurement everytime you leave this location. (This could drain your battery a bit faster.)", nil) delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
+//    [alertView show];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    
+    for (NSDictionary *geofenceDictionary in self.locationServiceLookAndFeel.placeMarkArray)
+    {
+        Geofence *geofence = [NSEntityDescription insertNewObjectForEntityForName:@"Geofence" inManagedObjectContext:self.managedObjectContext];
+        geofence.name = [geofenceDictionary objectForKey:@"name"];
+        geofence.longitude = [geofenceDictionary objectForKey:@"longitude"];
+        geofence.latitude = [geofenceDictionary objectForKey:@"latitude"];
+        geofence.radius = @(100.0f);
+    }
+    [(AppDelegate*)[[UIApplication sharedApplication] delegate] saveContext];
+    
     [self.locationServiceLookAndFeel.locationManager stopUpdatingLocation];
 }
 
@@ -123,15 +135,15 @@
 
 - (void)doneButtonTouched:(UIBarButtonItem*)sender
 {
-    for (NSDictionary *geofenceDictionary in self.locationServiceLookAndFeel.placeMarkArray)
-    {
-        Geofence *geofence = [NSEntityDescription insertNewObjectForEntityForName:@"Geofence" inManagedObjectContext:self.managedObjectContext];
-        geofence.name = [geofenceDictionary objectForKey:@"name"];
-        geofence.longitude = [geofenceDictionary objectForKey:@"longitude"];
-        geofence.latitude = [geofenceDictionary objectForKey:@"latitude"];
-        geofence.radius = @(100.0f);
-    }
-    [(AppDelegate*)[[UIApplication sharedApplication] delegate] saveContext];
+//    for (NSDictionary *geofenceDictionary in self.locationServiceLookAndFeel.placeMarkArray)
+//    {
+//        Geofence *geofence = [NSEntityDescription insertNewObjectForEntityForName:@"Geofence" inManagedObjectContext:self.managedObjectContext];
+//        geofence.name = [geofenceDictionary objectForKey:@"name"];
+//        geofence.longitude = [geofenceDictionary objectForKey:@"longitude"];
+//        geofence.latitude = [geofenceDictionary objectForKey:@"latitude"];
+//        geofence.radius = @(100.0f);
+//    }
+//    [(AppDelegate*)[[UIApplication sharedApplication] delegate] saveContext];
 
     [self dismissViewControllerAnimated:YES completion:^{}];
 }

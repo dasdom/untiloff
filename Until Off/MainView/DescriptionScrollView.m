@@ -19,9 +19,9 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.isAccessibilityElement = YES;
-        self.numberOfPages = 6;
+        self.numberOfPages = 8;
         
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor clearColor];
         self.pagingEnabled = YES;
         self.contentSize = CGSizeMake(frame.size.width*self.numberOfPages, frame.size.height);
         self.layer.cornerRadius = 3.0f;
@@ -33,6 +33,7 @@
             NSString *titleString;
             NSString *labelString;
             NSString *imageName;
+            BOOL templateImage = NO;
             switch (i) {
                 case 0:
                     titleString = NSLocalizedString(@"What is UntilOff?", nil);
@@ -51,14 +52,28 @@
                 case 3:
                     titleString = NSLocalizedString(@"Distribution", nil);
                     labelString = NSLocalizedString(@"If UntilOff believes the calculation is reliable, it saves the predicted total battery duration.", nil);
-                    imageName = @"distributionButton";
+                    imageName = @"distributionIcon";
+                    templateImage = YES;
                     break;
                 case 4:
-                    titleString = NSLocalizedString(@"Background", nil);
-                    labelString = NSLocalizedString(@"UntilOff can measure the battery in the background. To activate you have to add geo fences.", nil);
-                    imageName = @"geofenceButton";
+                    titleString = NSLocalizedString(@"Add Measurement", nil);
+                    labelString = NSLocalizedString(@"You can add a measurement to the distribution manually.", nil);
+                    imageName = @"addPrediction";
+                    templateImage = YES;
                     break;
                 case 5:
+                    titleString = NSLocalizedString(@"Background", nil);
+                    labelString = NSLocalizedString(@"UntilOff can measure the battery in the background. To activate you have to add geo fences.", nil);
+                    imageName = @"locationServiceIcon";
+                    templateImage = YES;
+                    break;
+                case 6:
+                    titleString = NSLocalizedString(@"Notifications", nil);
+                    labelString = NSLocalizedString(@"Add notifications if you want to be remebered to open UntilOff to add measurements in a regular manner.", nil);
+                    imageName = @"notificationIcon";
+                    templateImage = YES;
+                    break;
+                case 7:
                     titleString = NSLocalizedString(@"How does it work?", nil);
                     labelString = NSLocalizedString(@"UntilOff takes the duration between the highest and the actual battery level and interpolates to an empty battery. Therefore the values only take into account your prior usage.", nil);
                     break;
@@ -75,34 +90,44 @@
             pageView.isAccessibilityElement = YES;
             //            pageView.accessibilityLabel = titleString;
             //            pageView.accessibilityHint = labelString;
-            UIColor *backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"backgroundPattern"]];
-            pageView.backgroundColor = backgroundColor;
+//            UIColor *backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"backgroundPattern"]];
+//            pageView.backgroundColor = backgroundColor;
             [self addSubview:pageView];
             
             UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0f, 10.0f, frame.size.width-40.0f, 30.0f)];
             titleLabel.text = titleString;
-            titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:18.0f];
+            titleLabel.textColor = [UIColor whiteColor];
+            titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:20.0f];
             titleLabel.isAccessibilityElement = NO;
             [pageView addSubview:titleLabel];
             
-            UIFont *labelFont = [UIFont fontWithName:@"HelveticaNeue" size:18.0f];
+            UIFont *labelFont = [UIFont fontWithName:@"HelveticaNeue" size:20.0f];
             CGRect textFrame = [labelString boundingRectWithSize:CGSizeMake(frame.size.width-40.0f, frame.size.height-40.0f) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : labelFont} context:nil];
             CGRect labelFrame = CGRectMake(20.0f, CGRectGetMaxY(titleLabel.frame)+5.0f, frame.size.width-40.0f, textFrame.size.height);
             UILabel *label = [[UILabel alloc] initWithFrame:labelFrame];
             label.text = labelString;
+            label.textColor = [UIColor whiteColor];
             label.numberOfLines = 0;
             label.font = labelFont;
             label.isAccessibilityElement = NO;
-            //    label1.backgroundColor = [UIColor yellowColor];
+//                label.backgroundColor = [UIColor yellowColor];
             [pageView addSubview:label];
             
-            UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]];
-            CGRect imageViewFrame = imageView.frame;
-            imageViewFrame.origin.x = ceilf((frame.size.width-imageViewFrame.size.width)/2.0f);
-            imageViewFrame.origin.y = pageFrame.size.height-imageViewFrame.size.height-35.0f;
-            imageView.frame = imageViewFrame;
-            [pageView addSubview:imageView];
-            
+            if (imageName)
+            {
+                UIImage *image = [UIImage imageNamed:imageName];
+                if (templateImage) {
+                    image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                }
+                UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+                imageView.tintColor = [UIColor whiteColor];
+                CGRect imageViewFrame = imageView.frame;
+                imageViewFrame.origin.x = ceilf((frame.size.width-imageViewFrame.size.width)/2.0f);
+                imageViewFrame.origin.y = CGRectGetMaxY(label.frame) + 50.0f;
+//                imageViewFrame.origin.y = pageFrame.size.height-imageViewFrame.size.height-35.0f;
+                imageView.frame = imageViewFrame;
+                [pageView addSubview:imageView];
+            }
         }
         
         self.accessibilityContentStringArray = [mutableAccessibilityContentArray copy];

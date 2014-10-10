@@ -36,7 +36,7 @@
     UIBarButtonItem *closeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonTouched:)];
     self.navigationItem.leftBarButtonItem = closeButton;
     
-    UIBarButtonItem *resetBarButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Reset", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(resetPredictions:)];
+    UIBarButtonItem *resetBarButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Reset", nil) style:UIBarButtonItemStylePlain target:self action:@selector(resetPredictions:)];
     self.navigationItem.rightBarButtonItem = resetBarButton;
     
     self.title = NSLocalizedString(@"Distribution", nil);

@@ -13,6 +13,7 @@
 + (UIColor*)globalTintColor
 {
     return [UIColor colorWithHue:357.0f/360.0f saturation:1.0f brightness:0.75f alpha:1.0f];
+//    return [UIColor yellowColor];
 }
 
 @end

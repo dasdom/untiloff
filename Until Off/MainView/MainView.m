@@ -10,6 +10,7 @@
 #import "ElementFactory.h"
 #import "Measurement.h"
 #import "Utilities.h"
+#import <QuartzCore/QuartzCore.h>
 
 #define kSecondsPerHour 3600.0f
 #define kXPositionOfZero self.frame.size.width-87.0f
@@ -18,7 +19,6 @@
 @property (nonatomic, strong) NSMutableArray *pointsArray;
 @property (nonatomic) BOOL showTimes;
 @property (nonatomic, strong) UILabel *residualLabel;
-@property (nonatomic, strong) UILabel *totalLabel;
 @end
 
 @implementation MainView
@@ -102,13 +102,14 @@
         
         [self addConstraint:[NSLayoutConstraint constraintWithItem:_infoButton attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:titleLabel attribute:NSLayoutAttributeCenterY multiplier:1.0f constant:0.0f]];
         
-        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_totalLabel]-15-[_addPredictionButton(==40,==_predictionOverviewButton,==_locationServiceButton,==_addNotificationButton)]-|" options:0 metrics:nil views:viewsDictionary]];
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_totalLabel]-15-[_addPredictionButton(==40,==_predictionOverviewButton,==_locationServiceButton,==_addNotificationButton)]-20-|" options:0 metrics:nil views:viewsDictionary]];
         
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[_addPredictionButton(==_locationServiceButton,==_predictionOverviewButton,==_addNotificationButton)]-[_predictionOverviewButton]-[_locationServiceButton]-[_addNotificationButton]-|" options:NSLayoutFormatAlignAllTop metrics:nil views:viewsDictionary]];
         
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20-[_totalLabel]-20-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_totalLabel)]];
-        
-        
+    
+        self.shapeLayer = [CAShapeLayer layer];
+        self.dashedLineShapeLayer = [CAShapeLayer layer];
     }
     return self;
 }
@@ -118,10 +119,19 @@
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect
 {
-    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextRef context = UIGraphicsGetCurrentContext();    
     CGContextClearRect(context, rect);
-    [[UIColor colorWithWhite:0.98f alpha:1.0f] setFill];
+    [[UIColor colorWithWhite:0.9f alpha:1.0f] setFill];
+//    [[UIColor colorWithRed:0.141 green:0.149 blue:0.204 alpha:1.0] setFill];
+
     CGContextFillRect(context, rect);
+    
+    if (self.numberOfHours < 1) {
+        return;
+    }
+
+    [self.layer addSublayer:self.shapeLayer];
+    [self.layer addSublayer:self.dashedLineShapeLayer];
     
 	CGFloat timeNorm = self.numberOfHours*kSecondsPerHour+7000;
 	CGFloat width = self.frame.size.width;
@@ -179,7 +189,6 @@
         }
     }
 
-    
     [self.pointsArray removeAllObjects];
     
     CGFloat firstYPoint;
@@ -215,7 +224,21 @@
                 diagramFrame.origin.x = pointX;
             }
 		}
+        
+        if (pointX < 0) {
+            break;
+        }
 	}
+    
+    CGMutablePathRef path = CGPathCreateMutable();
+    [self.pointsArray enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(NSValue *value, NSUInteger idx, BOOL *stop) {
+        CGPoint point = [value CGPointValue];
+        if (idx == [self.pointsArray count]-1) {
+            CGPathMoveToPoint(path, NULL, point.x, point.y);
+        } else {
+            CGPathAddLineToPoint(path, NULL, point.x, point.y);
+        }
+    }];
     
     residualFrame.origin.y = firstYPoint;
     residualFrame.size.height = CGRectGetMaxY(diagramFrame)-firstYPoint;
@@ -248,18 +271,83 @@
     
     [[UIColor blackColor] setStroke];
     bezierPath.lineWidth = 2.0f;
-    [bezierPath stroke];
+//    [bezierPath stroke];
     
-    if (self.residualTime > 0)
+    self.shapeLayer.path = path;
+    CGPathRelease(path);
+    
+    self.shapeLayer.fillColor = [[UIColor clearColor] CGColor];
+    self.shapeLayer.strokeColor = [[UIColor blackColor] CGColor];
+    self.shapeLayer.lineWidth = 2.0f;
+    self.shapeLayer.strokeEnd = 1.0f;
+    
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
+    animation.fromValue = @0.0;
+    animation.toValue = @1.0;
+    animation.duration = 1.5f;
+    [self.shapeLayer addAnimation:animation forKey:@"strokeEnd"];
+    
+    NSString *residualString = [NSString stringWithFormat:@"%.0f%% ➞ %@h", firstLevel*100, self.residualTimeString];
+    self.residualLabel.frame = residualFrame;
+    self.residualLabel.text = residualString;
+    self.residualLabel.clipsToBounds = YES;
+    self.residualLabel.accessibilityLabel = NSLocalizedString(@"Not enough data to calculate residual battery duration.", nil);
+    self.residualLabel.accessibilityHint = NSLocalizedString(@"To collect data, open the app from time to time.", nil);
+    if (![self.residualTimeString isEqualToString:@"-:-"])
     {
-        UIBezierPath *dashedLine = [[UIBezierPath alloc] init];
-        [dashedLine moveToPoint:CGPointMake(CGRectGetMaxX(residualFrame), CGRectGetMinY(residualFrame))];
-        [dashedLine addLineToPoint:CGPointMake(kXPositionOfZero+self.residualTime*(kXPositionOfZero)/timeNorm, CGRectGetMaxY(diagramFrame))];
-        dashedLine.lineWidth = 2;
-        CGFloat dashedLinePattern[] = {3, 3, 3, 3};
-        [dashedLine setLineDash: dashedLinePattern count: 4 phase: 0];
-        [dashedLine stroke];
+        NSArray *componentsArray = [self.totalTimeString componentsSeparatedByString:@":"];
+        if ([componentsArray count] > 1)
+        {
+            self.residualLabel.accessibilityLabel = [NSString stringWithFormat:NSLocalizedString(@"Residual battery %@ hours and %@ minutes", nil), componentsArray[0], componentsArray[1]];
+            self.residualLabel.accessibilityHint = nil;
+        }
     }
+    
+    [self.dashedLineShapeLayer removeAllAnimations];
+    CGMutablePathRef dashedPath = CGPathCreateMutable();
+    CGPathMoveToPoint(dashedPath, NULL, CGRectGetMaxX(residualFrame), CGRectGetMinY(residualFrame));
+    CGPathAddLineToPoint(dashedPath, NULL, CGRectGetMaxX(residualFrame), CGRectGetMaxY(diagramFrame));
+    self.dashedLineShapeLayer.path = dashedPath;
+    self.dashedLineShapeLayer.strokeColor = [[UIColor clearColor] CGColor];
+    CGPathRelease(dashedPath);
+    
+    CGRect labelFrame = self.residualLabel.frame;
+    self.residualLabel.frame = CGRectMake(labelFrame.origin.x, labelFrame.origin.y, 0.0f, labelFrame.size.height);
+    [UIView animateWithDuration:1.5f animations:^{
+        self.residualLabel.frame = labelFrame;
+    } completion:^(BOOL finished) {
+        if (self.residualTime > 0)
+        {
+            NSLog(@"finished: %@", finished?@YES:@NO);
+//            UIBezierPath *dashedLine = [[UIBezierPath alloc] init];
+//            [dashedLine moveToPoint:CGPointMake(CGRectGetMaxX(residualFrame), CGRectGetMinY(residualFrame))];
+//            [dashedLine addLineToPoint:CGPointMake(kXPositionOfZero+self.residualTime*(kXPositionOfZero)/timeNorm, CGRectGetMaxY(diagramFrame))];
+//            dashedLine.lineWidth = 2;
+//            CGFloat dashedLinePattern[] = {3, 3, 3, 3};
+//            [dashedLine setLineDash: dashedLinePattern count: 4 phase: 0];
+//            [dashedLine stroke];
+            
+            CGMutablePathRef dashedPath = CGPathCreateMutable();
+            CGPathMoveToPoint(dashedPath, NULL, CGRectGetMaxX(residualFrame), CGRectGetMinY(residualFrame));
+            CGPathAddLineToPoint(dashedPath, NULL, kXPositionOfZero+self.residualTime*(kXPositionOfZero)/timeNorm, CGRectGetMaxY(diagramFrame));
+            self.dashedLineShapeLayer.path = dashedPath;
+            CGPathRelease(dashedPath);
+            
+            self.dashedLineShapeLayer.fillColor = [[UIColor clearColor] CGColor];
+            self.dashedLineShapeLayer.strokeColor = [[UIColor blackColor] CGColor];
+            self.dashedLineShapeLayer.lineWidth = 2.0f;
+            self.dashedLineShapeLayer.strokeEnd = 1.0f;
+            self.dashedLineShapeLayer.lineDashPattern = @[@3, @3, @3, @3];
+            
+            CABasicAnimation *dashedAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
+            dashedAnimation.fromValue = @0.0;
+            dashedAnimation.toValue = @1.0;
+            dashedAnimation.duration = 2.0f;
+            [self.dashedLineShapeLayer addAnimation:dashedAnimation forKey:@"strokeEnd"];
+
+        }
+    }];
+    
     
     CGContextRestoreGState(context);
     
@@ -291,20 +379,30 @@
     CGContextSetLineWidth(context, 1.0f);
     CGContextStrokePath(context);
     
-    NSString *residualString = [NSString stringWithFormat:@"%.0f%% ➞ %@h", firstLevel*100, self.residualTimeString];
-    self.residualLabel.frame = residualFrame;
-    self.residualLabel.text = residualString;
-    self.residualLabel.accessibilityLabel = NSLocalizedString(@"Not enough data to calculate residual battery duration.", nil);
-    self.residualLabel.accessibilityHint = NSLocalizedString(@"To collect data, open the app from time to time.", nil);
-    if (![self.residualTimeString isEqualToString:@"-:-"])
-    {
-        NSArray *componentsArray = [self.totalTimeString componentsSeparatedByString:@":"];
-        if ([componentsArray count] > 1)
-        {
-            self.residualLabel.accessibilityLabel = [NSString stringWithFormat:NSLocalizedString(@"Residual battery %@ hours and %@ minutes", nil), componentsArray[0], componentsArray[1]];
-            self.residualLabel.accessibilityHint = nil;
-        }
-    }
+//    NSString *residualString = [NSString stringWithFormat:@"%.0f%% ➞ %@h", firstLevel*100, self.residualTimeString];
+//    self.residualLabel.frame = residualFrame;
+//    self.residualLabel.text = residualString;
+//    self.residualLabel.clipsToBounds = YES;
+//    self.residualLabel.accessibilityLabel = NSLocalizedString(@"Not enough data to calculate residual battery duration.", nil);
+//    self.residualLabel.accessibilityHint = NSLocalizedString(@"To collect data, open the app from time to time.", nil);
+//    if (![self.residualTimeString isEqualToString:@"-:-"])
+//    {
+//        NSArray *componentsArray = [self.totalTimeString componentsSeparatedByString:@":"];
+//        if ([componentsArray count] > 1)
+//        {
+//            self.residualLabel.accessibilityLabel = [NSString stringWithFormat:NSLocalizedString(@"Residual battery %@ hours and %@ minutes", nil), componentsArray[0], componentsArray[1]];
+//            self.residualLabel.accessibilityHint = nil;
+//        }
+//    }
+//    
+//    CGRect labelFrame = self.residualLabel.frame;
+//    self.residualLabel.frame = CGRectMake(labelFrame.origin.x, labelFrame.origin.y, 0.0f, labelFrame.size.height);
+//    [UIView animateWithDuration:1.5f animations:^{
+//        self.residualLabel.frame = labelFrame;
+//    } completion:^(BOOL finished) {
+//        
+//    }];
+
 //    CGSize residualStringSize = [residualString sizeWithAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Bold" size:25.0f]}];
 //    [residualString drawAtPoint:CGPointMake(residualFrame.origin.x+(residualFrame.size.width-residualStringSize.width)/2.0f, residualFrame.origin.y+(residualFrame.size.height-residualStringSize.height)/2.0f) withAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Bold" size:25.0f], NSForegroundColorAttributeName : [UIColor whiteColor]}];
     
@@ -317,6 +415,7 @@
     {
         totalTimeString = @"";
     }
+    
     self.totalLabel.text = totalTimeString;
     self.totalLabel.accessibilityLabel = NSLocalizedString(@"Not enough data to calculate total battery duration.", nil);
     if (![self.totalTimeString isEqualToString:@"-:-"])
@@ -328,6 +427,7 @@
             self.residualLabel.accessibilityHint = nil;
         }
     }
+    
 //    CGSize totalTimeStringSize = [totalTimeString sizeWithAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Light" size:22.0f]}];
 //    [totalTimeString drawAtPoint:CGPointMake(width-totalTimeStringSize.width-20.0f, height-105.0f) withAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Light" size:22.0f]}];
 

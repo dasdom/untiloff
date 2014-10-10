@@ -101,7 +101,7 @@
     [mutableArray addObject:mockMeasurement];
 
     mockMeasurement = [[MockMeasurement alloc] init];
-    mockMeasurement.level = @(0.5f);
+    mockMeasurement.level = @(0.20f);
     mockMeasurement.date = [NSDate dateWithTimeInterval:(-60.0f*60.0f*12.5f) sinceDate:nowDate];
     mockMeasurement.batteryState = @(UIDeviceBatteryStateUnplugged);
     [mutableArray addObject:mockMeasurement];

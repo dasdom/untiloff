@@ -56,9 +56,9 @@
     CGFloat minimalHour = floorf([self.minimum floatValue]/3600.0f-1.5f);
     CGFloat maximalHour = ceilf([self.maximum floatValue]/3600.f+0.5f);
     
-//    NSArray *sortedPredictionsArray = [self.predictionsArray sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-//        return [((Prediction*)obj1).totalRuntime compare:((Prediction*)obj2).totalRuntime];
-//    }];
+    //    NSArray *sortedPredictionsArray = [self.predictionsArray sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+    //        return [((Prediction*)obj1).totalRuntime compare:((Prediction*)obj2).totalRuntime];
+    //    }];
     
     NSMutableArray *numberOfPredictionsForHours = [NSMutableArray array];
     for (int i = (int)minimalHour; i <= maximalHour; i++)
@@ -81,17 +81,31 @@
     CGFloat rectHeight = rect.size.height;
 
     NSInteger numberOfChannels = [numberOfPredictionsForHours count];
-    CGFloat normX = (self.frame.size.width-40.0f)/(float)numberOfChannels;
+    CGFloat normX = floorf((self.frame.size.width-40.0f)/(float)numberOfChannels);
     CGFloat normY = (rectHeight-190.0f)/(float)maximalNumberOfValues;
     NSDictionary *attributeDictionary = @{NSFontAttributeName : [UIFont systemFontOfSize:10.0f]};
+    
+    NSInteger stepSize = maximalNumberOfValues < 15 ? 1 : 5;
+    
+    for (int i = 0; i < maximalNumberOfValues; i+=stepSize)
+    {
+        CGRect lineRect = CGRectMake(10.0f, rectHeight-100.0f-i*normY, rect.size.width-20.0f, 0.5f);
+        CGContextFillRect(context, lineRect);
+        
+        NSString *numberString = [NSString stringWithFormat:@"%d", i];
+        [numberString drawAtPoint:CGPointMake(10.0f, CGRectGetMaxY(lineRect)-15.0f) withAttributes:attributeDictionary];
+    }
+
     for (int i = 0; i < [numberOfPredictionsForHours count]; i++)
     {
         NSNumber *number = numberOfPredictionsForHours[i];
         CGContextSetRGBFillColor(context, 0.6, 0.6, 0.6, 1.0);
         CGRect channelRect = CGRectMake(20.0f+i*normX, rectHeight-100.0f-MAX([number floatValue]*normY,2.0f), normX-1.0f, MAX([number floatValue]*normY,2.0f));
+        channelRect = CGRectIntegral(channelRect);
+        NSLog(@"channelRect: %@", NSStringFromCGRect(channelRect));
         CGContextFillRect(context, channelRect);
         
-        if (numberOfChannels > 10)
+        if (numberOfChannels > 20)
         {
             if ((i-1)%10 == 0)
             {
@@ -117,15 +131,6 @@
         }
     }
     
-    for (int i = 5; i < maximalNumberOfValues; i+=5)
-    {
-        CGRect lineRect = CGRectMake(10.0f, rectHeight-100.0f-i*normY, rect.size.width-20.0f, 1.0f);
-        CGContextFillRect(context, lineRect);
-        
-        NSString *numberString = [NSString stringWithFormat:@"%d", i];
-        [numberString drawAtPoint:CGPointMake(10.0f, CGRectGetMaxY(lineRect)-15.0f) withAttributes:attributeDictionary];
-    }
-    
     NSString *conclusionString = [NSString stringWithFormat:@"Minimum %.2f, Maximum %.2f, Average %.2f", [self.minimum floatValue]/3600, [self.maximum floatValue]/3600, [self.average floatValue]/3600];
     [conclusionString drawAtPoint:CGPointMake(20.0f, rectHeight-20.0f) withAttributes:attributeDictionary];
 }
@@ -142,19 +147,19 @@
     NSInteger minutes = seconds/60-hours*60;
     
     NSMutableString *mutableString = [NSMutableString stringWithString:@""];
-    [mutableString appendFormat:@"The average total battery duration is %d hours and %d minutes.", hours, minutes];
+    [mutableString appendFormat:@"The average total battery duration is %ld hours and %ld minutes.", (long)hours, (long)minutes];
     
     seconds = [self.minimum integerValue];
     hours = seconds/3600;
     minutes = seconds/60-hours*60;
     
-    [mutableString appendFormat:@"The minimal total battery duration is %d hours and %d minutes.", hours, minutes];
+    [mutableString appendFormat:@"The minimal total battery duration is %ld hours and %ld minutes.", (long)hours, (long)minutes];
 
     seconds = [self.maximum integerValue];
     hours = seconds/3600;
     minutes = seconds/60-hours*60;
     
-    [mutableString appendFormat:@"The maximum total battery duration is %d hours and %d minutes.", hours, minutes];
+    [mutableString appendFormat:@"The maximum total battery duration is %ld hours and %ld minutes.", (long)hours, (long)minutes];
 
     return mutableString;
 }

@@ -21,21 +21,28 @@
     self = [super initWithFrame:frame];
     if (self)
     {
-        self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.6f];
+        self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.7f];
         self.accessibilityViewIsModal = YES;
         
-        CGSize scrollViewSize = CGSizeMake(240.0f, 300.0f);
-        CGRect scrollViewFrame = CGRectMake(ceilf((frame.size.width-scrollViewSize.width)/2.0f), ceilf((frame.size.height-scrollViewSize.height)/2.0f), scrollViewSize.width, scrollViewSize.height);
+//        CGSize scrollViewSize = CGSizeMake(280.0f, 320.0f);
+//        CGRect scrollViewHostFrame = CGRectMake(ceilf((frame.size.width-scrollViewSize.width)/2.0f)+10.0f, ceilf((frame.size.height-scrollViewSize.height)/2.0f)-10.0f, scrollViewSize.width, scrollViewSize.height);
+        CGRect scrollViewHostFrame = CGRectInset(frame, 10.0f, 10.0f);
+        self.descriptionHostView = [[UIView alloc] initWithFrame:scrollViewHostFrame];
+//        self.descriptionHostView.backgroundColor = [UIColor redColor];
+        [self addSubview:self.descriptionHostView];
+        
+        CGRect scrollViewFrame = CGRectMake(20.0f, 20.0f, scrollViewHostFrame.size.width-40.0f, scrollViewHostFrame.size.height-20.0f);
         DescriptionScrollView *descriptionScrollView = [[DescriptionScrollView alloc] initWithFrame:scrollViewFrame];
         descriptionScrollView.delegate = self;
-        [self addSubview:descriptionScrollView];
+        [self.descriptionHostView addSubview:descriptionScrollView];
         
         _dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_dismissButton setImage:[UIImage imageNamed:@"closeButton"] forState:UIControlStateNormal];
-        _dismissButton.frame = CGRectMake(CGRectGetMaxX(scrollViewFrame)-20.0f, CGRectGetMaxY(scrollViewFrame)-20.0f, 40.0f, 40.0f);
+//        _dismissButton.frame = CGRectMake(CGRectGetMaxX(scrollViewFrame)-20.0f, CGRectGetMaxY(scrollViewFrame)-20.0f, 40.0f, 40.0f);
+        _dismissButton.frame = CGRectMake(CGRectGetWidth(scrollViewFrame), CGRectGetMinY(scrollViewFrame)-20.0f, 40.0f, 40.0f);
         _dismissButton.accessibilityLabel = @"Close";
         _dismissButton.accessibilityHint = @"Closes the description.";
-        [self addSubview:_dismissButton];
+        [self.descriptionHostView addSubview:_dismissButton];
         
 //        NSMutableArray *mutableAccessibilityContentArray = [NSMutableArray array];
 //        for (int i = 0; i < numberOfPages; i++)
@@ -115,14 +122,14 @@
 //        
 //        self.accessibilityContentStringArray = [mutableAccessibilityContentArray copy];
         
-        _pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(CGRectGetMinX(scrollViewFrame), CGRectGetMaxY(scrollViewFrame)-20.0f, scrollViewFrame.size.width, 10.0f)];
+        _pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(CGRectGetMinX(scrollViewFrame), CGRectGetHeight(scrollViewFrame), scrollViewHostFrame.size.width-20.0f, 10.0f)];
         _pageControl.numberOfPages = descriptionScrollView.numberOfPages;
         _pageControl.currentPage = 0;
         _pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
         _pageControl.currentPageIndicatorTintColor = [UIColor blackColor];
         _pageControl.userInteractionEnabled = NO;
         _pageControl.isAccessibilityElement = NO;
-        [self addSubview:_pageControl];
+        [self.descriptionHostView addSubview:_pageControl];
     }
     return self;
 }

@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface DescriptionView : UIView
-
 @property (nonatomic, strong) UIButton *dismissButton;
-
+@property (nonatomic, strong) UIView *descriptionHostView;
 @end

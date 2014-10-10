@@ -16,6 +16,8 @@
 #define kAlertDateTwo @"kAlertDateTwo"
 #define kAlertTwoIsOn @"kAlertTwoIsOn"
 
+NSString * const kRegisterNotificationSettings = @"kRegisterNotificationSettings";
+
 @interface NotificationViewController ()
 @property (nonatomic, strong) NotificationView *notificationView;
 @property (nonatomic, assign) NSInteger tag;
@@ -47,6 +49,8 @@
     UIBarButtonItem *closeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonTouched:)];
     self.navigationItem.leftBarButtonItem = closeButton;
 
+    
+    
     self.title = NSLocalizedString(@"Reminder", nil);
 }
 
@@ -95,6 +99,7 @@
 
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 
+    BOOL registerUserNotificationSettings = NO;
     if (self.notificationView.switchOne.isOn)
     {
         [userDefaults setObject:self.dateOne forKey:kAlertDateOne];
@@ -102,10 +107,12 @@
         
         UILocalNotification *localNotification = [[UILocalNotification alloc] init];
         [localNotification setFireDate: self.dateOne];
-        [localNotification setRepeatInterval: NSDayCalendarUnit];
+        [localNotification setRepeatInterval: NSCalendarUnitDay];
         [localNotification setAlertBody: NSLocalizedString(@"Would you like to save the current battery state?", nil)];
         [localNotification setAlertAction: NSLocalizedString(@"Save", nil)];
+        [localNotification setCategory:@"MEASUREMENT_CATEGORY"];
         [[UIApplication sharedApplication] scheduleLocalNotification: localNotification];
+        registerUserNotificationSettings = YES;
     }
     else
     {
@@ -120,15 +127,39 @@
         
         UILocalNotification *localNotification = [[UILocalNotification alloc] init];
         [localNotification setFireDate: self.dateTwo];
-        [localNotification setRepeatInterval: NSDayCalendarUnit];
+        [localNotification setRepeatInterval: NSCalendarUnitDay];
         [localNotification setAlertBody: NSLocalizedString(@"Would you like to save the current battery state?", nil)];
         [localNotification setAlertAction: NSLocalizedString(@"Save", nil)];
+        [localNotification setCategory:@"MEASUREMENT_CATEGORY"];
         [[UIApplication sharedApplication] scheduleLocalNotification: localNotification];
+        registerUserNotificationSettings = YES;
     }
     else
     {
         [userDefaults removeObjectForKey:kAlertDateTwo];
         [userDefaults setBool:NO forKey:kAlertTwoIsOn];
+    }
+    
+    if (registerUserNotificationSettings) {
+        NSDictionary *defaultPreferences = @{kRegisterNotificationSettings : @YES};
+        [userDefaults registerDefaults:defaultPreferences];
+        [userDefaults synchronize];
+        if ([userDefaults boolForKey:kRegisterNotificationSettings]) {
+            UIMutableUserNotificationAction *measurementAction = [[UIMutableUserNotificationAction alloc] init];
+            measurementAction.identifier = @"MEASUREMENT_ACTION";
+            measurementAction.title = @"Measure";
+            measurementAction.activationMode = UIUserNotificationActivationModeBackground;
+            
+            UIMutableUserNotificationCategory *measurementCategory = [[UIMutableUserNotificationCategory alloc] init];
+            [measurementCategory setActions:@[measurementAction] forContext:UIUserNotificationActionContextDefault];
+            measurementCategory.identifier = @"MEASUREMENT_CATEGORY";
+            
+            UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert | UIUserNotificationTypeSound) categories:[NSSet setWithObject:measurementCategory]];
+            [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+            
+            [userDefaults setBool:NO forKey:kRegisterNotificationSettings];
+            [userDefaults synchronize];
+        }
     }
 }
 

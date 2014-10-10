@@ -14,5 +14,7 @@
 
 - (id)initWithManagedObjectContext:(NSManagedObjectContext*)managedObjectContext;
 - (void)becameActive:(NSNotification*)notification;
+//- (void)clearView:(NSNotification*)notification;
+- (void)addMeasurement;
 
 @end

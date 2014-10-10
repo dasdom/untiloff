@@ -24,6 +24,9 @@
 @property (nonatomic) CGFloat residualTime;
 @property (nonatomic, strong) UIView *sliderView;
 @property (nonatomic, strong) NSLayoutConstraint *sliderConstraint;
+@property (nonatomic, strong) CAShapeLayer *shapeLayer;
+@property (nonatomic, strong) CAShapeLayer *dashedLineShapeLayer;
+@property (nonatomic, strong) UILabel *totalLabel;
 
 - (NSUInteger)indexForXPosition:(CGFloat)xPosition;
 - (CGFloat)xPositionForIndex:(NSUInteger)index;

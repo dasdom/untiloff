@@ -10,6 +10,12 @@
 #import "MainViewController.h"
 #import "Utilities.h"
 
+//NSString * const kRegisterNotificationSettings = @"kRegisterNotificationSettings";
+
+@interface AppDelegate ()
+@property (nonatomic, strong) MainViewController *mainViewController;
+@end
+
 @implementation AppDelegate
 
 @synthesize managedObjectContext = _managedObjectContext;
@@ -21,14 +27,38 @@
     [UIDevice currentDevice].batteryMonitoringEnabled = YES;
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    // Override point for customization after application launch.
     
-    MainViewController *mainViewController = [[MainViewController alloc] initWithManagedObjectContext:self.managedObjectContext];
-//    mainViewController.managedObjectContext = self.managedObjectContext;
+    self.mainViewController = [[MainViewController alloc] initWithManagedObjectContext:self.managedObjectContext];
     
-    [[NSNotificationCenter defaultCenter] addObserver:mainViewController selector:@selector(becameActive:) name:@"UIApplicationDidBecomeActiveNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self.mainViewController selector:@selector(becameActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 
-    self.window.rootViewController = mainViewController;
+//    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//
+//    NSDictionary *defaultPreferences = @{kRegisterNotificationSettings : @YES};
+//    [userDefaults registerDefaults:defaultPreferences];
+//    [userDefaults synchronize];
+//    if ([userDefaults boolForKey:kRegisterNotificationSettings]) {
+//        UIMutableUserNotificationAction *measurementAction = [[UIMutableUserNotificationAction alloc] init];
+//        measurementAction.identifier = @"MEASUREMENT_ACTION";
+//        measurementAction.title = @"Measure";
+//        measurementAction.activationMode = UIUserNotificationActivationModeBackground;
+//        
+//        UIMutableUserNotificationCategory *measurementCategory = [[UIMutableUserNotificationCategory alloc] init];
+//        [measurementCategory setActions:@[measurementAction] forContext:UIUserNotificationActionContextDefault];
+//        measurementCategory.identifier = @"MEASUREMENT_CATEGORY";
+//        
+//        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert | UIUserNotificationTypeSound) categories:[NSSet setWithObject:measurementCategory]];
+//        [application registerUserNotificationSettings:settings];
+//        
+//        [userDefaults setBool:NO forKey:kRegisterNotificationSettings];
+//        [userDefaults synchronize];
+//    }
+    
+    if ([launchOptions objectForKey:@"UIApplicationLaunchOptionsLocationKey"]) {
+        [self.mainViewController addMeasurement];
+    }
+
+    self.window.rootViewController = self.mainViewController;
     
     self.window.backgroundColor = [UIColor whiteColor];
     self.window.tintColor = [Utilities globalTintColor];
@@ -36,10 +66,24 @@
     return YES;
 }
 
+- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings {
+    NSLog(@"notificationSettings: %@", notificationSettings);
+}
+
+- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void (^)())completionHandler {
+    
+    if ([identifier isEqualToString:@"MEASUREMENT_ACTION"]) {
+        [self.mainViewController addMeasurement];
+    }
+    
+    completionHandler();
+}
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+    [self.mainViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
