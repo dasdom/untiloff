@@ -8,6 +8,7 @@
 
 #import "PredictionsOverviewViewController.h"
 #import "PredictionOverviewView.h"
+#import "Until_Off-Swift.h"
 #import "Prediction.h"
 #import "Utilities.h"
 
@@ -19,10 +20,10 @@
 
 - (void)loadView
 {
-    CGRect frame = [[UIScreen mainScreen] applicationFrame];
+//    CGRect frame = [[UIScreen mainScreen] applicationFrame];
 //    frame.size.height = frame.size.height-self.navigationController.navigationBar.frame.size.height;
     
-    PredictionOverviewView *predictionOverviewView = [[PredictionOverviewView alloc] initWithFrame:frame];
+//    PredictionOverviewView *predictionOverviewView = [[PredictionOverviewView alloc] initWithFrame:frame];
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Prediction" inManagedObjectContext:self.managedObjectContext];
@@ -31,23 +32,35 @@
     NSError *fetchError;
     _predictionArray = [self.managedObjectContext executeFetchRequest:fetchRequest error:&fetchError];
     
-    predictionOverviewView.predictionsArray = _predictionArray;
+//    predictionOverviewView.predictionsArray = _predictionArray;
+    
+    PredictionOverView *predictionOverviewView = [[PredictionOverView alloc] initWithPredictionsArray:_predictionArray];
     
     UIBarButtonItem *closeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonTouched:)];
-    self.navigationItem.leftBarButtonItem = closeButton;
+    self.navigationItem.rightBarButtonItem = closeButton;
     
-    UIBarButtonItem *resetBarButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Reset", nil) style:UIBarButtonItemStylePlain target:self action:@selector(resetPredictions:)];
-    self.navigationItem.rightBarButtonItem = resetBarButton;
+    UIBarButtonItem *resetBarButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Delete", nil) style:UIBarButtonItemStylePlain target:self action:@selector(resetPredictions:)];
+    self.navigationItem.leftBarButtonItem = resetBarButton;
     
     self.title = NSLocalizedString(@"Distribution", nil);
     
     self.view = predictionOverviewView;
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+        
+    if ([self.predictionArray count] < 1) {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"No data", nil) message:NSLocalizedString(@"There aren't any predicted battery durations stored yet. The predicted values are stored when the measurement range is larger than or equal to 40%. You can also add predictions with the + button.", nil) preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [self dismissViewControllerAnimated:YES completion:^{
+                
+            }];
+        }];
+        
+        [alertController addAction:okAction];
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -64,14 +77,27 @@
 
 - (void)resetPredictions:(UIBarButtonItem*)sender
 {
-    for (Prediction *prediction in self.predictionArray)
-    {
-        [self.managedObjectContext deleteObject:prediction];
-    }
-    [self.managedObjectContext save:nil];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Delete", nil) message:NSLocalizedString(@"Do you really want delete the stored predictions?", nil) preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Delete", nil) style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+        for (Prediction *prediction in self.predictionArray)
+        {
+            [self.managedObjectContext deleteObject:prediction];
+        }
+        [self.managedObjectContext save:nil];
+        
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:kAverageTotalRuntimeKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }];
+    [alertController addAction:deleteAction];
     
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kAverageTotalRuntimeKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        
+    }];
+    [alertController addAction:cancelAction];
+    
+    [self presentViewController:alertController animated:YES completion:^{
+        
+    }];
 }
 
 @end

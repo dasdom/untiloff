@@ -43,7 +43,7 @@ typedef void(^ActionBlock)(void);
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    NSLog(@"buttonIndex %d", buttonIndex);
+    NSLog(@"buttonIndex %ld", (long)buttonIndex);
     
     if (buttonIndex < 1)
     {

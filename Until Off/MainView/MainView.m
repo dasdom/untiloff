@@ -108,8 +108,8 @@
         
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20-[_totalLabel]-20-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_totalLabel)]];
     
-        self.shapeLayer = [CAShapeLayer layer];
-        self.dashedLineShapeLayer = [CAShapeLayer layer];
+        _shapeLayer = [CAShapeLayer layer];
+        _dashedLineShapeLayer = [CAShapeLayer layer];
     }
     return self;
 }
@@ -276,16 +276,18 @@
     self.shapeLayer.path = path;
     CGPathRelease(path);
     
-    self.shapeLayer.fillColor = [[UIColor clearColor] CGColor];
-    self.shapeLayer.strokeColor = [[UIColor blackColor] CGColor];
-    self.shapeLayer.lineWidth = 2.0f;
-    self.shapeLayer.strokeEnd = 1.0f;
-    
-    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-    animation.fromValue = @0.0;
-    animation.toValue = @1.0;
-    animation.duration = 1.5f;
-    [self.shapeLayer addAnimation:animation forKey:@"strokeEnd"];
+    if (!self.showTimes) {
+        self.shapeLayer.fillColor = [[UIColor clearColor] CGColor];
+        self.shapeLayer.strokeColor = [[UIColor blackColor] CGColor];
+        self.shapeLayer.lineWidth = 2.0f;
+        self.shapeLayer.strokeEnd = 1.0f;
+        
+        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
+        animation.fromValue = @0.0;
+        animation.toValue = @1.0;
+        animation.duration = 1.5f;
+        [self.shapeLayer addAnimation:animation forKey:@"strokeEnd"];
+    }
     
     NSString *residualString = [NSString stringWithFormat:@"%.0f%% ➞ %@h", firstLevel*100, self.residualTimeString];
     self.residualLabel.frame = residualFrame;
@@ -313,6 +315,8 @@
     
     CGRect labelFrame = self.residualLabel.frame;
     self.residualLabel.frame = CGRectMake(labelFrame.origin.x, labelFrame.origin.y, 0.0f, labelFrame.size.height);
+   
+    if (!self.showTimes) {
     [UIView animateWithDuration:1.5f animations:^{
         self.residualLabel.frame = labelFrame;
     } completion:^(BOOL finished) {
@@ -347,7 +351,7 @@
 
         }
     }];
-    
+    }
     
     CGContextRestoreGState(context);
     
@@ -368,7 +372,11 @@
             NSString *timeString = [NSString stringWithFormat:@" %@ ", [dateFormatter stringFromDate:measurement.date]];
             [timeString drawAtPoint:CGPointMake(point.x-10.0f, point.y-18.0f) withAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Light" size:9.0f], NSBackgroundColorAttributeName : [[UIColor whiteColor] colorWithAlphaComponent:0.8f], NSForegroundColorAttributeName : [UIColor blackColor]}];
         }
-		CGContextAddArc(context, point.x, point.y, 3, 0, 2*M_PI, NO);
+        if (i == 0) {
+            CGContextAddArc(context, point.x, point.y, 4, 0, 2*M_PI, NO);
+        } else {
+            CGContextAddArc(context, point.x, point.y, 3, 0, 2*M_PI, NO);
+        }
         CGContextSetRGBFillColor(context, 0.0f, 0.0f, 0.0f, 1.0f);
         CGContextFillPath(context);
 //		CGContextStrokePath(context);
@@ -456,23 +464,38 @@
 }
 
 
-//- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-//{
-//    self.showTimes = YES;
-//    [self setNeedsDisplay];
-//}
-//
-//- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-//{
-//    self.showTimes = NO;
-//    [self setNeedsDisplay];
-//}
-//
-//- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
-//{
-//    self.showTimes = NO;
-//    [self setNeedsDisplay];
-//}
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    NSSet *allTouches = [event allTouches];
+    if ([allTouches count] > 1) {
+        self.showTimes = YES;
+        [self setNeedsDisplay];
+    } else {
+        [super touchesBegan:touches withEvent:event];
+    }
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    NSSet *allTouches = [event allTouches];
+    if ([allTouches count] > 1) {
+        self.showTimes = NO;
+        [self setNeedsDisplay];
+    } else {
+        [super touchesEnded:touches withEvent:event];
+    }
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    NSSet *allTouches = [event allTouches];
+    if ([allTouches count] > 1) {
+        self.showTimes = NO;
+        [self setNeedsDisplay];
+    } else {
+        [super touchesCancelled:touches withEvent:event];
+    }
+}
 
 
 @end

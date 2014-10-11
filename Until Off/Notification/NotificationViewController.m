@@ -47,9 +47,7 @@ NSString * const kRegisterNotificationSettings = @"kRegisterNotificationSettings
     _dateFormatter.dateStyle = NSDateFormatterNoStyle;
     
     UIBarButtonItem *closeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonTouched:)];
-    self.navigationItem.leftBarButtonItem = closeButton;
-
-    
+    self.navigationItem.rightBarButtonItem = closeButton;
     
     self.title = NSLocalizedString(@"Reminder", nil);
 }

@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 dasdom. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 #define kAverageTotalRuntimeKey @"kAverageTotalRuntimeKey"
 

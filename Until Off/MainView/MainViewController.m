@@ -320,6 +320,18 @@
     self.mainView.totalTimeString = totalTimeString ? : @"-:-";
     self.mainView.residualTime = (CGFloat)predictionOfResitualSeconds;
     
+    if (!totalTimeString) {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"No data", nil) message:NSLocalizedString(@"There are not enough measurements to estimate the residual battery duration. Add geo fences to allow automatic measurements or add reminders to remind you to open UntilOff during the day.", nil) preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            
+        }];
+        
+        [alertController addAction:okAction];
+        [self presentViewController:alertController animated:YES completion:nil];
+
+    }
+
+    
     [self.mainView setNeedsDisplay];
 }
 
@@ -394,7 +406,7 @@
 
 - (NSString*)timeStringFromSeconds:(NSInteger)seconds
 {
-    NSLog(@"seconds: %d", seconds);
+    NSLog(@"seconds: %ld", (long)seconds);
     if (seconds < 1)
     {
         return nil;
@@ -403,7 +415,7 @@
     NSNumber *minutes = @(seconds/60-hours*60);
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     [formatter setPositiveFormat: @"00"];
-    return [NSString stringWithFormat:@"%d:%@", hours, [formatter stringFromNumber:minutes]];
+    return [NSString stringWithFormat:@"%ld:%@", (long)hours, [formatter stringFromNumber:minutes]];
 }
 
 #pragma mark - actions
