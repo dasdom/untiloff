@@ -320,7 +320,8 @@
     self.mainView.totalTimeString = totalTimeString ? : @"-:-";
     self.mainView.residualTime = (CGFloat)predictionOfResitualSeconds;
     
-    if (!totalTimeString) {
+    Measurement *firstMeasurement = [self.measurementArray firstObject];
+    if (!totalTimeString && [firstMeasurement.batteryState integerValue] == UIDeviceBatteryStateUnplugged) {
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"No data", nil) message:NSLocalizedString(@"There are not enough measurements to estimate the residual battery duration. Add geo fences to allow automatic measurements or add reminders to remind you to open UntilOff during the day.", nil) preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             
