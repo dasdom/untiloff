@@ -15,8 +15,6 @@
 		F2006E5C1BE2CB1200067390 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2006E5B1BE2CB1200067390 /* SystemConfiguration.framework */; };
 		F2006E5E1BE2CB2700067390 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F2006E5D1BE2CB2700067390 /* libz.tbd */; };
 		F2006E601BE2CB3C00067390 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F2006E5F1BE2CB3C00067390 /* libsqlite3.tbd */; };
-		F2006E6B1BE4A79400067390 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2006E691BE4A79400067390 /* Bolts.framework */; };
-		F2006E6C1BE4A79400067390 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2006E6A1BE4A79400067390 /* Parse.framework */; };
 		F207546717DFB2E100981BE4 /* Measurement.m in Sources */ = {isa = PBXBuildFile; fileRef = F207546617DFB2E100981BE4 /* Measurement.m */; };
 		F207546817DFB2E100981BE4 /* Measurement.m in Sources */ = {isa = PBXBuildFile; fileRef = F207546617DFB2E100981BE4 /* Measurement.m */; };
 		F23EE43D17E25396005D5572 /* Prediction.m in Sources */ = {isa = PBXBuildFile; fileRef = F23EE43C17E25396005D5572 /* Prediction.m */; };
@@ -106,8 +104,6 @@
 		F2006E5B1BE2CB1200067390 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		F2006E5D1BE2CB2700067390 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		F2006E5F1BE2CB3C00067390 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
-		F2006E691BE4A79400067390 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
-		F2006E6A1BE4A79400067390 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		F207546517DFB2E100981BE4 /* Measurement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Measurement.h; path = Data/Measurement.h; sourceTree = "<group>"; };
 		F207546617DFB2E100981BE4 /* Measurement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Measurement.m; path = Data/Measurement.m; sourceTree = "<group>"; };
 		F23EE43B17E25396005D5572 /* Prediction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Prediction.h; path = Data/Prediction.h; sourceTree = "<group>"; };
@@ -192,7 +188,6 @@
 				F2006E5E1BE2CB2700067390 /* libz.tbd in Frameworks */,
 				F2006E5C1BE2CB1200067390 /* SystemConfiguration.framework in Frameworks */,
 				F2006E5A1BE2CB0700067390 /* StoreKit.framework in Frameworks */,
-				F2006E6C1BE4A79400067390 /* Parse.framework in Frameworks */,
 				F2006E581BE2CAFD00067390 /* Security.framework in Frameworks */,
 				F2006E561BE2CAF000067390 /* QuartzCore.framework in Frameworks */,
 				F2006E541BE2CADB00067390 /* CFNetwork.framework in Frameworks */,
@@ -202,7 +197,6 @@
 				F2A0DDE917CE9CA200EA93AF /* CoreData.framework in Frameworks */,
 				F2A0DDE717CE9CA200EA93AF /* UIKit.framework in Frameworks */,
 				F2A0DDE317CE9CA200EA93AF /* Foundation.framework in Frameworks */,
-				F2006E6B1BE4A79400067390 /* Bolts.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,8 +270,6 @@
 		F2A0DDD617CE9CA200EA93AF = {
 			isa = PBXGroup;
 			children = (
-				F2006E691BE4A79400067390 /* Bolts.framework */,
-				F2006E6A1BE4A79400067390 /* Parse.framework */,
 				F2A0DDEA17CE9CA300EA93AF /* Until Off */,
 				F2A0DE0717CE9CA300EA93AF /* Until OffTests */,
 				F2A0DDE117CE9CA200EA93AF /* Frameworks */,

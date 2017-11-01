@@ -9,8 +9,6 @@
 #import "AppDelegate.h"
 #import "MainViewController.h"
 #import "Utilities.h"
-#import <Parse/Parse.h>
-//#import <Crashlytics/Crashlytics.h>
 
 //NSString * const kRegisterNotificationSettings = @"kRegisterNotificationSettings";
 
@@ -64,8 +62,6 @@
     
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     
-    [Parse setApplicationId:@"uyjyEeYxdPbU7nm2Gvfn0h8fv5rcyvkoU6m2rrjr" clientKey:@"fpmF7EuAZt3aILeRNRcH3XjUk0zcvK4LVGo0zD45"];
-
     // Register for Push Notitications
     UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
     UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
@@ -123,19 +119,19 @@
     [self saveContext];
 }
 
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    // Store the deviceToken in the current installation and save it to Parse.
-    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-    [currentInstallation setDeviceTokenFromData:deviceToken];
-    [currentInstallation saveInBackground];
-}
+//- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+//    // Store the deviceToken in the current installation and save it to Parse.
+//    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+//    [currentInstallation setDeviceTokenFromData:deviceToken];
+//    [currentInstallation saveInBackground];
+//}
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     
     NSLog(@"**********PUSH**********************************************************************");
     
     [self.mainViewController addMeasurement];
-    [PFPush handlePush:userInfo];
+//    [PFPush handlePush:userInfo];
 }
 
 - (void)saveContext
