@@ -22,7 +22,7 @@
 
 - (void)loadView
 {
-    CGRect frame = [[UIScreen mainScreen] applicationFrame];
+    CGRect frame = [[UIScreen mainScreen] bounds];
     frame.size.height = frame.size.height-self.navigationController.navigationBar.frame.size.height;
     
     UICollectionViewFlowLayout *collectionViewFlowLayout = [[UICollectionViewFlowLayout alloc] init];

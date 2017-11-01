@@ -58,6 +58,7 @@
         _datePicker = [[UIDatePicker alloc] init];
         _datePicker.translatesAutoresizingMaskIntoConstraints = NO;
         _datePicker.datePickerMode = UIDatePickerModeTime;
+        _datePicker.minuteInterval = 10;
         [self addSubview:_datePicker];
         
         _dateLabelTwo = [[UILabel alloc] init];

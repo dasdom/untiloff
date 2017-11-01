@@ -12,6 +12,8 @@
 #import "Prediction.h"
 #import "Utilities.h"
 
+NSString * const kLastPredictionDate = @"lastPredictionDate";
+
 @interface PredictionsOverviewViewController ()
 @property (nonatomic, strong) NSArray *predictionArray;
 @end
@@ -25,26 +27,38 @@
     
 //    PredictionOverviewView *predictionOverviewView = [[PredictionOverviewView alloc] initWithFrame:frame];
     
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Prediction" inManagedObjectContext:self.managedObjectContext];
-    [fetchRequest setEntity: entity];
+//    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+//    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Prediction" inManagedObjectContext:self.managedObjectContext];
+//    [fetchRequest setEntity: entity];
+//    
+//    NSError *fetchError;
+//    _predictionArray = [self.managedObjectContext executeFetchRequest:fetchRequest error:&fetchError];
     
-    NSError *fetchError;
-    _predictionArray = [self.managedObjectContext executeFetchRequest:fetchRequest error:&fetchError];
-    
-//    predictionOverviewView.predictionsArray = _predictionArray;
-    
-    PredictionOverView *predictionOverviewView = [[PredictionOverView alloc] initWithPredictionsArray:_predictionArray];
+    PredictionOverView *predictionOverviewView = [[PredictionOverView alloc] initWithPredictionsArray:@[]];
     
     UIBarButtonItem *closeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonTouched:)];
     self.navigationItem.rightBarButtonItem = closeButton;
     
-    UIBarButtonItem *resetBarButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Delete", nil) style:UIBarButtonItemStylePlain target:self action:@selector(resetPredictions:)];
+    UIBarButtonItem *resetBarButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"List", nil) style:UIBarButtonItemStylePlain target:self action:@selector(resetPredictions:)];
     self.navigationItem.leftBarButtonItem = resetBarButton;
     
     self.title = NSLocalizedString(@"Distribution", nil);
     
     self.view = predictionOverviewView;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Prediction" inManagedObjectContext:self.managedObjectContext];
+    [fetchRequest setEntity: entity];
+    
+    NSError *fetchError;
+    self.predictionArray = [self.managedObjectContext executeFetchRequest:fetchRequest error:&fetchError];
+
+    ((PredictionOverView *)self.view).predictionsArray = self.predictionArray;
+    [self.view setNeedsDisplay];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -63,12 +77,6 @@
     }
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 #pragma mark - bar button actions
 - (void)doneButtonTouched:(UIBarButtonItem*)sender
 {
@@ -77,27 +85,38 @@
 
 - (void)resetPredictions:(UIBarButtonItem*)sender
 {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Delete", nil) message:NSLocalizedString(@"Do you really want delete the stored predictions?", nil) preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Delete", nil) style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-        for (Prediction *prediction in self.predictionArray)
-        {
-            [self.managedObjectContext deleteObject:prediction];
-        }
-        [self.managedObjectContext save:nil];
-        
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:kAverageTotalRuntimeKey];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }];
-    [alertController addAction:deleteAction];
+//    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Delete", nil) message:NSLocalizedString(@"Do you really want delete the stored predictions?", nil) preferredStyle:UIAlertControllerStyleAlert];
+//    UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Delete", nil) style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+//        for (Prediction *prediction in self.predictionArray)
+//        {
+//            [self.managedObjectContext deleteObject:prediction];
+//        }
+//        [self.managedObjectContext save:nil];
+//        PredictionOverView *predictionOverView = (PredictionOverView*)self.view;
+//        [predictionOverView deletePredictions];
+//        [predictionOverView setNeedsDisplay];
+//        
+//        [self dismissViewControllerAnimated:YES completion:nil];
+//        
+//        [[NSUserDefaults standardUserDefaults] removeObjectForKey:kAverageTotalRuntimeKey];
+//        [[NSUserDefaults standardUserDefaults] removeObjectForKey:kLastPredictionDate];
+//        [[NSUserDefaults standardUserDefaults] synchronize];
+//    }];
+//    [alertController addAction:deleteAction];
+//    
+//    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+//        
+//    }];
+//    [alertController addAction:cancelAction];
+//    
+//    [self presentViewController:alertController animated:YES completion:^{}];
     
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-        
-    }];
-    [alertController addAction:cancelAction];
+    PredictionsTableViewController *predictionsTableViewController = [[PredictionsTableViewController alloc] init];
+    predictionsTableViewController.predictionsArray = self.predictionArray;
+    predictionsTableViewController.managedObjectContext = self.managedObjectContext;
     
-    [self presentViewController:alertController animated:YES completion:^{
-        
-    }];
+//    [self presentViewController:predictionsTableViewController animated:YES completion:nil];
+    [self.navigationController pushViewController:predictionsTableViewController animated:YES];
 }
 
 @end

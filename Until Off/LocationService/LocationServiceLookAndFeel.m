@@ -111,10 +111,12 @@
 {
     if (indexPath.section == 0)
     {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
         NSLog(@"locationManager: %lf %lf", _locationManager.location.coordinate.longitude, _locationManager.location.coordinate.latitude);
         CLGeocoder *geocoder = [[CLGeocoder alloc] init];
         __weak LocationServiceLookAndFeel *weakSelf = self;
         [geocoder reverseGeocodeLocation:_locationManager.location completionHandler:^(NSArray *placemarks, NSError *error) {
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
             CLPlacemark *placemark = [placemarks firstObject];
             if (placemark)
             {

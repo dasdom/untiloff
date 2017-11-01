@@ -8,7 +8,6 @@
 
 #import "Prediction.h"
 
-
 @implementation Prediction
 
 @dynamic date;

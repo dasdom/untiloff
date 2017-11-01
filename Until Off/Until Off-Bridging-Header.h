@@ -4,3 +4,4 @@
 
 #import "Prediction.h"
 #import "Utilities.h"
+#import "AppDelegate.h"

@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F2006E521BE2CAD000067390 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2006E511BE2CAD000067390 /* AudioToolbox.framework */; };
+		F2006E541BE2CADB00067390 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2006E531BE2CADB00067390 /* CFNetwork.framework */; };
+		F2006E561BE2CAF000067390 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2006E551BE2CAF000067390 /* QuartzCore.framework */; };
+		F2006E581BE2CAFD00067390 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2006E571BE2CAFD00067390 /* Security.framework */; };
+		F2006E5A1BE2CB0700067390 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2006E591BE2CB0700067390 /* StoreKit.framework */; };
+		F2006E5C1BE2CB1200067390 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2006E5B1BE2CB1200067390 /* SystemConfiguration.framework */; };
+		F2006E5E1BE2CB2700067390 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F2006E5D1BE2CB2700067390 /* libz.tbd */; };
+		F2006E601BE2CB3C00067390 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F2006E5F1BE2CB3C00067390 /* libsqlite3.tbd */; };
+		F2006E6B1BE4A79400067390 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2006E691BE4A79400067390 /* Bolts.framework */; };
+		F2006E6C1BE4A79400067390 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2006E6A1BE4A79400067390 /* Parse.framework */; };
 		F207546717DFB2E100981BE4 /* Measurement.m in Sources */ = {isa = PBXBuildFile; fileRef = F207546617DFB2E100981BE4 /* Measurement.m */; };
 		F207546817DFB2E100981BE4 /* Measurement.m in Sources */ = {isa = PBXBuildFile; fileRef = F207546617DFB2E100981BE4 /* Measurement.m */; };
 		F23EE43D17E25396005D5572 /* Prediction.m in Sources */ = {isa = PBXBuildFile; fileRef = F23EE43C17E25396005D5572 /* Prediction.m */; };
@@ -28,8 +38,6 @@
 		F272CFDA17DCC4F4004C09A2 /* Geofence.m in Sources */ = {isa = PBXBuildFile; fileRef = F272CFD917DCC4F4004C09A2 /* Geofence.m */; };
 		F272CFDB17DCC4F4004C09A2 /* Geofence.m in Sources */ = {isa = PBXBuildFile; fileRef = F272CFD917DCC4F4004C09A2 /* Geofence.m */; };
 		F27F0A15182C1A9E008CD207 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F27F0A14182C1A9E008CD207 /* Images.xcassets */; };
-		F27F0A18182C2F2C008CD207 /* DDHAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = F27F0A17182C2F2C008CD207 /* DDHAlertView.m */; };
-		F27F0A19182C2F2C008CD207 /* DDHAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = F27F0A17182C2F2C008CD207 /* DDHAlertView.m */; };
 		F28D937517F0E47A0044943E /* DescriptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = F28D937417F0E47A0044943E /* DescriptionView.m */; };
 		F28D937617F0E47A0044943E /* DescriptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = F28D937417F0E47A0044943E /* DescriptionView.m */; };
 		F28D937917F616350044943E /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = F28D937817F616350044943E /* Utilities.m */; };
@@ -70,7 +78,13 @@
 		F2AE7F0717EA3C6700A1778F /* MeasurementsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F2AE7F0517EA3C6700A1778F /* MeasurementsManager.m */; };
 		F2AE7F0A17EB8F0D00A1778F /* LocationHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F2AE7F0917EB8F0D00A1778F /* LocationHeaderView.m */; };
 		F2AE7F0B17EB8F0D00A1778F /* LocationHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F2AE7F0917EB8F0D00A1778F /* LocationHeaderView.m */; };
+		F2BB35EC19F2471800CD9CA5 /* UntilOffStyleKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F2BB35EB19F2471700CD9CA5 /* UntilOffStyleKit.m */; };
+		F2BB35EE19F2850300CD9CA5 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BB35ED19F2850300CD9CA5 /* SettingsTableViewController.swift */; };
+		F2BB35F119F2BFD300CD9CA5 /* PickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BB35F019F2BFD300CD9CA5 /* PickerTableViewCell.swift */; };
 		F2BE932819E32459001F0971 /* LaunchImage.xib in Resources */ = {isa = PBXBuildFile; fileRef = F2BE932719E32459001F0971 /* LaunchImage.xib */; };
+		F2C605951BC5A07C00454B4E /* PredictionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C605941BC5A07C00454B4E /* PredictionsTableViewController.swift */; };
+		F2C605971BC5A6D600454B4E /* Predictions+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C605961BC5A6D600454B4E /* Predictions+Extension.swift */; };
+		F2C605991BC5AC3300454B4E /* PredictionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C605981BC5AC3300454B4E /* PredictionTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,6 +98,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F2006E511BE2CAD000067390 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		F2006E531BE2CADB00067390 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		F2006E551BE2CAF000067390 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		F2006E571BE2CAFD00067390 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		F2006E591BE2CB0700067390 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		F2006E5B1BE2CB1200067390 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		F2006E5D1BE2CB2700067390 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		F2006E5F1BE2CB3C00067390 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		F2006E691BE4A79400067390 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
+		F2006E6A1BE4A79400067390 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		F207546517DFB2E100981BE4 /* Measurement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Measurement.h; path = Data/Measurement.h; sourceTree = "<group>"; };
 		F207546617DFB2E100981BE4 /* Measurement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Measurement.m; path = Data/Measurement.m; sourceTree = "<group>"; };
 		F23EE43B17E25396005D5572 /* Prediction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Prediction.h; path = Data/Prediction.h; sourceTree = "<group>"; };
@@ -105,8 +129,6 @@
 		F272CFD817DCC4F4004C09A2 /* Geofence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Geofence.h; path = Data/Geofence.h; sourceTree = "<group>"; };
 		F272CFD917DCC4F4004C09A2 /* Geofence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Geofence.m; path = Data/Geofence.m; sourceTree = "<group>"; };
 		F27F0A14182C1A9E008CD207 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		F27F0A16182C2F2C008CD207 /* DDHAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DDHAlertView.h; path = DDHAlertView/DDHAlertView.h; sourceTree = "<group>"; };
-		F27F0A17182C2F2C008CD207 /* DDHAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DDHAlertView.m; path = DDHAlertView/DDHAlertView.m; sourceTree = "<group>"; };
 		F28D937317F0E47A0044943E /* DescriptionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DescriptionView.h; path = MainView/DescriptionView.h; sourceTree = "<group>"; };
 		F28D937417F0E47A0044943E /* DescriptionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DescriptionView.m; path = MainView/DescriptionView.m; sourceTree = "<group>"; };
 		F28D937717F616350044943E /* Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Utilities.h; path = Utilities/Utilities.h; sourceTree = "<group>"; };
@@ -151,7 +173,14 @@
 		F2AE7F0517EA3C6700A1778F /* MeasurementsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MeasurementsManager.m; path = MainView/MeasurementsManager.m; sourceTree = "<group>"; };
 		F2AE7F0817EB8F0D00A1778F /* LocationHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LocationHeaderView.h; path = LocationService/LocationHeaderView.h; sourceTree = "<group>"; };
 		F2AE7F0917EB8F0D00A1778F /* LocationHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LocationHeaderView.m; path = LocationService/LocationHeaderView.m; sourceTree = "<group>"; };
+		F2BB35EA19F2471700CD9CA5 /* UntilOffStyleKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UntilOffStyleKit.h; sourceTree = "<group>"; };
+		F2BB35EB19F2471700CD9CA5 /* UntilOffStyleKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UntilOffStyleKit.m; sourceTree = "<group>"; };
+		F2BB35ED19F2850300CD9CA5 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsTableViewController.swift; path = Settings/SettingsTableViewController.swift; sourceTree = "<group>"; };
+		F2BB35F019F2BFD300CD9CA5 /* PickerTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PickerTableViewCell.swift; path = Settings/PickerTableViewCell.swift; sourceTree = "<group>"; };
 		F2BE932719E32459001F0971 /* LaunchImage.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchImage.xib; sourceTree = "<group>"; };
+		F2C605941BC5A07C00454B4E /* PredictionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PredictionsTableViewController.swift; path = PredictionsOverview/PredictionsTableViewController.swift; sourceTree = "<group>"; };
+		F2C605961BC5A6D600454B4E /* Predictions+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Predictions+Extension.swift"; sourceTree = "<group>"; };
+		F2C605981BC5AC3300454B4E /* PredictionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PredictionTableViewCell.swift; path = PredictionsOverview/PredictionTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,11 +188,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F2006E601BE2CB3C00067390 /* libsqlite3.tbd in Frameworks */,
+				F2006E5E1BE2CB2700067390 /* libz.tbd in Frameworks */,
+				F2006E5C1BE2CB1200067390 /* SystemConfiguration.framework in Frameworks */,
+				F2006E5A1BE2CB0700067390 /* StoreKit.framework in Frameworks */,
+				F2006E6C1BE4A79400067390 /* Parse.framework in Frameworks */,
+				F2006E581BE2CAFD00067390 /* Security.framework in Frameworks */,
+				F2006E561BE2CAF000067390 /* QuartzCore.framework in Frameworks */,
+				F2006E541BE2CADB00067390 /* CFNetwork.framework in Frameworks */,
+				F2006E521BE2CAD000067390 /* AudioToolbox.framework in Frameworks */,
 				F2A0DE3717DB44F100EA93AF /* CoreLocation.framework in Frameworks */,
 				F2A0DDE517CE9CA200EA93AF /* CoreGraphics.framework in Frameworks */,
 				F2A0DDE917CE9CA200EA93AF /* CoreData.framework in Frameworks */,
 				F2A0DDE717CE9CA200EA93AF /* UIKit.framework in Frameworks */,
 				F2A0DDE317CE9CA200EA93AF /* Foundation.framework in Frameworks */,
+				F2006E6B1BE4A79400067390 /* Bolts.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -189,6 +228,8 @@
 				F23EE44417E259F8005D5572 /* PredictionOverviewView.h */,
 				F23EE44517E259F8005D5572 /* PredictionOverviewView.m */,
 				F29CD04D19E7E269002A1A7D /* PredictionOverView.swift */,
+				F2C605941BC5A07C00454B4E /* PredictionsTableViewController.swift */,
+				F2C605981BC5AC3300454B4E /* PredictionTableViewCell.swift */,
 			);
 			name = PredictionOverview;
 			sourceTree = "<group>";
@@ -217,8 +258,6 @@
 				F28D937817F616350044943E /* Utilities.m */,
 				F26AEEE31810812C007170AA /* ElementFactory.h */,
 				F26AEEE41810812C007170AA /* ElementFactory.m */,
-				F27F0A16182C2F2C008CD207 /* DDHAlertView.h */,
-				F27F0A17182C2F2C008CD207 /* DDHAlertView.m */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -237,6 +276,8 @@
 		F2A0DDD617CE9CA200EA93AF = {
 			isa = PBXGroup;
 			children = (
+				F2006E691BE4A79400067390 /* Bolts.framework */,
+				F2006E6A1BE4A79400067390 /* Parse.framework */,
 				F2A0DDEA17CE9CA300EA93AF /* Until Off */,
 				F2A0DE0717CE9CA300EA93AF /* Until OffTests */,
 				F2A0DDE117CE9CA200EA93AF /* Frameworks */,
@@ -256,6 +297,14 @@
 		F2A0DDE117CE9CA200EA93AF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F2006E5F1BE2CB3C00067390 /* libsqlite3.tbd */,
+				F2006E5D1BE2CB2700067390 /* libz.tbd */,
+				F2006E5B1BE2CB1200067390 /* SystemConfiguration.framework */,
+				F2006E591BE2CB0700067390 /* StoreKit.framework */,
+				F2006E571BE2CAFD00067390 /* Security.framework */,
+				F2006E551BE2CAF000067390 /* QuartzCore.framework */,
+				F2006E531BE2CADB00067390 /* CFNetwork.framework */,
+				F2006E511BE2CAD000067390 /* AudioToolbox.framework */,
 				F2A0DE3617DB44F100EA93AF /* CoreLocation.framework */,
 				F2A0DDE217CE9CA200EA93AF /* Foundation.framework */,
 				F2A0DDE417CE9CA200EA93AF /* CoreGraphics.framework */,
@@ -278,8 +327,11 @@
 				F2A0DE1C17CFDC1800EA93AF /* MainView */,
 				F24BCABB17DB794500A09272 /* LocationService */,
 				F294587A1812D06700DFD7E3 /* Notification */,
+				F2BB35EF19F2BA5700CD9CA5 /* Settings */,
 				F2A0DE1717CE9DF900EA93AF /* Data */,
 				F27F0A14182C1A9E008CD207 /* Images.xcassets */,
+				F2BB35EA19F2471700CD9CA5 /* UntilOffStyleKit.h */,
+				F2BB35EB19F2471700CD9CA5 /* UntilOffStyleKit.m */,
 				F2A0DDEB17CE9CA300EA93AF /* Supporting Files */,
 			);
 			path = "Until Off";
@@ -324,6 +376,7 @@
 				F2A0DDF617CE9CA300EA93AF /* Until_Off.xcdatamodeld */,
 				F23EE43B17E25396005D5572 /* Prediction.h */,
 				F23EE43C17E25396005D5572 /* Prediction.m */,
+				F2C605961BC5A6D600454B4E /* Predictions+Extension.swift */,
 				F207546517DFB2E100981BE4 /* Measurement.h */,
 				F207546617DFB2E100981BE4 /* Measurement.m */,
 				F272CFD817DCC4F4004C09A2 /* Geofence.h */,
@@ -351,6 +404,15 @@
 			name = MainView;
 			sourceTree = "<group>";
 		};
+		F2BB35EF19F2BA5700CD9CA5 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				F2BB35ED19F2850300CD9CA5 /* SettingsTableViewController.swift */,
+				F2BB35F019F2BFD300CD9CA5 /* PickerTableViewCell.swift */,
+			);
+			name = Settings;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -361,6 +423,8 @@
 				F2A0DDDB17CE9CA200EA93AF /* Sources */,
 				F2A0DDDC17CE9CA200EA93AF /* Frameworks */,
 				F2A0DDDD17CE9CA200EA93AF /* Resources */,
+				F25E4CEE19FAC8890091D1D9 /* ShellScript */,
+				F25E4CF119FAF99A0091D1D9 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -395,13 +459,19 @@
 		F2A0DDD717CE9CA200EA93AF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastSwiftMigration = 0700;
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = dasdom;
 				TargetAttributes = {
 					F2A0DDDE17CE9CA200EA93AF = {
 						DevelopmentTeam = Q6PD97MRX4;
+						LastSwiftMigration = 0830;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Push = {
 								enabled = 1;
 							};
 						};
@@ -450,6 +520,35 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		F25E4CEE19FAC8890091D1D9 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#./Crashlytics.framework/run 091893b21331260046ce7c2674ca2e86bce15782 3e0551e0b8c38d82bf707bf64f17c1720a9c77b67e9739ec00e7e09db7cb8811";
+		};
+		F25E4CF119FAF99A0091D1D9 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\nbuildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$INFOPLIST_FILE\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"$INFOPLIST_FILE\"";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		F2A0DDDB17CE9CA200EA93AF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -467,18 +566,23 @@
 				F2AE7F0617EA3C6700A1778F /* MeasurementsManager.m in Sources */,
 				F23EE44117E25757005D5572 /* PredictionsOverviewViewController.m in Sources */,
 				F2A0DE3117D3CD3A00EA93AF /* MainView.m in Sources */,
+				F2C605991BC5AC3300454B4E /* PredictionTableViewCell.swift in Sources */,
 				F24BCABE17DB79AB00A09272 /* LocationServiceLookAndFeel.m in Sources */,
 				F28D937517F0E47A0044943E /* DescriptionView.m in Sources */,
 				F207546717DFB2E100981BE4 /* Measurement.m in Sources */,
-				F27F0A18182C2F2C008CD207 /* DDHAlertView.m in Sources */,
 				F24BCAC617DBC8B500A09272 /* AddCurrentLocationCell.m in Sources */,
 				F29458781812D05F00DFD7E3 /* NotificationViewController.m in Sources */,
+				F2C605971BC5A6D600454B4E /* Predictions+Extension.swift in Sources */,
 				F272CFDA17DCC4F4004C09A2 /* Geofence.m in Sources */,
 				F291949817F8C22C0036D6E3 /* MockMeasurement.m in Sources */,
+				F2BB35EE19F2850300CD9CA5 /* SettingsTableViewController.swift in Sources */,
+				F2BB35F119F2BFD300CD9CA5 /* PickerTableViewCell.swift in Sources */,
 				F2A0DDF117CE9CA300EA93AF /* main.m in Sources */,
 				F24BCAC217DB8B0000A09272 /* LocationCell.m in Sources */,
+				F2C605951BC5A07C00454B4E /* PredictionsTableViewController.swift in Sources */,
 				F23EE43D17E25396005D5572 /* Prediction.m in Sources */,
 				F29CD04E19E7E269002A1A7D /* PredictionOverView.swift in Sources */,
+				F2BB35EC19F2471800CD9CA5 /* UntilOffStyleKit.m in Sources */,
 				F2A0DE1A17CFDC1200EA93AF /* MainViewController.m in Sources */,
 				F23EE44617E259F8005D5572 /* PredictionOverviewView.m in Sources */,
 			);
@@ -503,7 +607,6 @@
 				F2A0DE2E17D3CCEC00EA93AF /* BatteryCalculation.m in Sources */,
 				F272CFDB17DCC4F4004C09A2 /* Geofence.m in Sources */,
 				F24BCABA17DB793900A09272 /* LocationServiceViewController.m in Sources */,
-				F27F0A19182C2F2C008CD207 /* DDHAlertView.m in Sources */,
 				F291949717F70CD00036D6E3 /* DescriptionScrollView.m in Sources */,
 				F29458791812D05F00DFD7E3 /* NotificationViewController.m in Sources */,
 				F24BCABF17DB79AB00A09272 /* LocationServiceLookAndFeel.m in Sources */,
@@ -564,6 +667,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -620,17 +724,25 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Dominik Hauser (MNX8UVNQT5)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Dominik Hauser (MNX8UVNQT5)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Until",
+					Off,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Until Off/Until Off-Prefix.pch";
 				INFOPLIST_FILE = "Until Off/Until Off-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "de.dasdom.Until-Off";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "e3058e67-25fd-4945-9b3a-6f4d86ff8548";
 				SWIFT_OBJC_BRIDGING_HEADER = "Until Off/Until Off-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -642,16 +754,24 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Until",
+					Off,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Until Off/Until Off-Prefix.pch";
 				INFOPLIST_FILE = "Until Off/Until Off-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "de.dasdom.Until-Off";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "e18c51a7-b8c0-467b-97bd-3b432f73ac99";
 				SWIFT_OBJC_BRIDGING_HEADER = "Until Off/Until Off-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -673,6 +793,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "Until OffTests/Until OffTests-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "de.dasdom.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
@@ -691,6 +812,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Until Off/Until Off-Prefix.pch";
 				INFOPLIST_FILE = "Until OffTests/Until OffTests-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "de.dasdom.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;

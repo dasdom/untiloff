@@ -9,6 +9,8 @@
 #import "AppDelegate.h"
 #import "MainViewController.h"
 #import "Utilities.h"
+#import <Parse/Parse.h>
+//#import <Crashlytics/Crashlytics.h>
 
 //NSString * const kRegisterNotificationSettings = @"kRegisterNotificationSettings";
 
@@ -24,6 +26,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+//    [Crashlytics startWithAPIKey:@"091893b21331260046ce7c2674ca2e86bce15782"];
+  
     [UIDevice currentDevice].batteryMonitoringEnabled = YES;
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -57,7 +61,18 @@
     if ([launchOptions objectForKey:@"UIApplicationLaunchOptionsLocationKey"]) {
         [self.mainViewController addMeasurement];
     }
+    
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    
+    [Parse setApplicationId:@"uyjyEeYxdPbU7nm2Gvfn0h8fv5rcyvkoU6m2rrjr" clientKey:@"fpmF7EuAZt3aILeRNRcH3XjUk0zcvK4LVGo0zD45"];
 
+    // Register for Push Notitications
+    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
+    
+    [application registerUserNotificationSettings:settings];
+    [application registerForRemoteNotifications];
+    
     self.window.rootViewController = self.mainViewController;
     
     self.window.backgroundColor = [UIColor whiteColor];
@@ -108,6 +123,21 @@
     [self saveContext];
 }
 
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    // Store the deviceToken in the current installation and save it to Parse.
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    [currentInstallation setDeviceTokenFromData:deviceToken];
+    [currentInstallation saveInBackground];
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    
+    NSLog(@"**********PUSH**********************************************************************");
+    
+    [self.mainViewController addMeasurement];
+    [PFPush handlePush:userInfo];
+}
+
 - (void)saveContext
 {
     NSError *error = nil;
@@ -134,7 +164,7 @@
     
     NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
     if (coordinator != nil) {
-        _managedObjectContext = [[NSManagedObjectContext alloc] init];
+        _managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
         [_managedObjectContext setPersistentStoreCoordinator:coordinator];
     }
     return _managedObjectContext;

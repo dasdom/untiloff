@@ -55,8 +55,8 @@
     NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
     [fetchRequest setSortDescriptors:sortDescriptors];
     
-    return [self.managedObjectContext executeFetchRequest:fetchRequest error:nil];
-//    return [self testArray];
+//    return [self.managedObjectContext executeFetchRequest:fetchRequest error:nil];
+    return [self testArray];
 }
 
 - (NSArray*)testArray

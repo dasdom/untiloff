@@ -20,12 +20,14 @@
 #import "DescriptionView.h"
 #import "Utilities.h"
 #import <CoreLocation/CoreLocation.h>
-#import "DDHAlertView.h"
+#import "Until_Off-Swift.h"
 #import <QuartzCore/QuartzCore.h>
 
 #define kLevelDiff @"kLevelDiff"
 #define kTimeDiff @"kTimeDiff"
 #define kMaxPointsInTimeForCalculation @"kMaxPointsInTimeForCalculation"
+
+//NSString * const kLastPredictionDate = @"lastPredictionDate";
 
 @interface MainViewController () <CLLocationManagerDelegate>
 @property (nonatomic, strong) MainView *mainView;
@@ -39,6 +41,8 @@
 @property (nonatomic, strong) UIDynamicAnimator *animator;
 @property (nonatomic, strong) UIGravityBehavior *gravity;
 @property (nonatomic, strong) DescriptionView *descriptionView;
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
+@property (nonatomic, assign) BOOL showTimeOfOff;
 @end
 
 @implementation MainViewController
@@ -57,19 +61,23 @@
         [_mainView.infoButton addTarget:self action:@selector(showDescription) forControlEvents:UIControlEventTouchUpInside];
         [_mainView.addPredictionButton addTarget:self action:@selector(addPredictionTouched:) forControlEvents:UIControlEventTouchUpInside];
         [_mainView.addNotificationButton addTarget:self action:@selector(addNotification:) forControlEvents:UIControlEventTouchUpInside];
+        [_mainView.settingButton addTarget:self action:@selector(showSettings:) forControlEvents:UIControlEventTouchUpInside];
         
         _measurementManager = [[MeasurementsManager alloc] initWithManagedObjectContext:managedObjectContext];
         
         _managedObjectContext = managedObjectContext;
+        
+        _dateFormatter = [[NSDateFormatter alloc] init];
+        _dateFormatter.dateStyle = NSDateFormatterNoStyle;
+        _dateFormatter.timeStyle = NSDateFormatterShortStyle;
+        
+        _showTimeOfOff = [[NSUserDefaults standardUserDefaults] boolForKey:[SettingsTableViewController showTimeOfOffKey]];
     }
     return self;
 }
 
-- (void)loadView
-{
-//    [self.mainView.layer addSublayer:self.mainView.shapeLayer];
-//    [self.mainView.layer addSublayer:self.mainView.dashedLineShapeLayer];
-    
+- (void)loadView {
+
     self.view = self.mainView;
 
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"appAlreadyStarted"])
@@ -77,19 +85,15 @@
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"appAlreadyStarted"];
         [[NSUserDefaults standardUserDefaults] synchronize];
         
-//        DescriptionView *descriptionView = [[DescriptionView alloc] initWithFrame:bounds];
-//        [descriptionView.dismissButton addTarget:descriptionView action:@selector(removeFromSuperview) forControlEvents:UIControlEventTouchUpInside];
-//        [self.view addSubview:descriptionView];
-        
         [self showDescription];
     }
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	// Do any additional setup after loading the view.
-}
+//- (void)viewDidLoad
+//{
+//    [super viewDidLoad];
+//	// Do any additional setup after loading the view.
+//}
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -117,6 +121,12 @@
             [self.locationManager startMonitoringForRegion:circularRegion];
         }
     }
+    
+    BOOL currentShowTimeOfOff = [[NSUserDefaults standardUserDefaults] boolForKey:[SettingsTableViewController showTimeOfOffKey]];
+    if (self.showTimeOfOff != currentShowTimeOfOff) {
+        [self.mainView setNeedsDisplay];
+        self.showTimeOfOff = currentShowTimeOfOff;
+    }
 }
 
 //- (void)viewDidAppear:(BOOL)animated {
@@ -128,12 +138,6 @@
 //        
 //    }];
 //}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 - (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region {
     NSLog(@"didExitRegion: %@", region);
@@ -150,8 +154,7 @@
 }
 
 #pragma mark -
-- (void)showDescription
-{
+- (void)showDescription {
     [self.animator removeAllBehaviors];
     self.animator = nil;
 
@@ -203,8 +206,7 @@
     }];
 }
 
-- (void)hideDescription:(UIButton*)sender
-{
+- (void)hideDescription:(UIButton*)sender {
     [self.animator removeAllBehaviors];
     self.animator = nil;
     
@@ -237,16 +239,14 @@
     }];
 }
 
-- (UIGravityBehavior *) gravity
-{
+- (UIGravityBehavior*)gravity {
     if (!_gravity)
         _gravity = [[UIGravityBehavior alloc] initWithItems:@[self.descriptionView.descriptionHostView]];
     
     return _gravity;
 }
 
-- (UIDynamicAnimator *) animator
-{
+- (UIDynamicAnimator*)animator {
     if (!_animator)
         _animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.descriptionView];
     
@@ -255,8 +255,7 @@
 
 #pragma mark -
 
-- (void)becameActive:(NSNotification*)notification
-{
+- (void)becameActive:(NSNotification*)notification {
     [self addMeasurement];
     
     self.measurementArray = [self.measurementManager measurements];
@@ -269,8 +268,7 @@
     [self.measurementManager addMeasurement];
 }
 
-- (void)updateMainViewAndAddPrediction:(BOOL)addPrecition
-{
+- (void)updateMainViewAndAddPrediction:(BOOL)addPrecition {
     self.mainView.measurementArray = self.measurementArray;
 
     BatteryCalculation *batteryCalculation = [[BatteryCalculation alloc] initWithMeasurementArray:self.measurementArray];
@@ -283,32 +281,28 @@
     self.timeDiff = [batteryCalculation timeDiffForStopIndex:stopIndex];
 
     self.levelDiff = [batteryCalculation levelDiffForStopIndex:stopIndex];
-    if (self.levelDiff >= 0.4f && addPrecition)
-    {
+    NSLog(@"shouldAddPrediction: %@", [self shouldAddPrediction] ? @YES : @NO);
+    if (self.levelDiff >= 0.4f && addPrecition && [self shouldAddPrediction]) {
         [self addPredictionTouched:nil];
     }
     
     self.mainView.stopCalcAtPointFromNow = stopIndex;
-    NSString *residualTimeString = [self timeStringFromSeconds:predictionOfResitualSeconds];
-    NSString *totalTimeString = [self timeStringFromSeconds:self.predictionOfTotalSeconds];
-    if (!residualTimeString)
-    {
+    NSString *residualTimeString = [Prediction timeStringFromSeconds:predictionOfResitualSeconds];
+    NSString *totalTimeString = [Prediction timeStringFromSeconds:self.predictionOfTotalSeconds];
+    NSDate *predictionDate = [NSDate dateWithTimeIntervalSinceNow:predictionOfResitualSeconds];
+    if (!residualTimeString) {
         self.mainView.addPredictionButton.userInteractionEnabled = YES;
         self.mainView.addPredictionButton.alpha = 1.0f;
         NSInteger averageTotalTime = [[NSUserDefaults standardUserDefaults] integerForKey:kAverageTotalRuntimeKey];
-        if (averageTotalTime > 0)
-        {
+        if (averageTotalTime > 0) {
             Measurement *firstMeasurement = [self.measurementArray firstObject];
-            if ([firstMeasurement.batteryState integerValue] == UIDeviceBatteryStateUnplugged)
-            {
+            if ([firstMeasurement.batteryState integerValue] == UIDeviceBatteryStateUnplugged) {
                 NSInteger residualTime = averageTotalTime*[firstMeasurement.level floatValue];
-                residualTimeString = [NSString stringWithFormat:@"~%@", [self timeStringFromSeconds:residualTime]];
-                totalTimeString = [NSString stringWithFormat:@"~%@", [self timeStringFromSeconds:averageTotalTime]];
+                residualTimeString = [NSString stringWithFormat:@"~%@", [Prediction timeStringFromSeconds:residualTime]];
+                totalTimeString = [NSString stringWithFormat:@"~%@", [Prediction timeStringFromSeconds:averageTotalTime]];
             }
         }
-    }
-    else
-    {
+    } else {
         self.mainView.addPredictionButton.userInteractionEnabled = YES;
         self.mainView.addPredictionButton.alpha = 1.0f;
     }
@@ -319,21 +313,54 @@
     self.mainView.residualTimeString = residualTimeString ? : @"-:-";
     self.mainView.totalTimeString = totalTimeString ? : @"-:-";
     self.mainView.residualTime = (CGFloat)predictionOfResitualSeconds;
+    self.mainView.timeOfOffString = [self.dateFormatter stringFromDate:predictionDate];
     
-    Measurement *firstMeasurement = [self.measurementArray firstObject];
-    if (!totalTimeString && [firstMeasurement.batteryState integerValue] == UIDeviceBatteryStateUnplugged) {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"No data", nil) message:NSLocalizedString(@"There are not enough measurements to estimate the residual battery duration. Add geo fences to allow automatic measurements or add reminders to remind you to open UntilOff during the day.", nil) preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            
-        }];
-        
-        [alertController addAction:okAction];
-        [self presentViewController:alertController animated:YES completion:nil];
+//    Measurement *firstMeasurement = [self.measurementArray firstObject];
+//    if (!totalTimeString && [firstMeasurement.batteryState integerValue] == UIDeviceBatteryStateUnplugged) {
+//        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"No data", nil) message:NSLocalizedString(@"There are not enough measurements to estimate the residual battery duration. Add geo fences to allow automatic measurements or add reminders to remind you to open UntilOff during the day.", nil) preferredStyle:UIAlertControllerStyleAlert];
+//        UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+//            
+//        }];
+//        
+//        [alertController addAction:okAction];
+//        [self presentViewController:alertController animated:YES completion:nil];
+//
+//    }
 
-    }
-
-    
     [self.mainView setNeedsDisplay];
+}
+
+- (BOOL)shouldAddPrediction {
+    NSInteger savingFequency = [[NSUserDefaults standardUserDefaults] integerForKey:[SettingsTableViewController savingFrequencyIdentifer]];
+    switch (savingFequency) {
+        case 0:
+            //Magic
+            return YES;
+            break;
+        case 1:
+            //Once per day
+        {
+            NSDate *lastPredictionDate = [[NSUserDefaults standardUserDefaults] objectForKey:kLastPredictionDate];
+            NSInteger averageTotalTime = [[NSUserDefaults standardUserDefaults] integerForKey:kAverageTotalRuntimeKey];
+            NSInteger timeThresholdInSeconds = 12 * 60 * 60;
+            if (averageTotalTime > 0) {
+                timeThresholdInSeconds = averageTotalTime/2;
+            }
+            if ([[NSDate date] timeIntervalSinceDate:lastPredictionDate] < timeThresholdInSeconds) {
+                return NO;
+            } else {
+                return YES;
+            }
+            break;
+        }
+        case 2:
+            //Manually
+            return NO;
+            break;
+        default:
+            break;
+    }
+    return YES;
 }
 
 //- (void)clearView:(NSNotification*)notification {
@@ -351,17 +378,24 @@
     if (sender) {
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         
-        NSDate *lastPredictionDate = [userDefaults objectForKey:@"lastPredictionDate"];
+        NSDate *lastPredictionDate = [userDefaults objectForKey:kLastPredictionDate];
         NSDate *nowDate = [NSDate date];
         
-        if ([nowDate timeIntervalSinceDate:lastPredictionDate] < 3 * 60 * 60)
+        if ([nowDate timeIntervalSinceDate:lastPredictionDate] < 60)
         {
-            DDHAlertView *alertView = [[DDHAlertView alloc] initWithTitle:NSLocalizedString(@"Add again", nil) message:NSLocalizedString(@"It looks like this predition has already been saved. Do you still want to save it?", nil) cancelButtonTitle:@"Cancel"];
-            [alertView addButtonWithTitle:@"Save Prediction" andAction:^{
+            
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Add again", nil) message:NSLocalizedString(@"It looks like this predition has already been saved. Do you still want to save it?", nil) preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+            [alertController addAction:cancelAction];
+            
+            UIAlertAction *addPredictionAction = [UIAlertAction actionWithTitle:@"Save Prediction" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [self addPrediction];
             }];
+            [alertController addAction:addPredictionAction];
             
-            [alertView show];
+            [self presentViewController:alertController animated:YES completion:nil];
+            
             return;
         }
     }
@@ -378,7 +412,7 @@
     prediction.totalRuntime = @(self.predictionOfTotalSeconds);
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:nowDate forKey:@"lastPredictionDate"];
+    [userDefaults setObject:nowDate forKey:kLastPredictionDate];
     [userDefaults synchronize];
     
     [(AppDelegate*)[[UIApplication sharedApplication] delegate] saveContext];
@@ -405,19 +439,19 @@
 //    return [batteryCalculation stopIndex];
 }
 
-- (NSString*)timeStringFromSeconds:(NSInteger)seconds
-{
-    NSLog(@"seconds: %ld", (long)seconds);
-    if (seconds < 1)
-    {
-        return nil;
-    }
-    NSInteger hours = seconds/3600;
-    NSNumber *minutes = @(seconds/60-hours*60);
-    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-    [formatter setPositiveFormat: @"00"];
-    return [NSString stringWithFormat:@"%ld:%@", (long)hours, [formatter stringFromNumber:minutes]];
-}
+//- (NSString*)timeStringFromSeconds:(NSInteger)seconds
+//{
+//    NSLog(@"seconds: %ld", (long)seconds);
+//    if (seconds < 1)
+//    {
+//        return nil;
+//    }
+//    NSInteger hours = seconds/3600;
+//    NSNumber *minutes = @(seconds/60-hours*60);
+//    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+//    [formatter setPositiveFormat: @"00"];
+//    return [NSString stringWithFormat:@"%ld:%@", (long)hours, [formatter stringFromNumber:minutes]];
+//}
 
 #pragma mark - actions
 - (void)showLocationServiceSettings:(UIButton*)sender
@@ -458,6 +492,12 @@
     NotificationViewController *notificationViewController = [[NotificationViewController alloc] init];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:notificationViewController];
     [self presentViewController:navigationController animated:YES completion:^{}];
+}
+
+- (void)showSettings:(UIButton*)sender {
+    SettingsTableViewController *settingsViewController = [[SettingsTableViewController alloc] initWithStyle:UITableViewStylePlain];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 #pragma mark - resture action

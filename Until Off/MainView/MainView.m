@@ -10,10 +10,12 @@
 #import "ElementFactory.h"
 #import "Measurement.h"
 #import "Utilities.h"
+#import "UntilOffStyleKit.h"
 #import <QuartzCore/QuartzCore.h>
+#import "Until_Off-Swift.h"
 
 #define kSecondsPerHour 3600.0f
-#define kXPositionOfZero self.frame.size.width-87.0f
+#define kXPositionOfZero self.frame.size.width-160.0f
 
 @interface MainView ()
 @property (nonatomic, strong) NSMutableArray *pointsArray;
@@ -33,12 +35,26 @@
         
         UILabel *titleLabel = [[UILabel alloc] init];
         titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
-        titleLabel.text = NSLocalizedString(@"Lapse", nil);
+        titleLabel.text = NSLocalizedString(@"Charge History", nil);
         titleLabel.textAlignment = NSTextAlignmentCenter;
         titleLabel.textColor = [UIColor blackColor];
-        titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:22.0f];
+//        titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:20.0f];
+        titleLabel.font = [UIFont systemFontOfSize:20];
         titleLabel.backgroundColor = [UIColor clearColor];
         [self addSubview:titleLabel];
+        
+        CGSize settingsButtonSize = CGSizeMake(50, 50);
+        _settingButton = ({
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+            button.translatesAutoresizingMaskIntoConstraints = NO;
+            [button setImage:[UntilOffStyleKit imageOfSettingsIconWithSize:CGSizeMake(settingsButtonSize.width/2.0f, settingsButtonSize.height/2.0f)] forState:UIControlStateNormal];
+//            button.backgroundColor = [UIColor yellowColor];
+            button.imageView.contentMode = UIViewContentModeScaleAspectFit;
+            button.accessibilityLabel = NSLocalizedString(@"Settings", nil);
+            button.accessibilityHint = NSLocalizedString(@"Show the settings", nil);
+            button;
+        });
+        [self addSubview:_settingButton];
         
         _infoButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
         _infoButton.translatesAutoresizingMaskIntoConstraints = NO;
@@ -67,17 +83,20 @@
         [self addSubview:_addNotificationButton];
         
         _residualLabel = [[UILabel alloc] init];
-        _residualLabel.textColor = [UIColor whiteColor];
-//        _residualLabel.backgroundColor = [UIColor colorWithRed:102.0f/255.0f green:157.0f/255.0f blue:107.0f/255.0f alpha:1.0f];
+        _residualLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        _residualLabel.textColor = [UIColor colorWithWhite:0.225 alpha:1.000];
         _residualLabel.backgroundColor = [UIColor clearColor];
         _residualLabel.textAlignment = NSTextAlignmentCenter;
-        _residualLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:24.0f];
+        _residualLabel.numberOfLines = 0;
+//        _residualLabel.font = [UIFont fontWithName:@"AvenirNext-Medium" size:20];
+        _residualLabel.font = [UIFont systemFontOfSize:20];
         [self addSubview:_residualLabel];
         
         _totalLabel = [[UILabel alloc] init];
-        _totalLabel.textColor = [UIColor blackColor];
+        _totalLabel.textColor = [UIColor colorWithWhite:0.225 alpha:1.000];
         _totalLabel.backgroundColor = [UIColor clearColor];
-        _totalLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:22.0f];
+//        _totalLabel.font = [UIFont fontWithName:@"AvenirNext-Light" size:20];
+        _totalLabel.font = [UIFont systemFontOfSize:16];
         _totalLabel.adjustsFontSizeToFitWidth = YES;
         _totalLabel.minimumScaleFactor = 0.7f;
         _totalLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -90,23 +109,27 @@
         _sliderView.userInteractionEnabled = NO;
         [self addSubview:_sliderView];
         
-        NSDictionary *viewsDictionary = NSDictionaryOfVariableBindings(titleLabel, _infoButton, _sliderView, _totalLabel, _locationServiceButton, _predictionOverviewButton, _addPredictionButton, _addNotificationButton);
-        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[titleLabel(40)]-10-[_sliderView(sliderHeight)]" options:0 metrics:@{@"sliderHeight" : @(frame.size.height-210.0f)} views:viewsDictionary]];
+        NSDictionary *views = NSDictionaryOfVariableBindings(titleLabel, _settingButton, _infoButton, _sliderView, _residualLabel, _totalLabel, _locationServiceButton, _predictionOverviewButton, _addPredictionButton, _addNotificationButton);
+        NSDictionary *metrics = @{@"settingsButtonWidth" : @(settingsButtonSize.width), @"settingsButtonHeight" : @(settingsButtonSize.height), @"sliderHeight" : @(frame.size.height-310.0f)};
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-30-[titleLabel]-10-[_sliderView(sliderHeight)]" options:kNilOptions metrics:metrics views:views]];
         
-        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[titleLabel]-[_infoButton]-|" options:0 metrics:nil views:viewsDictionary]];
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-2-[_settingButton(settingsButtonWidth)]-(>=5)-[titleLabel]-(>=5)-[_infoButton]-|" options:NSLayoutFormatAlignAllCenterY metrics:metrics views:views]];
         
-        [_sliderView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"[_sliderView(1)]" options:0 metrics:nil views:viewsDictionary]];
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_settingButton(settingsButtonHeight)]" options:kNilOptions metrics:metrics views:views]];
+        
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:titleLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.0f constant:0.0f]];
+        
+        [_sliderView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"[_sliderView(1)]" options:kNilOptions metrics:nil views:views]];
         
         _sliderConstraint = [NSLayoutConstraint constraintWithItem:_sliderView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:1.0f constant:20.0f];
         [self addConstraint: _sliderConstraint];
         
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:_infoButton attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:titleLabel attribute:NSLayoutAttributeCenterY multiplier:1.0f constant:0.0f]];
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_residualLabel]-10-[_totalLabel]-55-[_addPredictionButton(==40,==_predictionOverviewButton,==_locationServiceButton,==_addNotificationButton)]-20-|" options:kNilOptions metrics:nil views:views]];
         
-        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_totalLabel]-15-[_addPredictionButton(==40,==_predictionOverviewButton,==_locationServiceButton,==_addNotificationButton)]-20-|" options:0 metrics:nil views:viewsDictionary]];
-        
-        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[_addPredictionButton(==_locationServiceButton,==_predictionOverviewButton,==_addNotificationButton)]-[_predictionOverviewButton]-[_locationServiceButton]-[_addNotificationButton]-|" options:NSLayoutFormatAlignAllTop metrics:nil views:viewsDictionary]];
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[_addPredictionButton(==_locationServiceButton,==_predictionOverviewButton,==_addNotificationButton)]-[_predictionOverviewButton]-[_locationServiceButton]-[_addNotificationButton]-|" options:NSLayoutFormatAlignAllTop metrics:nil views:views]];
         
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20-[_totalLabel]-20-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_totalLabel)]];
+      [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20-[_residualLabel]-20-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_residualLabel)]];
     
         _shapeLayer = [CAShapeLayer layer];
         _dashedLineShapeLayer = [CAShapeLayer layer];
@@ -136,18 +159,18 @@
 	CGFloat timeNorm = self.numberOfHours*kSecondsPerHour+7000;
 	CGFloat width = self.frame.size.width;
 //	CGFloat height = self.frame.size.height;
-    CGRect diagramFrame = CGRectMake(20.0f, 72.0f, kXPositionOfZero-20.0f, self.frame.size.height-210.0f);
-    CGRect residualFrame = CGRectMake(20.0f, 72.0f, kXPositionOfZero-20.0f, self.frame.size.height-210.0f);
+    CGRect diagramFrame = CGRectMake(20.0f, 100.0f, kXPositionOfZero-20.0f, self.frame.size.height-350.0f);
+    CGRect residualFrame = CGRectMake(20.0f, 100.0f, kXPositionOfZero-20.0f, self.frame.size.height-350.0f);
     
 	for (int i = 0; i <= self.numberOfHours/2; i++)
     {
         CGFloat xPos = diagramFrame.size.width+20-i*2*60*60*(diagramFrame.size.width+20)/timeNorm;
 //        NSLog(@"xPos: %f", xPos);
-		CGContextMoveToPoint(context, xPos, CGRectGetMinY(diagramFrame));
-		CGContextAddLineToPoint(context, xPos, CGRectGetMaxY(diagramFrame));
-        CGContextSetRGBStrokeColor(context, 0.66, 0.66, 0.66, 1.0);
-        CGContextSetLineWidth(context, 0.5f);
-		CGContextStrokePath(context);
+//		CGContextMoveToPoint(context, xPos, CGRectGetMinY(diagramFrame));
+//		CGContextAddLineToPoint(context, xPos, CGRectGetMaxY(diagramFrame));
+//        CGContextSetRGBStrokeColor(context, 0.66, 0.66, 0.66, 1.0);
+//        CGContextSetLineWidth(context, 0.5f);
+//		CGContextStrokePath(context);
         if (self.numberOfHours < 14 || (self.numberOfHours < 20  && i%2 == 0) || i%4 == 0)
         {
             NSString *labelText;
@@ -163,27 +186,27 @@
             [labelText drawAtPoint:CGPointMake(xPos-labelSize.width/2.0f, CGRectGetMaxY(diagramFrame)+5.0f) withAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:12.0f], NSForegroundColorAttributeName : [UIColor blackColor]}];
 		}
 	}
-    CGFloat xPos = diagramFrame.size.width+20+2*60*60*(diagramFrame.size.width+20)/timeNorm;
-    CGContextMoveToPoint(context, xPos, CGRectGetMinY(diagramFrame));
-    CGContextAddLineToPoint(context, xPos, CGRectGetMaxY(diagramFrame));
-    CGContextSetRGBStrokeColor(context, 0.66, 0.66, 0.66, 1.0);
-    CGContextSetLineWidth(context, 0.5f);
-    CGContextStrokePath(context);
-    NSString *labelText = @"2h";
-    CGSize labelSize = [labelText sizeWithAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:12.0f]}];
-    [labelText drawAtPoint:CGPointMake(xPos-labelSize.width/2.0f, CGRectGetMaxY(diagramFrame)+5.0f) withAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:12.0f], NSForegroundColorAttributeName : [UIColor blackColor]}];
-    
+//    CGFloat xPos = diagramFrame.size.width+20+2*60*60*(diagramFrame.size.width+20)/timeNorm;
+//    CGContextMoveToPoint(context, xPos, CGRectGetMinY(diagramFrame));
+//    CGContextAddLineToPoint(context, xPos, CGRectGetMaxY(diagramFrame));
+//    CGContextSetRGBStrokeColor(context, 0.66, 0.66, 0.66, 1.0);
+//    CGContextSetLineWidth(context, 0.5f);
+//    CGContextStrokePath(context);
+//    NSString *labelText = @"2h";
+//    CGSize labelSize = [labelText sizeWithAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:12.0f]}];
+//    [labelText drawAtPoint:CGPointMake(xPos-labelSize.width/2.0f, CGRectGetMaxY(diagramFrame)+5.0f) withAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:12.0f], NSForegroundColorAttributeName : [UIColor blackColor]}];
+  
     for (int i = 1; i < 11; i++)
     {
         CGFloat yPos = diagramFrame.origin.y+(1-i*0.1)*(diagramFrame.size.height);
-        CGContextMoveToPoint(context, 20, yPos);
-        CGContextAddLineToPoint(context, width-20, yPos);
-        CGContextSetRGBStrokeColor(context, 0.66, 0.66, 0.66, 1.0);
-        CGContextSetLineWidth(context, 0.5f);
-		CGContextStrokePath(context);
+//        CGContextMoveToPoint(context, 20, yPos);
+//        CGContextAddLineToPoint(context, width-20, yPos);
+//        CGContextSetRGBStrokeColor(context, 0.66, 0.66, 0.66, 1.0);
+//        CGContextSetLineWidth(context, 0.5f);
+//		CGContextStrokePath(context);
         if (i == 5 || i == 10)
         {
-            NSString *labelText = [NSString stringWithFormat:@"%d %%", i*10];
+            NSString *labelText = [NSString stringWithFormat:@"%d%%", i*10];
             CGSize labelSize = [labelText sizeWithAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:12.0f]}];
             [labelText drawAtPoint:CGPointMake(kXPositionOfZero+5.0f, yPos-labelSize.height) withAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:12.0f], NSForegroundColorAttributeName : [UIColor blackColor]}];
         }
@@ -255,8 +278,8 @@
 //	CGContextStrokePath(context);
 
     CGContextSetRGBFillColor(context, 0.0, 0.5, 1.0, 0.1);
-    CGContextFillRect(context, diagramFrame);
-    
+//    CGContextFillRect(context, diagramFrame);
+  
     if (firstLevel > 0.2f)
     {
         CGContextSetRGBFillColor(context, 102.0f/255.0f, 157.0f/255.0f, 107.0f/255.0f, 1.0f);
@@ -265,11 +288,11 @@
     {
         CGContextSetRGBFillColor(context, 210.0f/255.0f, 102.0f/255.0f, 107.0f/255.0f, 1.0f);
     }
-    CGContextFillRect(context, residualFrame);
-    
+//    CGContextFillRect(context, residualFrame);
+  
     CGContextSaveGState(context);
     
-    [[UIColor blackColor] setStroke];
+    [[UIColor colorWithWhite:0.225 alpha:1.000] setStroke];
     bezierPath.lineWidth = 2.0f;
 //    [bezierPath stroke];
     
@@ -278,25 +301,32 @@
     
     if (!self.showTimes) {
         self.shapeLayer.fillColor = [[UIColor clearColor] CGColor];
-        self.shapeLayer.strokeColor = [[UIColor blackColor] CGColor];
+      self.shapeLayer.strokeColor = [UIColor colorWithWhite:0.225 alpha:1.000].CGColor;
+
         self.shapeLayer.lineWidth = 2.0f;
         self.shapeLayer.strokeEnd = 1.0f;
         
         CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
         animation.fromValue = @0.0;
         animation.toValue = @1.0;
-        animation.duration = 1.5f;
+        animation.duration = 1.0f;
         [self.shapeLayer addAnimation:animation forKey:@"strokeEnd"];
     }
     
-    NSString *residualString = [NSString stringWithFormat:@"%.0f%% ➞ %@h", firstLevel*100, self.residualTimeString];
-    self.residualLabel.frame = residualFrame;
-    self.residualLabel.text = residualString;
+    NSString *residualString = @"Not enough data.\nCome back later again.\nOr add a geo fences.";
+//    self.residualLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:14.0f];
+//    self.residualLabel.frame = residualFrame;
     self.residualLabel.clipsToBounds = YES;
     self.residualLabel.accessibilityLabel = NSLocalizedString(@"Not enough data to calculate residual battery duration.", nil);
     self.residualLabel.accessibilityHint = NSLocalizedString(@"To collect data, open the app from time to time.", nil);
     if (![self.residualTimeString isEqualToString:@"-:-"])
     {
+        BOOL showTimeOfOff = [[NSUserDefaults standardUserDefaults] boolForKey:[SettingsTableViewController showTimeOfOffKey]];
+        if (showTimeOfOff) {
+            residualString = [NSString stringWithFormat:@"%.0f%% ➔ 0%% : %@h (%@)", firstLevel*100, self.residualTimeString, self.timeOfOffString];
+        } else {
+            residualString = [NSString stringWithFormat:@"%.0f%% ➔ 0%% : %@h", firstLevel*100, self.residualTimeString];
+        }
         NSArray *componentsArray = [self.totalTimeString componentsSeparatedByString:@":"];
         if ([componentsArray count] > 1)
         {
@@ -305,6 +335,9 @@
         }
     }
     
+    self.residualLabel.text = residualString;
+//    self.residualLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:30.0f];
+  
     [self.dashedLineShapeLayer removeAllAnimations];
     CGMutablePathRef dashedPath = CGPathCreateMutable();
     CGPathMoveToPoint(dashedPath, NULL, CGRectGetMaxX(residualFrame), CGRectGetMinY(residualFrame));
@@ -313,16 +346,23 @@
     self.dashedLineShapeLayer.strokeColor = [[UIColor clearColor] CGColor];
     CGPathRelease(dashedPath);
     
-    CGRect labelFrame = self.residualLabel.frame;
-    self.residualLabel.frame = CGRectMake(labelFrame.origin.x, labelFrame.origin.y, 0.0f, labelFrame.size.height);
-   
+//    CGRect labelFrame = self.residualLabel.frame;
+//    self.residualLabel.frame = CGRectMake(labelFrame.origin.x, labelFrame.origin.y, 0.0f, labelFrame.size.height);
+  self.residualLabel.alpha = 0;
+  
     if (!self.showTimes) {
-    [UIView animateWithDuration:1.5f animations:^{
-        self.residualLabel.frame = labelFrame;
-    } completion:^(BOOL finished) {
+      [UIView animateWithDuration:1.0f delay:0.0f options:kNilOptions animations:^{
+//        self.residualLabel.frame = labelFrame;
+        self.residualLabel.alpha = 1.0;
+      } completion:^(BOOL finished) {
+        
+//      }];
+//      [UIView animateWithDuration:1.0f delay:1.5f options:kNilOptions animations:^{
+//
+//    } completion:^(BOOL finished) {
         if (self.residualTime > 0)
         {
-            NSLog(@"finished: %@", finished?@YES:@NO);
+//            NSLog(@"finished: %@", finished?@YES:@NO);
 //            UIBezierPath *dashedLine = [[UIBezierPath alloc] init];
 //            [dashedLine moveToPoint:CGPointMake(CGRectGetMaxX(residualFrame), CGRectGetMinY(residualFrame))];
 //            [dashedLine addLineToPoint:CGPointMake(kXPositionOfZero+self.residualTime*(kXPositionOfZero)/timeNorm, CGRectGetMaxY(diagramFrame))];
@@ -330,25 +370,36 @@
 //            CGFloat dashedLinePattern[] = {3, 3, 3, 3};
 //            [dashedLine setLineDash: dashedLinePattern count: 4 phase: 0];
 //            [dashedLine stroke];
-            
-            CGMutablePathRef dashedPath = CGPathCreateMutable();
-            CGPathMoveToPoint(dashedPath, NULL, CGRectGetMaxX(residualFrame), CGRectGetMinY(residualFrame));
-            CGPathAddLineToPoint(dashedPath, NULL, kXPositionOfZero+self.residualTime*(kXPositionOfZero)/timeNorm, CGRectGetMaxY(diagramFrame));
-            self.dashedLineShapeLayer.path = dashedPath;
-            CGPathRelease(dashedPath);
-            
-            self.dashedLineShapeLayer.fillColor = [[UIColor clearColor] CGColor];
-            self.dashedLineShapeLayer.strokeColor = [[UIColor blackColor] CGColor];
-            self.dashedLineShapeLayer.lineWidth = 2.0f;
-            self.dashedLineShapeLayer.strokeEnd = 1.0f;
-            self.dashedLineShapeLayer.lineDashPattern = @[@3, @3, @3, @3];
-            
-            CABasicAnimation *dashedAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-            dashedAnimation.fromValue = @0.0;
-            dashedAnimation.toValue = @1.0;
-            dashedAnimation.duration = 2.0f;
-            [self.dashedLineShapeLayer addAnimation:dashedAnimation forKey:@"strokeEnd"];
-
+            if (finished) {
+                CGMutablePathRef dashedPath = CGPathCreateMutable();
+                CGPoint startPoint = CGPointMake(CGRectGetMaxX(residualFrame), CGRectGetMinY(residualFrame));
+                CGPathMoveToPoint(dashedPath, NULL, startPoint.x, startPoint.y);
+                
+                CGPoint endPoint = CGPointMake(kXPositionOfZero+self.residualTime*(kXPositionOfZero)/timeNorm, CGRectGetMaxY(diagramFrame));
+                CGPathAddLineToPoint(dashedPath, NULL, endPoint.x, endPoint.y);
+                
+                CGFloat diffX = endPoint.x-startPoint.x;
+                CGFloat diffY = endPoint.y-startPoint.y;
+                
+                CGFloat pathLength = sqrtf(diffX*diffX + diffY*diffY);
+                
+                self.dashedLineShapeLayer.path = dashedPath;
+                CGPathRelease(dashedPath);
+                
+                self.dashedLineShapeLayer.fillColor = [[UIColor clearColor] CGColor];
+                self.dashedLineShapeLayer.strokeColor = [UIColor colorWithWhite:0.225 alpha:1.000].CGColor;
+                self.dashedLineShapeLayer.lineWidth = 2.0f;
+                self.dashedLineShapeLayer.strokeEnd = 1.0f;
+                self.dashedLineShapeLayer.lineDashPattern = @[@3, @3, @3, @3];
+                
+                CABasicAnimation *dashedAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
+                dashedAnimation.fromValue = @0.0;
+                dashedAnimation.toValue = @1.0;
+                dashedAnimation.duration = pathLength/120;
+              
+                [self.dashedLineShapeLayer addAnimation:dashedAnimation forKey:@"strokeEnd"];
+            }
+        
         }
     }];
     }
@@ -357,7 +408,7 @@
     
     CGContextMoveToPoint(context, kXPositionOfZero, CGRectGetMinY(diagramFrame)-15.0f);
 	CGContextAddLineToPoint(context, kXPositionOfZero, CGRectGetMaxY(diagramFrame));
-	CGContextSetRGBStrokeColor(context, 0.0, 0.0, 0.0, 1.0);
+	CGContextSetRGBStrokeColor(context, 0.225, 0.225, 0.225, 1.0);
     CGContextSetLineWidth(context, 2.0f);
 	CGContextStrokePath(context);
     
@@ -370,18 +421,19 @@
         if (self.showTimes)
         {
             NSString *timeString = [NSString stringWithFormat:@" %@ ", [dateFormatter stringFromDate:measurement.date]];
-            [timeString drawAtPoint:CGPointMake(point.x-10.0f, point.y-18.0f) withAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Light" size:9.0f], NSBackgroundColorAttributeName : [[UIColor whiteColor] colorWithAlphaComponent:0.8f], NSForegroundColorAttributeName : [UIColor blackColor]}];
+            UIFont *font = [UIFont systemFontOfSize:9];
+            [timeString drawAtPoint:CGPointMake(point.x-10.0f, point.y-18.0f) withAttributes:@{NSFontAttributeName : font, NSBackgroundColorAttributeName : [[UIColor whiteColor] colorWithAlphaComponent:0.8f], NSForegroundColorAttributeName : [UIColor blackColor]}];
         }
         if (i == 0) {
-            CGContextAddArc(context, point.x, point.y, 4, 0, 2*M_PI, NO);
+            CGContextAddArc(context, point.x, point.y, 5, 0, 2*M_PI, NO);
         } else {
-            CGContextAddArc(context, point.x, point.y, 3, 0, 2*M_PI, NO);
+            CGContextAddArc(context, point.x, point.y, 5, 0, 2*M_PI, NO);
         }
-        CGContextSetRGBFillColor(context, 0.0f, 0.0f, 0.0f, 1.0f);
+        CGContextSetRGBFillColor(context, 0.225, 0.225, 0.225, 1.0f);
         CGContextFillPath(context);
-//		CGContextStrokePath(context);
+		CGContextStrokePath(context);
     }
-    
+  
     CGContextMoveToPoint(context, 20, CGRectGetMaxY(diagramFrame));
 	CGContextAddLineToPoint(context, width-20, CGRectGetMaxY(diagramFrame));
     CGContextSetLineWidth(context, 1.0f);
@@ -417,7 +469,7 @@
     NSString *totalTimeString;
     if (firstLevel < 1.0f)
     {
-        totalTimeString = [NSString stringWithFormat:NSLocalizedString(@"100%% ➞ %@h", nil), self.totalTimeString];
+        totalTimeString = [NSString stringWithFormat:NSLocalizedString(@"100%% ➔ 0%% : %@h", nil), self.totalTimeString];
     }
     else
     {

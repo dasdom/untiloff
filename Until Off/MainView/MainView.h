@@ -16,12 +16,14 @@
 @property (nonatomic) NSUInteger stopCalcAtPointFromNow;
 @property (nonatomic, strong) NSString *residualTimeString;
 @property (nonatomic, strong) NSString *totalTimeString;
+@property (nonatomic, strong) NSString *timeOfOffString;
 @property (nonatomic, strong) UIButton *locationServiceButton;
 @property (nonatomic, strong) UIButton *predictionOverviewButton;
 @property (nonatomic, strong) UIButton *addPredictionButton;
 @property (nonatomic, strong) UIButton *addNotificationButton;
 @property (nonatomic, strong) UIButton *infoButton;
-@property (nonatomic) CGFloat residualTime;
+@property (nonatomic, strong) UIButton *settingButton;
+@property (nonatomic, assign) CGFloat residualTime;
 @property (nonatomic, strong) UIView *sliderView;
 @property (nonatomic, strong) NSLayoutConstraint *sliderConstraint;
 @property (nonatomic, strong) CAShapeLayer *shapeLayer;

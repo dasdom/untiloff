@@ -30,7 +30,7 @@ NSString * const kRegisterNotificationSettings = @"kRegisterNotificationSettings
 
 - (void)loadView
 {
-    CGRect frame = [[UIScreen mainScreen] applicationFrame];
+    CGRect frame = [[UIScreen mainScreen] bounds];
     _notificationView = [[NotificationView alloc] initWithFrame:frame];
     [_notificationView.datePicker addTarget:self action:@selector(datePickerChanged:) forControlEvents:UIControlEventValueChanged];
 
@@ -145,7 +145,7 @@ NSString * const kRegisterNotificationSettings = @"kRegisterNotificationSettings
         if ([userDefaults boolForKey:kRegisterNotificationSettings]) {
             UIMutableUserNotificationAction *measurementAction = [[UIMutableUserNotificationAction alloc] init];
             measurementAction.identifier = @"MEASUREMENT_ACTION";
-            measurementAction.title = @"Measure";
+            measurementAction.title = @"Save";
             measurementAction.activationMode = UIUserNotificationActivationModeBackground;
             
             UIMutableUserNotificationCategory *measurementCategory = [[UIMutableUserNotificationCategory alloc] init];
