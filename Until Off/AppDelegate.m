@@ -31,6 +31,8 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     self.mainViewController = [[MainViewController alloc] initWithManagedObjectContext:self.managedObjectContext];
+    self.mainViewController.title = NSLocalizedString(@"Charge History", nil);
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self.mainViewController];
     
     [[NSNotificationCenter defaultCenter] addObserver:self.mainViewController selector:@selector(becameActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 
@@ -69,7 +71,7 @@
     [application registerUserNotificationSettings:settings];
     [application registerForRemoteNotifications];
     
-    self.window.rootViewController = self.mainViewController;
+    self.window.rootViewController = navigationController;
     
     self.window.backgroundColor = [UIColor whiteColor];
     self.window.tintColor = [Utilities globalTintColor];
@@ -126,13 +128,18 @@
 //    [currentInstallation saveInBackground];
 //}
 
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-    
-    NSLog(@"**********PUSH**********************************************************************");
-    
-    [self.mainViewController addMeasurement];
-//    [PFPush handlePush:userInfo];
-}
+//- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+//
+//    NSLog(@"**********PUSH**********************************************************************");
+//
+//    [self.mainViewController addMeasurement];
+////    [PFPush handlePush:userInfo];
+//}
+
+//- (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+//    [self.mainViewController addMeasurement];
+//    completionHandler(UIBackgroundFetchResultNewData);
+//}
 
 - (void)saveContext
 {

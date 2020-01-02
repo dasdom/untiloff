@@ -1,7 +1,3 @@
-//
-//  MainViewController.m
-//  Until Off
-//
 //  Created by dasdom on 29.08.13.
 //  Copyright (c) 2013 dasdom. All rights reserved.
 //
@@ -22,6 +18,9 @@
 #import <CoreLocation/CoreLocation.h>
 #import "Until_Off-Swift.h"
 #import <QuartzCore/QuartzCore.h>
+#import "UntilOffStyleKit.h"
+#import "OnBoardingCoordinator.h"
+#import "OnBoardingItem.h"
 
 #define kLevelDiff @"kLevelDiff"
 #define kTimeDiff @"kTimeDiff"
@@ -43,6 +42,7 @@
 @property (nonatomic, strong) DescriptionView *descriptionView;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 @property (nonatomic, assign) BOOL showTimeOfOff;
+@property (nonatomic, strong) OnBoardingCoordinator *onBoardingCoordinator;
 @end
 
 @implementation MainViewController
@@ -58,10 +58,10 @@
         
         [_mainView.locationServiceButton addTarget:self action:@selector(showLocationServiceSettings:) forControlEvents:UIControlEventTouchUpInside];
         [_mainView.predictionOverviewButton addTarget:self action:@selector(showPredictionOverview:) forControlEvents:UIControlEventTouchUpInside];
-        [_mainView.infoButton addTarget:self action:@selector(showDescription) forControlEvents:UIControlEventTouchUpInside];
+//        [_mainView.infoButton addTarget:self action:@selector(showDescription) forControlEvents:UIControlEventTouchUpInside];
         [_mainView.addPredictionButton addTarget:self action:@selector(addPredictionTouched:) forControlEvents:UIControlEventTouchUpInside];
         [_mainView.addNotificationButton addTarget:self action:@selector(addNotification:) forControlEvents:UIControlEventTouchUpInside];
-        [_mainView.settingButton addTarget:self action:@selector(showSettings:) forControlEvents:UIControlEventTouchUpInside];
+//        [_mainView.settingButton addTarget:self action:@selector(showSettings:) forControlEvents:UIControlEventTouchUpInside];
         
         _measurementManager = [[MeasurementsManager alloc] initWithManagedObjectContext:managedObjectContext];
         
@@ -79,25 +79,24 @@
 - (void)loadView {
 
     self.view = self.mainView;
-
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"appAlreadyStarted"])
-    {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"appAlreadyStarted"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        
-        [self showDescription];
-    }
 }
 
-//- (void)viewDidLoad
-//{
-//    [super viewDidLoad];
-//	// Do any additional setup after loading the view.
-//}
+- (void)viewDidLoad {
+    [super viewDidLoad];
 
-- (void)viewWillAppear:(BOOL)animated
-{
+    UIButton *infoButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
+    [infoButton addTarget:self action:@selector(showDescription) forControlEvents:UIControlEventTouchUpInside];
+
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:infoButton];
+    
+    UIImage *settingsImage = [UntilOffStyleKit imageOfSettingsIconWithSize:CGSizeMake(25, 25)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:settingsImage style:UIBarButtonItemStylePlain target:self action:@selector(showSettings:)];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    self.onBoardingCoordinator = nil;
     
     NSArray *regionArray = [[self.locationManager monitoredRegions] allObjects];
     for (CLRegion *region in regionArray)
@@ -122,10 +121,21 @@
         }
     }
     
+    [self.locationManager startMonitoringSignificantLocationChanges];
+    self.locationManager.distanceFilter = 1000.0f;
+
     BOOL currentShowTimeOfOff = [[NSUserDefaults standardUserDefaults] boolForKey:[SettingsTableViewController showTimeOfOffKey]];
     if (self.showTimeOfOff != currentShowTimeOfOff) {
         [self.mainView setNeedsDisplay];
         self.showTimeOfOff = currentShowTimeOfOff;
+    }
+    
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"appAlreadyStarted"])
+    {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"appAlreadyStarted"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        [self showDescription];
     }
 }
 
@@ -155,55 +165,75 @@
 
 #pragma mark -
 - (void)showDescription {
-    [self.animator removeAllBehaviors];
-    self.animator = nil;
-
-    self.descriptionView = [[DescriptionView alloc] initWithFrame:self.view.bounds];
-    [self.descriptionView.dismissButton addTarget:self action:@selector(hideDescription:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.descriptionView];
+//    [self.animator removeAllBehaviors];
+//    self.animator = nil;
+//
+//    self.descriptionView = [[DescriptionView alloc] initWithFrame:self.view.bounds];
+//    [self.descriptionView.dismissButton addTarget:self action:@selector(hideDescription:) forControlEvents:UIControlEventTouchUpInside];
+//    [self.view addSubview:self.descriptionView];
+//
+//    UIDynamicAnimator* animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.descriptionView];
+//    UIGravityBehavior* gravityBeahvior = [[UIGravityBehavior alloc] initWithItems:@[self.descriptionView.descriptionHostView]];
+//    UIDynamicItemBehavior *friction = [[UIDynamicItemBehavior alloc] initWithItems:@[self.descriptionView.descriptionHostView]];
+////    friction.friction = 10.0f;
+//    friction.density = 1.0f;
+//    friction.resistance = 1.0f;
+//
+//    CGSize halfHostViewSize = self.descriptionView.descriptionHostView.frame.size;
+//    halfHostViewSize.width = ceilf(halfHostViewSize.width/2.0f);
+//    halfHostViewSize.height = ceilf(halfHostViewSize.height/2.0f);
+//
+//    CGPoint anchorPoint = CGPointMake(self.descriptionView.descriptionHostView.center.x, self.descriptionView.descriptionHostView.center.y - halfHostViewSize.height - 5.0f);
+////    UIAttachmentBehavior* attachmentBehavior = [[UIAttachmentBehavior alloc] initWithItem:self.descriptionView.descriptionHostView attachedToAnchor:anchorPoint];
+//    UIAttachmentBehavior *leftAttachmentBehavior = [[UIAttachmentBehavior alloc] initWithItem:self.descriptionView.descriptionHostView offsetFromCenter:UIOffsetMake(-(halfHostViewSize.width-20.0f), -(halfHostViewSize.height-20.0f)) attachedToAnchor:anchorPoint];
+//    [leftAttachmentBehavior setFrequency:2.0];
+//    [leftAttachmentBehavior setDamping:1.0];
+//    leftAttachmentBehavior.length = 80.0f;
+//
+//    UIAttachmentBehavior *rightAttachmentBehavior = [[UIAttachmentBehavior alloc] initWithItem:self.descriptionView.descriptionHostView offsetFromCenter:UIOffsetMake(halfHostViewSize.width-20.0f, -(halfHostViewSize.height-20.0f)) attachedToAnchor:anchorPoint];
+//    [rightAttachmentBehavior setFrequency:2.0];
+//    [rightAttachmentBehavior setDamping:1.0];
+//    rightAttachmentBehavior.length = 80.0f;
+//
+//    UIPushBehavior *pushBehavior = [[UIPushBehavior alloc] initWithItems:@[self.descriptionView.descriptionHostView] mode:UIPushBehaviorModeInstantaneous];
+//    pushBehavior.angle = 0.0;
+//    pushBehavior.magnitude = 1.0;
+//
+//    [animator addBehavior:leftAttachmentBehavior];
+//    [animator addBehavior:rightAttachmentBehavior];
+//    [animator addBehavior:gravityBeahvior];
+//    [animator addBehavior:friction];
+//    [animator addBehavior:pushBehavior];
+////    self.animator = animator;
+//
+////    self.descriptionView.descriptionHostView.center = CGPointMake(self.descriptionView.descriptionHostView.center.x-50.0f, self.descriptionView.descriptionHostView.center.y);
+//
+//    self.descriptionView.alpha = 0.0f;
+//    [UIView animateWithDuration:0.25f animations:^{
+//        self.descriptionView.alpha = 1.0f;
+//    } completion:^(BOOL finished) {
+//
+//    }];
     
-    UIDynamicAnimator* animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.descriptionView];
-    UIGravityBehavior* gravityBeahvior = [[UIGravityBehavior alloc] initWithItems:@[self.descriptionView.descriptionHostView]];
-    UIDynamicItemBehavior *friction = [[UIDynamicItemBehavior alloc] initWithItems:@[self.descriptionView.descriptionHostView]];
-//    friction.friction = 10.0f;
-    friction.density = 1.0f;
-    friction.resistance = 1.0f;
-
-    CGSize halfHostViewSize = self.descriptionView.descriptionHostView.frame.size;
-    halfHostViewSize.width = ceilf(halfHostViewSize.width/2.0f);
-    halfHostViewSize.height = ceilf(halfHostViewSize.height/2.0f);
+    NSArray<OnBoardingItem *> *onBoardingItems = @[
+                                                   [[OnBoardingItem alloc] initWithImage:[UIImage imageNamed:@"onboarding_icon"] title:NSLocalizedString(@"What is UntilOff?", nil) text:NSLocalizedString(@"UntilOff let's you figure out how long you can use your phone until it needs to be charged again.", nil)],
+                                                   [[OnBoardingItem alloc] initWithImage:[UIImage imageNamed:@"startAppAfterUnplug"] title:NSLocalizedString(@"Help", nil) text:NSLocalizedString(@"This job is hard. But you can help! Start UntilOff after you have charged your phone.", nil)],
+                                                   [[OnBoardingItem alloc] initWithImage:[UIImage imageNamed:@"residualTime"] title:NSLocalizedString(@"Residual Battery", nil) text:NSLocalizedString(@"Every time you need to know the residual battery duration, start UntilOff and it will tell you.", nil)],
+                                                   [[OnBoardingItem alloc] initWithImage:[UIImage imageNamed:@"distributionIcon"] title:NSLocalizedString(@"Distribution", nil) text:NSLocalizedString(@"If UntilOff believes the calculation is reliable, it saves the predicted total battery duration.", nil)],
+                                                   [[OnBoardingItem alloc] initWithImage:[UIImage imageNamed:@"addPrediction"] title:NSLocalizedString(@"Add Measurement", nil) text:NSLocalizedString(@"You can add a measurement to the distribution manually.", nil)],
+                                                   [[OnBoardingItem alloc] initWithImage:[UIImage imageNamed:@"locationServiceIcon"] title:NSLocalizedString(@"Background", nil) text:NSLocalizedString(@"UntilOff can measure the battery in the background. To activate you have to add geo fences.", nil)],
+                                                   [[OnBoardingItem alloc] initWithImage:[UIImage imageNamed:@"notificationIcon"] title:NSLocalizedString(@"Notifications", nil) text:NSLocalizedString(@"Add notifications if you want to be remebered to open UntilOff to add measurements in a regular manner.", nil)],
+                                                   [[OnBoardingItem alloc] initWithImage:nil title:NSLocalizedString(@"How does it work?", nil) text:NSLocalizedString(@"UntilOff takes the duration between the highest and the actual battery level and interpolates to an empty battery. Therefore the values only take into account your prior usage.", nil)],
+                                                   ];
     
-    CGPoint anchorPoint = CGPointMake(self.descriptionView.descriptionHostView.center.x, self.descriptionView.descriptionHostView.center.y - halfHostViewSize.height - 5.0f);
-//    UIAttachmentBehavior* attachmentBehavior = [[UIAttachmentBehavior alloc] initWithItem:self.descriptionView.descriptionHostView attachedToAnchor:anchorPoint];
-    UIAttachmentBehavior *leftAttachmentBehavior = [[UIAttachmentBehavior alloc] initWithItem:self.descriptionView.descriptionHostView offsetFromCenter:UIOffsetMake(-(halfHostViewSize.width-20.0f), -(halfHostViewSize.height-20.0f)) attachedToAnchor:anchorPoint];
-    [leftAttachmentBehavior setFrequency:2.0];
-    [leftAttachmentBehavior setDamping:1.0];
-    leftAttachmentBehavior.length = 80.0f;
     
-    UIAttachmentBehavior *rightAttachmentBehavior = [[UIAttachmentBehavior alloc] initWithItem:self.descriptionView.descriptionHostView offsetFromCenter:UIOffsetMake(halfHostViewSize.width-20.0f, -(halfHostViewSize.height-20.0f)) attachedToAnchor:anchorPoint];
-    [rightAttachmentBehavior setFrequency:2.0];
-    [rightAttachmentBehavior setDamping:1.0];
-    rightAttachmentBehavior.length = 80.0f;
+    UINavigationController *navigationController = [UINavigationController new];
+    navigationController.navigationBar.translucent = false;
+    self.onBoardingCoordinator = [[OnBoardingCoordinator alloc] initWithNavigationController:navigationController onBoardingItems:onBoardingItems];
     
-    UIPushBehavior *pushBehavior = [[UIPushBehavior alloc] initWithItems:@[self.descriptionView.descriptionHostView] mode:UIPushBehaviorModeInstantaneous];
-    pushBehavior.angle = 0.0;
-    pushBehavior.magnitude = 1.0;
-
-    [animator addBehavior:leftAttachmentBehavior];
-    [animator addBehavior:rightAttachmentBehavior];
-    [animator addBehavior:gravityBeahvior];
-    [animator addBehavior:friction];
-    [animator addBehavior:pushBehavior];
-//    self.animator = animator;
+    [self.onBoardingCoordinator start];
     
-//    self.descriptionView.descriptionHostView.center = CGPointMake(self.descriptionView.descriptionHostView.center.x-50.0f, self.descriptionView.descriptionHostView.center.y);
-    
-    self.descriptionView.alpha = 0.0f;
-    [UIView animateWithDuration:0.25f animations:^{
-        self.descriptionView.alpha = 1.0f;
-    } completion:^(BOOL finished) {
-        
-    }];
+    [self presentViewController:navigationController animated:true completion:nil];
 }
 
 - (void)hideDescription:(UIButton*)sender {

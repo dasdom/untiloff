@@ -166,7 +166,7 @@ class PredictionOverView: UIView {
         for prediction in predictionsArray {
             let index = Int(prediction.totalRuntime.floatValue/3600.0-minimumHour-0.5)
             let timeDiffInHours = Date().timeIntervalSince(prediction.date)/3600.0
-            let colorFactor = max(0.1, min(1.0, 100.0/timeDiffInHours))
+            let colorFactor = max(0.1, min(1.0, 1200.0/timeDiffInHours))
             print("timeDiff: \(timeDiffInHours), index: \(index), colorFactor: \(colorFactor)")
 
             let numberOfPredictions = distributionValues[index]+1

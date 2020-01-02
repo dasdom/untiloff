@@ -7,16 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F2006E521BE2CAD000067390 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2006E511BE2CAD000067390 /* AudioToolbox.framework */; };
 		F2006E541BE2CADB00067390 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2006E531BE2CADB00067390 /* CFNetwork.framework */; };
 		F2006E561BE2CAF000067390 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2006E551BE2CAF000067390 /* QuartzCore.framework */; };
-		F2006E581BE2CAFD00067390 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2006E571BE2CAFD00067390 /* Security.framework */; };
 		F2006E5A1BE2CB0700067390 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2006E591BE2CB0700067390 /* StoreKit.framework */; };
 		F2006E5C1BE2CB1200067390 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2006E5B1BE2CB1200067390 /* SystemConfiguration.framework */; };
-		F2006E5E1BE2CB2700067390 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F2006E5D1BE2CB2700067390 /* libz.tbd */; };
 		F2006E601BE2CB3C00067390 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F2006E5F1BE2CB3C00067390 /* libsqlite3.tbd */; };
 		F207546717DFB2E100981BE4 /* Measurement.m in Sources */ = {isa = PBXBuildFile; fileRef = F207546617DFB2E100981BE4 /* Measurement.m */; };
 		F207546817DFB2E100981BE4 /* Measurement.m in Sources */ = {isa = PBXBuildFile; fileRef = F207546617DFB2E100981BE4 /* Measurement.m */; };
+		F23B9D841FBC9EA10007B13D /* OnBoardingInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F23B9D831FBC9EA00007B13D /* OnBoardingInfoViewController.m */; };
+		F23B9D871FBCA0720007B13D /* OnBoardingInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = F23B9D861FBCA0720007B13D /* OnBoardingInfoView.m */; };
+		F23B9D8A1FBCA5F70007B13D /* OnBoardingCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F23B9D891FBCA5F70007B13D /* OnBoardingCoordinator.m */; };
+		F23B9D8D1FBCA8A10007B13D /* OnBoardingItem.m in Sources */ = {isa = PBXBuildFile; fileRef = F23B9D8C1FBCA8A10007B13D /* OnBoardingItem.m */; };
 		F23EE43D17E25396005D5572 /* Prediction.m in Sources */ = {isa = PBXBuildFile; fileRef = F23EE43C17E25396005D5572 /* Prediction.m */; };
 		F23EE43E17E25396005D5572 /* Prediction.m in Sources */ = {isa = PBXBuildFile; fileRef = F23EE43C17E25396005D5572 /* Prediction.m */; };
 		F23EE44117E25757005D5572 /* PredictionsOverviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F23EE44017E25757005D5572 /* PredictionsOverviewViewController.m */; };
@@ -106,6 +107,14 @@
 		F2006E5F1BE2CB3C00067390 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		F207546517DFB2E100981BE4 /* Measurement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Measurement.h; path = Data/Measurement.h; sourceTree = "<group>"; };
 		F207546617DFB2E100981BE4 /* Measurement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Measurement.m; path = Data/Measurement.m; sourceTree = "<group>"; };
+		F23B9D821FBC9EA00007B13D /* OnBoardingInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnBoardingInfoViewController.h; sourceTree = "<group>"; };
+		F23B9D831FBC9EA00007B13D /* OnBoardingInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnBoardingInfoViewController.m; sourceTree = "<group>"; };
+		F23B9D851FBCA0710007B13D /* OnBoardingInfoView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OnBoardingInfoView.h; sourceTree = "<group>"; };
+		F23B9D861FBCA0720007B13D /* OnBoardingInfoView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OnBoardingInfoView.m; sourceTree = "<group>"; };
+		F23B9D881FBCA5F70007B13D /* OnBoardingCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OnBoardingCoordinator.h; sourceTree = "<group>"; };
+		F23B9D891FBCA5F70007B13D /* OnBoardingCoordinator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OnBoardingCoordinator.m; sourceTree = "<group>"; };
+		F23B9D8B1FBCA8A10007B13D /* OnBoardingItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OnBoardingItem.h; sourceTree = "<group>"; };
+		F23B9D8C1FBCA8A10007B13D /* OnBoardingItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OnBoardingItem.m; sourceTree = "<group>"; };
 		F23EE43B17E25396005D5572 /* Prediction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Prediction.h; path = Data/Prediction.h; sourceTree = "<group>"; };
 		F23EE43C17E25396005D5572 /* Prediction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Prediction.m; path = Data/Prediction.m; sourceTree = "<group>"; };
 		F23EE43F17E25757005D5572 /* PredictionsOverviewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PredictionsOverviewViewController.h; path = PredictionsOverview/PredictionsOverviewViewController.h; sourceTree = "<group>"; };
@@ -185,13 +194,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				F2006E601BE2CB3C00067390 /* libsqlite3.tbd in Frameworks */,
-				F2006E5E1BE2CB2700067390 /* libz.tbd in Frameworks */,
 				F2006E5C1BE2CB1200067390 /* SystemConfiguration.framework in Frameworks */,
 				F2006E5A1BE2CB0700067390 /* StoreKit.framework in Frameworks */,
-				F2006E581BE2CAFD00067390 /* Security.framework in Frameworks */,
 				F2006E561BE2CAF000067390 /* QuartzCore.framework in Frameworks */,
 				F2006E541BE2CADB00067390 /* CFNetwork.framework in Frameworks */,
-				F2006E521BE2CAD000067390 /* AudioToolbox.framework in Frameworks */,
 				F2A0DE3717DB44F100EA93AF /* CoreLocation.framework in Frameworks */,
 				F2A0DDE517CE9CA200EA93AF /* CoreGraphics.framework in Frameworks */,
 				F2A0DDE917CE9CA200EA93AF /* CoreData.framework in Frameworks */,
@@ -214,6 +220,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F23B9D811FBC9EA00007B13D /* OnBoarding */ = {
+			isa = PBXGroup;
+			children = (
+				F23B9D881FBCA5F70007B13D /* OnBoardingCoordinator.h */,
+				F23B9D891FBCA5F70007B13D /* OnBoardingCoordinator.m */,
+				F23B9D821FBC9EA00007B13D /* OnBoardingInfoViewController.h */,
+				F23B9D831FBC9EA00007B13D /* OnBoardingInfoViewController.m */,
+				F23B9D851FBCA0710007B13D /* OnBoardingInfoView.h */,
+				F23B9D861FBCA0720007B13D /* OnBoardingInfoView.m */,
+				F23B9D8B1FBCA8A10007B13D /* OnBoardingItem.h */,
+				F23B9D8C1FBCA8A10007B13D /* OnBoardingItem.m */,
+			);
+			path = OnBoarding;
+			sourceTree = "<group>";
+		};
 		F23EE44317E259D6005D5572 /* PredictionOverview */ = {
 			isa = PBXGroup;
 			children = (
@@ -317,6 +338,7 @@
 				F28D937B17F6163C0044943E /* Utilities */,
 				F23EE44317E259D6005D5572 /* PredictionOverview */,
 				F2A0DE1C17CFDC1800EA93AF /* MainView */,
+				F23B9D811FBC9EA00007B13D /* OnBoarding */,
 				F24BCABB17DB794500A09272 /* LocationService */,
 				F294587A1812D06700DFD7E3 /* Notification */,
 				F2BB35EF19F2BA5700CD9CA5 /* Settings */,
@@ -459,6 +481,7 @@
 					F2A0DDDE17CE9CA200EA93AF = {
 						DevelopmentTeam = Q6PD97MRX4;
 						LastSwiftMigration = 0830;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -556,6 +579,7 @@
 				F294587D1812D0A800DFD7E3 /* NotificationView.m in Sources */,
 				F2AE7F0A17EB8F0D00A1778F /* LocationHeaderView.m in Sources */,
 				F2AE7F0617EA3C6700A1778F /* MeasurementsManager.m in Sources */,
+				F23B9D871FBCA0720007B13D /* OnBoardingInfoView.m in Sources */,
 				F23EE44117E25757005D5572 /* PredictionsOverviewViewController.m in Sources */,
 				F2A0DE3117D3CD3A00EA93AF /* MainView.m in Sources */,
 				F2C605991BC5AC3300454B4E /* PredictionTableViewCell.swift in Sources */,
@@ -565,14 +589,17 @@
 				F24BCAC617DBC8B500A09272 /* AddCurrentLocationCell.m in Sources */,
 				F29458781812D05F00DFD7E3 /* NotificationViewController.m in Sources */,
 				F2C605971BC5A6D600454B4E /* Predictions+Extension.swift in Sources */,
+				F23B9D8D1FBCA8A10007B13D /* OnBoardingItem.m in Sources */,
 				F272CFDA17DCC4F4004C09A2 /* Geofence.m in Sources */,
 				F291949817F8C22C0036D6E3 /* MockMeasurement.m in Sources */,
 				F2BB35EE19F2850300CD9CA5 /* SettingsTableViewController.swift in Sources */,
 				F2BB35F119F2BFD300CD9CA5 /* PickerTableViewCell.swift in Sources */,
+				F23B9D841FBC9EA10007B13D /* OnBoardingInfoViewController.m in Sources */,
 				F2A0DDF117CE9CA300EA93AF /* main.m in Sources */,
 				F24BCAC217DB8B0000A09272 /* LocationCell.m in Sources */,
 				F2C605951BC5A07C00454B4E /* PredictionsTableViewController.swift in Sources */,
 				F23EE43D17E25396005D5572 /* Prediction.m in Sources */,
+				F23B9D8A1FBCA5F70007B13D /* OnBoardingCoordinator.m in Sources */,
 				F29CD04E19E7E269002A1A7D /* PredictionOverView.swift in Sources */,
 				F2BB35EC19F2471800CD9CA5 /* UntilOffStyleKit.m in Sources */,
 				F2A0DE1A17CFDC1200EA93AF /* MainViewController.m in Sources */,
@@ -717,7 +744,9 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Dominik Hauser (MNX8UVNQT5)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Dominik Hauser (MNX8UVNQT5)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -727,11 +756,12 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Until Off/Until Off-Prefix.pch";
 				INFOPLIST_FILE = "Until Off/Until Off-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.dasdom.Until-Off";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "e3058e67-25fd-4945-9b3a-6f4d86ff8548";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Until Off/Until Off-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
@@ -747,7 +777,9 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -757,11 +789,12 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Until Off/Until Off-Prefix.pch";
 				INFOPLIST_FILE = "Until Off/Until Off-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.dasdom.Until-Off";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "e18c51a7-b8c0-467b-97bd-3b432f73ac99";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Until Off/Until Off-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;

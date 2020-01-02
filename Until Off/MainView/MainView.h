@@ -21,8 +21,8 @@
 @property (nonatomic, strong) UIButton *predictionOverviewButton;
 @property (nonatomic, strong) UIButton *addPredictionButton;
 @property (nonatomic, strong) UIButton *addNotificationButton;
-@property (nonatomic, strong) UIButton *infoButton;
-@property (nonatomic, strong) UIButton *settingButton;
+//@property (nonatomic, strong) UIButton *infoButton;
+//@property (nonatomic, strong) UIButton *settingButton;
 @property (nonatomic, assign) CGFloat residualTime;
 @property (nonatomic, strong) UIView *sliderView;
 @property (nonatomic, strong) NSLayoutConstraint *sliderConstraint;

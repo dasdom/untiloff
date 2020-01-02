@@ -24,8 +24,7 @@
     return self;
 }
 
-- (void)addMeasurement
-{
+- (void)addMeasurement {
     NSDate *date = [NSDate date];
     CGFloat currentLevel = [[UIDevice currentDevice] batteryLevel];
     NSNumber *currentLevelNumber = [NSNumber numberWithFloat:currentLevel];
@@ -37,16 +36,14 @@
     measurement.batteryState = batteryState;
     
     NSArray *measurementsArray = [self measurements];
-    if ([measurementsArray count] > 50)
-    {
+    if ([measurementsArray count] > 500) {
         [self.managedObjectContext deleteObject:[measurementsArray lastObject]];
     }
     
     [self saveContext];
 }
 
-- (NSArray*)measurements
-{
+- (NSArray*)measurements {
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Measurement" inManagedObjectContext:self.managedObjectContext];
     fetchRequest.entity = entity;

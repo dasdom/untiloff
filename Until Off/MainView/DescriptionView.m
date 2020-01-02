@@ -31,7 +31,7 @@
 //        self.descriptionHostView.backgroundColor = [UIColor redColor];
         [self addSubview:self.descriptionHostView];
         
-        CGRect scrollViewFrame = CGRectMake(20.0f, 20.0f, scrollViewHostFrame.size.width-40.0f, scrollViewHostFrame.size.height-20.0f);
+        CGRect scrollViewFrame = CGRectMake(20.0f, 50.0f, scrollViewHostFrame.size.width-40.0f, scrollViewHostFrame.size.height-20.0f);
         DescriptionScrollView *descriptionScrollView = [[DescriptionScrollView alloc] initWithFrame:scrollViewFrame];
         descriptionScrollView.delegate = self;
         [self.descriptionHostView addSubview:descriptionScrollView];
@@ -39,7 +39,8 @@
         _dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_dismissButton setImage:[UIImage imageNamed:@"closeButton"] forState:UIControlStateNormal];
 //        _dismissButton.frame = CGRectMake(CGRectGetMaxX(scrollViewFrame)-20.0f, CGRectGetMaxY(scrollViewFrame)-20.0f, 40.0f, 40.0f);
-        _dismissButton.frame = CGRectMake(CGRectGetWidth(scrollViewFrame), CGRectGetMinY(scrollViewFrame)-20.0f, 40.0f, 40.0f);
+        
+        _dismissButton.frame = CGRectMake(CGRectGetWidth(scrollViewFrame), CGRectGetMinY(scrollViewFrame), 40.0f, 40.0f);
         _dismissButton.accessibilityLabel = @"Close";
         _dismissButton.accessibilityHint = @"Closes the description.";
         [self.descriptionHostView addSubview:_dismissButton];
